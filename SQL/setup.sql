@@ -7,16 +7,16 @@ GO
 
 CREATE TABLE account (
     id_account INT PRIMARY KEY,
-    mail_account NVARCHAR(255) not null,
     phone_number_account NVARCHAR(255),
     birth_date_account DATE not null,
-    name_account NVARCHAR(255) not null,
     description_account NVARCHAR(255)
 );
 GO
 CREATE TABLE user (
     id_user INT PRIMARY KEY,
+    mail_user NVARCHAR(255) not null,
     login_user NVARCHAR(255) UNIQUE not null,
+    name_user NVARCHAR(255) not null,
     password_user NVARCHAR(255) not null,
     role_user INT not null,
     titre_user NVARCHAR(255),
@@ -28,21 +28,21 @@ CREATE TABLE friend (
     id_friend INT FOREIGN KEY REFERENCES account(id_account) not null
 );
 GO
-CREATE TABLE groupe(
-    id_groupe INT PRIMARY KEY,
-    name_groupe NVARCHAR(255)
+CREATE TABLE group(
+    id_group INT PRIMARY KEY,
+    name_group NVARCHAR(255)
 );
 GO
-CREATE TABLE User_Groupe(
+CREATE TABLE User_Group(
     id_user INT FOREIGN KEY REFERENCES user(id_user) not null,
-    id_groupe INT FOREIGN KEY REFERENCES groupe(id_groupe) not null
+    id_group INT FOREIGN KEY REFERENCES groupe(id_group) not null
 );
 GO
 CREATE TABLE txt_msg(
     id_txtMsg INT PRIMARY KEY,
     content_txtMsg NVARCHAR(255) not null,
     send_date_txtMsg DATETIME not null,
-    id_user_group INT FOREIGN KEY REFERENCES User_Groupe(id_user)
+    id_user_group INT FOREIGN KEY REFERENCES User_Group(id_user)
 );
 GO
 CREATE TABLE msg(
