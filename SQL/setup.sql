@@ -41,8 +41,8 @@ GO
 CREATE TABLE txt_msg(
     id_txtMsg INT PRIMARY KEY,
     content_txtMsg NVARCHAR(255) not null,
-    send_date_txtMsg DATETIME not null,
-    id_user_group INT FOREIGN KEY REFERENCES User_Group(id_user)
+    id_user_group INT FOREIGN KEY REFERENCES User_Group(id_user),
+    id_msg INT FOREIGN KEY REFERENCES msg(id_msg)
 );
 GO
 CREATE TABLE msg(
@@ -55,6 +55,7 @@ CREATE TABLE friend_request_msg(
     id_msg INT FOREIGN KEY REFERENCES msg(id_msg),
     id_user INT FOREIGN KEY REFERENCES user(id_user),
     id_friend INT FOREIGN KEY REFERENCES user(id_user)
+    id_msg INT FOREIGN KEY REFERENCES msg(id_msg)
 );
 GO
 CREATE TABLE publication(
