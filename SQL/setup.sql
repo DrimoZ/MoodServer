@@ -5,6 +5,8 @@ GO
 USE DB_Mood;
 GO
 
+
+
 CREATE TABLE account (
     id_account INT PRIMARY KEY,
     phone_number_account NVARCHAR(255),

@@ -1,11 +1,95 @@
+using System.Text;
+using AutoMapper;
+using Infrastructure.EntityFramework;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using WebApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Read Config Files
+var configs = new ConfigurationBuilder()
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.Development.json")
+    .Build();
 
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Setup Automapper
+builder.Services.AddAutoMapper(typeof(Mapper));
+
+// Setup Database
+builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
+    builder.Configuration.GetConnectionString("db")
+));
+
+//Database Repositories & Services
+
+
+//Use Cases
+
+
+// Initialize JWT Bearer
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configs["JwtSettings:Issuer"],
+            ValidAudience = configs["JwtSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configs["JwtSettings:SecretKey"]))
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var token = context.Request.Cookies[configs["JwtSettings:CookieName"]];
+
+                if (string.IsNullOrEmpty(token)) return Task.CompletedTask;
+                context.Token = token;
+
+                return Task.CompletedTask;
+            },
+        };
+    });
+
+// Load TokenService Class
+builder.Services.AddScoped<TokenService>();
+
+// Initialize Loggers
+builder.Services.AddLogging(b =>
+{
+    b.AddConsole();
+    b.AddDebug();
+});
+
+// Initialize Dev Env
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Dev", policyBuilder =>
+    {
+        policyBuilder.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -16,10 +100,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors("Dev");
 app.Run();
