@@ -27,6 +27,7 @@ public class UserController: ControllerBase
         return Ok(StatusCodes.Status200OK);
     }
     
+    
     [HttpPost("signIn")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
