@@ -1,4 +1,5 @@
 using Application.Dtos.User;
+using Application.UseCases.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services;
@@ -10,10 +11,12 @@ namespace WebAPI.Controllers;
 public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
+    private UseCaseGetAllUsers _useCaseGetAllUsers;
 
-    public UserController(TokenService tokenService)
+    public UserController(TokenService tokenService, UseCaseGetAllUsers useCaseGetAllUsers)
     {
         _tokenService = tokenService;
+        _useCaseGetAllUsers = useCaseGetAllUsers;
     }
     
     
@@ -56,5 +59,12 @@ public class UserController: ControllerBase
     private static bool IsUserValid(string login, string password)
     {
         return true;
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<List<DtoOutputUser>> GetAll()
+    {
+        return Ok(_useCaseGetAllUsers.Execute());
     }
 }
