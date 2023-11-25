@@ -1,6 +1,7 @@
 using Application.Dtos.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Application.UseCases.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services;
@@ -15,9 +16,13 @@ public class UserController: ControllerBase
     private readonly ILogger<UserController> _logger;
     
     public UserController(TokenService tokenService, ILogger<UserController> logger)
+    private UseCaseGetAllUsers _useCaseGetAllUsers;
+
+    public UserController(TokenService tokenService, UseCaseGetAllUsers useCaseGetAllUsers)
     {
         _tokenService = tokenService;
         _logger = logger;
+        _useCaseGetAllUsers = useCaseGetAllUsers;
     }
     
     
@@ -53,36 +58,6 @@ public class UserController: ControllerBase
         Response.Cookies.Append("MoodSession", tokenValue, cookieOptions);
         
         return Ok();
-    }
-    
-    [HttpPost("logOut")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [Authorize]
-    public IActionResult Logout()
-    {
-        try
-        {
-            // Delete the cookie
-            if (Request.Cookies.ContainsKey("MoodSession"))
-            {
-                Response.Cookies.Delete("MoodSession");
-            }
-
-            // Sign out the user
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            // Log the error
-            _logger.LogError(ex, "An error occurred while logging out the user.");
-
-            // Return an error response
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while logging out the user.");
-        }
     }
     
     

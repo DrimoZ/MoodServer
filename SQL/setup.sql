@@ -57,7 +57,6 @@ CREATE TABLE friend_request_msg(
     id_msg INT FOREIGN KEY REFERENCES msg(id_msg),
     id_user INT FOREIGN KEY REFERENCES user(id_user),
     id_friend INT FOREIGN KEY REFERENCES user(id_user)
-    id_msg INT FOREIGN KEY REFERENCES msg(id_msg)
 );
 GO
 CREATE TABLE publication(
