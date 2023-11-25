@@ -14,11 +14,9 @@ public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
     private readonly ILogger<UserController> _logger;
-    
-    public UserController(TokenService tokenService, ILogger<UserController> logger)
     private UseCaseGetAllUsers _useCaseGetAllUsers;
 
-    public UserController(TokenService tokenService, UseCaseGetAllUsers useCaseGetAllUsers)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetAllUsers useCaseGetAllUsers)
     {
         _tokenService = tokenService;
         _logger = logger;
