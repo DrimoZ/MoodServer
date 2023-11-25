@@ -1,7 +1,7 @@
 using Application.Dtos.User;
+using Application.UseCases.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Application.UseCases.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services;
@@ -58,6 +58,42 @@ public class UserController: ControllerBase
         return Ok();
     }
     
+    [HttpPost("logOut")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        try
+        {
+            // Delete the cookie
+            if (Request.Cookies.ContainsKey("MoodSession"))
+            {
+                Response.Cookies.Delete("MoodSession");
+            }
+
+            // Sign out the user
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            _logger.LogError(ex, "An error occurred while logging out the user.");
+
+            // Return an error response
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while logging out the user.");
+        }
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<List<DtoOutputUser>> GetAll()
+    {
+        return Ok(/*_useCaseGetAllUsers.Execute()*/);
+    }
     
     // Temporaire
     private static bool IsUserValid(string login, string password)

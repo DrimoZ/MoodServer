@@ -14,7 +14,6 @@
       <Folder Include="Services\" />
       <Folder Include="UseCases\Messages\" />
       <Folder Include="UseCases\Publications\" />
-      <Folder Include="UseCases\Users\" />
     </ItemGroup>
 
     <ItemGroup>

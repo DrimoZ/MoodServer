@@ -1,4 +1,5 @@
 using System.Text;
+using Application.UseCases.Users;
 using AutoMapper;
 using Infrastructure.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,7 +33,7 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 
 
 //Use Cases
-
+builder.Services.AddScoped<UseCaseGetAllUsers>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
