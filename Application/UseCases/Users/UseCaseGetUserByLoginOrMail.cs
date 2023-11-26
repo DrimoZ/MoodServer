@@ -1,10 +1,11 @@
 using Application.Dtos.User;
+using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseGetUserByLoginOrMail : IUseCase
+public class UseCaseGetUserByLoginOrMail : IUseCaseParameterizedQuery<DtoOutputUser, string>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;

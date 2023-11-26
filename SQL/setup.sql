@@ -1,10 +1,10 @@
 
 CREATE DATABASE DB_Mood;
-GO
 
+GO
 USE DB_Mood;
-GO
 
+GO
 CREATE TABLE accounts (
     acc_id INT PRIMARY KEY,
     acc_phone_number NVARCHAR(255),

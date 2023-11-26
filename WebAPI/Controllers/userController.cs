@@ -14,14 +14,12 @@ public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
     private readonly ILogger<UserController> _logger;
-    private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail)
     {
         _tokenService = tokenService;
         _logger = logger;
-        _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
     }
     
