@@ -97,3 +97,12 @@ CREATE TABLE likes (
     like_apreciation INT,
     pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
 );
+
+GO
+INSERT INTO accounts VALUES (1, '0600000000', '1990-01-01', 'Compte 1');
+INSERT INTO accounts VALUES (2, '0611111111', '1990-01-01', 'Compte 2');
+
+GO
+INSERT INTO users VALUES (1, 'user1@mail.com', 'login1', 'User 1', 'password1', 1, 'Title 1', 1);
+INSERT INTO users VALUES (2, 'user2@mail.com', 'login2', 'User 2', 'password2', 1, 'Title 2', 2);
+

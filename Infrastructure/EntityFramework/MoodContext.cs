@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using Domain;
-using Infrastructure.Repositories;
+using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework;
@@ -11,20 +11,23 @@ public class MoodContext: DbContext
     {
         
     }
-
+    
+    public DbSet<DbUser> Users { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>(builder =>
+        modelBuilder.Entity<DbUser>(builder =>
         {
-            builder.ToTable("User");
-            builder.HasKey(user => user.IdUser);
-            builder.Property(user => user.IdUser).HasColumnName("id_user");
-            builder.Property(user => user.MailUser).HasColumnName("mail_user");
-            builder.Property(user => user.LoginUser).HasColumnName("login_user");
-            builder.Property(user => user.PasswordUser).HasColumnName("password_user");
-            builder.Property(user => user.RoleUser).HasColumnName("role_user");
-            builder.Property(user => user.TitreUser).HasColumnName("titre_user");
-            builder.Property(user => user.IdAccount).HasColumnName("id_account");
+            builder.ToTable("users");
+            builder.HasKey(user => user.Id);
+            builder.Property(user => user.Id).HasColumnName("user_id");
+            builder.Property(user => user.Mail).HasColumnName("user_mail");
+            builder.Property(user => user.Login).HasColumnName("user_login");
+            builder.Property(user => user.Name).HasColumnName("user_name");
+            builder.Property(user => user.Password).HasColumnName("user_password");
+            builder.Property(user => user.Role).HasColumnName("user_role");
+            builder.Property(user => user.Title).HasColumnName("user_title");
+            builder.Property(user => user.AccountId).HasColumnName("acc_id");
         });
     }
 }

@@ -2,10 +2,12 @@ using System.Text;
 using Application.UseCases.Users;
 using AutoMapper;
 using Infrastructure.EntityFramework;
+using Infrastructure.EntityFramework.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Services;
+using Mapper = Application.UseCases.Utils.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +32,11 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 ));
 
 //Database Repositories & Services
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseGetAllUsers>();
+builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();

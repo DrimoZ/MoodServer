@@ -9,7 +9,7 @@ public class User
     
     public string MailUser { get; set; }
     public string PasswordUser { get; set; }
-    public string TitreUser { get; set; }
+    public string TitleUser { get; set; }
 
     public User()
     {

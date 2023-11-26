@@ -14,13 +14,15 @@ public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
     private readonly ILogger<UserController> _logger;
-    private UseCaseGetAllUsers _useCaseGetAllUsers;
+    private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
+    private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetAllUsers useCaseGetAllUsers)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail)
     {
         _tokenService = tokenService;
         _logger = logger;
         _useCaseGetAllUsers = useCaseGetAllUsers;
+        _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
     }
     
     
@@ -38,6 +40,7 @@ public class UserController: ControllerBase
     [HttpPost("signIn")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
     public IActionResult SignIn([FromBody] DtoInputSignIn model)
     {
@@ -45,7 +48,10 @@ public class UserController: ControllerBase
         var (isValid, errorMessage) = IsUserValid(model.Login, model.Password);
         if (!isValid)
         {
-            return Unauthorized(new { message = errorMessage });
+            return NotFound(new
+            {
+                errorMessage?.Message
+            });
         }
         
         // Role a recuperer a partir de la db (username - unique + user role)
@@ -100,22 +106,23 @@ public class UserController: ControllerBase
         return Ok(/*_useCaseGetAllUsers.Execute()*/);
     }
     
-    // Temporaire
-    private static (bool, string) IsUserValid(string login, string password)
+    private (bool, Exception?) IsUserValid(string login, string password)
     {
         // Fetch the user from the database
-        /*var user = _userService.GetUserByLogin(login);
-
-        if (user == null)
+        try
         {
-            return (false, "404NotFound");
+            var user = _useCaseGetUserByLoginOrMail.Execute(login);
+
+            if (!user.Password.Equals(password))
+            {
+                return (false, new KeyNotFoundException($"Wrong Password for user with login {login}"));
+            }
+                
+            return (true, null);
         }
-
-        if (!user.Password.Equals(password))
+        catch (KeyNotFoundException e)
         {
-            return (false, "401Unauthorized");
-        }*/
-
-        return (true, "");
+            return (false, e);
+        }
     }
 }

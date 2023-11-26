@@ -1,6 +1,6 @@
-namespace Application.Dtos.User;
+﻿namespace Infrastructure.EntityFramework.DbEntities;
 
-public class DtoOutputUser
+public class DbUser
 {
     public int Id { get; set; }
     public string Mail { get; set; }

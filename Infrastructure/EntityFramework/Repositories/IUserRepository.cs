@@ -1,6 +1,7 @@
 using Domain;
+using Infrastructure.EntityFramework.DbEntities;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IUserRepository
 {
@@ -9,4 +10,7 @@ public interface IUserRepository
     User Create(User user);
     bool Update(User user);
     bool Delete(int id);
+
+    DbUser FetchById(int id);
+    DbUser FetchByLoginOrMail(string login);
 }
