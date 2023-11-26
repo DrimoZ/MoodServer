@@ -5,8 +5,6 @@ GO
 USE DB_Mood;
 GO
 
-
-
 CREATE TABLE accounts (
     acc_id INT PRIMARY KEY,
     acc_phone_number NVARCHAR(255),
@@ -22,12 +20,12 @@ CREATE TABLE users (
     user_password NVARCHAR(255) not null,
     user_role INT not null,
     user_title NVARCHAR(255),
-    acc_id INT FOREIGN KEY REFERENCES account(acc_id)
+    acc_id INT FOREIGN KEY REFERENCES accounts(acc_id)
 );
 
 CREATE TABLE friends (
-    acc_id INT FOREIGN KEY REFERENCES account(acc_id) not null,
-    friend_id INT FOREIGN KEY REFERENCES account(acc_id) not null
+    acc_id INT FOREIGN KEY REFERENCES accounts(acc_id) not null,
+    friend_id INT FOREIGN KEY REFERENCES accounts(acc_id) not null
 );
 
 CREATE TABLE groups (
@@ -36,6 +34,7 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE user_groups (
+    user_group_id INT PRIMARY KEY,
     user_id INT FOREIGN KEY REFERENCES users(user_id) not null,
     group_id INT FOREIGN KEY REFERENCES groups(group_id) not null
 );
@@ -48,7 +47,7 @@ CREATE TABLE messages (
 CREATE TABLE text_messages (
     txtMsg_id INT PRIMARY KEY,
     txtMsg_content NVARCHAR(255) not null,
-    user_id INT FOREIGN KEY REFERENCES user_groups(user_id),
+    user_id INT FOREIGN KEY REFERENCES user_groups(user_group_id),
     msg_id INT FOREIGN KEY REFERENCES messages(msg_id)
 );
 
