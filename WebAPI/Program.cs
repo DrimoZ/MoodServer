@@ -1,6 +1,5 @@
 using System.Text;
 using Application.UseCases.Users;
-using AutoMapper;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
