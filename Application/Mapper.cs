@@ -1,9 +1,8 @@
 using Application.Dtos.User;
 using AutoMapper;
-using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Application.UseCases.Utils;
+namespace Application;
 
 public class Mapper: Profile
 {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Services;
-using Mapper = Application.UseCases.Utils.Mapper;
+using Mapper = Application.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
