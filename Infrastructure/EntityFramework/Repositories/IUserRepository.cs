@@ -13,4 +13,7 @@ public interface IUserRepository
 
     DbUser FetchById(int id);
     DbUser FetchByLoginOrMail(string login);
+    DbUser FetchByName(string name);
+    
+    
 }

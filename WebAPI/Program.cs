@@ -35,8 +35,8 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Use Cases
-builder.Services.AddScoped<UseCaseGetAllUsers>();
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
+builder.Services.AddScoped<UseCaseGetUserByName>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();

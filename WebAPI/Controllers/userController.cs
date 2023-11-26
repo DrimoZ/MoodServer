@@ -14,15 +14,15 @@ public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
     private readonly ILogger<UserController> _logger;
-    private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
+    private readonly UseCaseGetUserByName _useCaseGetUserByName;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName)
     {
         _tokenService = tokenService;
         _logger = logger;
-        _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
+        _useCaseGetUserByName = useCaseGetUserByName;
     }
     
     
@@ -99,11 +99,11 @@ public class UserController: ControllerBase
         }
     }
     
-    [HttpGet]
+    [HttpGet("/get={name}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<DtoOutputUser>> GetAll()
+    public ActionResult<List<DtoOutputUser>> GetUserByName(string name)
     {
-        return Ok(/*_useCaseGetAllUsers.Execute()*/);
+        return Ok(_useCaseGetUserByName.Execute(name));
     }
     
     private (bool, Exception?) IsUserValid(string login, string password)

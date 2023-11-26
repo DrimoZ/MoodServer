@@ -54,4 +54,13 @@ public class UserRepository: IUserRepository
 
         return user;
     }
+
+    public DbUser FetchByName(string name)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Name == name);
+
+        if (user == null) throw new KeyNotFoundException($"userLoginNotFound");
+
+        return user;
+    }
 }
