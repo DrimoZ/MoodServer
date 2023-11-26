@@ -7,96 +7,94 @@ GO
 
 
 
-CREATE TABLE account (
-    id_account INT PRIMARY KEY,
-    phone_number_account NVARCHAR(255),
-    birth_date_account DATE not null,
-    description_account NVARCHAR(255)
+CREATE TABLE accounts (
+    acc_id INT PRIMARY KEY,
+    acc_phone_number NVARCHAR(255),
+    acc_birth_date DATE not null,
+    acc_description NVARCHAR(255)
 );
-GO
-CREATE TABLE user (
-    id_user INT PRIMARY KEY,
-    mail_user NVARCHAR(255) not null,
-    login_user NVARCHAR(255) UNIQUE not null,
-    name_user NVARCHAR(255) not null,
-    password_user NVARCHAR(255) not null,
-    role_user INT not null,
-    titre_user NVARCHAR(255),
-    id_account INT FOREIGN KEY REFERENCES account(id_account)
-);
-GO
-CREATE TABLE friend (
-    id_account INT FOREIGN KEY REFERENCES account(id_account) not null,
-    id_friend INT FOREIGN KEY REFERENCES account(id_account) not null
-);
-GO
-CREATE TABLE group(
-    id_group INT PRIMARY KEY,
-    name_group NVARCHAR(255)
-);
-GO
-CREATE TABLE User_Group(
-    id_user INT FOREIGN KEY REFERENCES user(id_user) not null,
-    id_group INT FOREIGN KEY REFERENCES groupe(id_group) not null
-);
-GO
-CREATE TABLE txt_msg(
-    id_txtMsg INT PRIMARY KEY,
-    content_txtMsg NVARCHAR(255) not null,
-    id_user_group INT FOREIGN KEY REFERENCES User_Group(id_user),
-    id_msg INT FOREIGN KEY REFERENCES msg(id_msg)
-);
-GO
-CREATE TABLE msg(
-    id_msg INT PRIMARY KEY,
-    send_date_msg DATETIME not null,
-);
-GO
-CREATE TABLE friend_request_msg(
-    id_friendReqMsg INT PRIMARY KEY,
-    id_msg INT FOREIGN KEY REFERENCES msg(id_msg),
-    id_user INT FOREIGN KEY REFERENCES user(id_user),
-    id_friend INT FOREIGN KEY REFERENCES user(id_user)
-);
-GO
-CREATE TABLE publication(
-    id_pub INT PRIMARY KEY,
-    content_pub NVARCHAR(255) not null,
-);
-GO
-CREATE TABLE photo_pub (
-    id_photo_pub INT PRIMARY KEY,
-    extention_photo_pub NVARCHAR(16),
-    content_photo_pub NVARCHAR(255),
-    id_pub INT FOREIGN KEY REFERENCES publication(id_pub)
-);
-GO
 
-CREATE TABLE video_pub (
-    id_photo_pub INT PRIMARY KEY,
-    extention_video_pub NVARCHAR(16),
-    content_video_pub NVARCHAR(255),
-    id_pub INT FOREIGN KEY REFERENCES publication(id_pub)
+CREATE TABLE users (
+    user_id INT PRIMARY KEY,
+    user_mail NVARCHAR(255) not null,
+    user_login NVARCHAR(255) UNIQUE not null,
+    user_name NVARCHAR(255) not null,
+    user_password NVARCHAR(255) not null,
+    user_role INT not null,
+    user_title NVARCHAR(255),
+    acc_id INT FOREIGN KEY REFERENCES account(acc_id)
 );
-GO
-CREATE TABLE survey_pub (
-    id_survey_pub INT PRIMARY KEY,
-    content_survey_pub NVARCHAR(255),
-    id_pub INT FOREIGN KEY REFERENCES publication(id_pub)
-);
-GO
 
-CREATE TABLE comment (
-    id_comment INT PRIMARY KEY,
-    date_comment DATETIME,
-    content_comment NVARCHAR(255),
-    id_pub INT FOREIGN KEY REFERENCES publication(id_pub),
-    id_account INT FOREIGN KEY REFERENCES user(id_user)
+CREATE TABLE friends (
+    acc_id INT FOREIGN KEY REFERENCES account(acc_id) not null,
+    friend_id INT FOREIGN KEY REFERENCES account(acc_id) not null
 );
-GO
-CREATE TABLE liked (
-    id_like INT PRIMARY KEY,
-    date_like DATETIME,
-    apreciation INT,
-    id_pub INT FOREIGN KEY REFERENCES publication(id_pub)
+
+CREATE TABLE groups (
+    group_id INT PRIMARY KEY,
+    group_name NVARCHAR(255)
+);
+
+CREATE TABLE user_groups (
+    user_id INT FOREIGN KEY REFERENCES users(user_id) not null,
+    group_id INT FOREIGN KEY REFERENCES groups(group_id) not null
+);
+
+CREATE TABLE messages (
+    msg_id INT PRIMARY KEY,
+    msg_date DATETIME not null,
+);
+
+CREATE TABLE text_messages (
+    txtMsg_id INT PRIMARY KEY,
+    txtMsg_content NVARCHAR(255) not null,
+    user_id INT FOREIGN KEY REFERENCES user_groups(user_id),
+    msg_id INT FOREIGN KEY REFERENCES messages(msg_id)
+);
+
+CREATE TABLE friend_request_messages (
+    reqMsg_id INT PRIMARY KEY,
+    msg_id INT FOREIGN KEY REFERENCES messages(msg_id),
+    user_id INT FOREIGN KEY REFERENCES users(user_id),
+    friend_id INT FOREIGN KEY REFERENCES users(user_id)
+);
+
+CREATE TABLE publications (
+    pub_id INT PRIMARY KEY,
+    pub_content NVARCHAR(255) not null,
+);
+
+CREATE TABLE photo_publications (
+    photoPub_id INT PRIMARY KEY,
+    photoPub_extention NVARCHAR(16),
+    photoPub_content NVARCHAR(255),
+    pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
+);
+
+CREATE TABLE video_publications (
+    videoPub_id INT PRIMARY KEY,
+    videoPub_extention NVARCHAR(16),
+    videoPub_content NVARCHAR(255),
+    pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
+);
+
+CREATE TABLE survey_publications (
+    surveyPub_id INT PRIMARY KEY,
+    surveyPub_content NVARCHAR(255),
+    pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
+);
+
+CREATE TABLE comments (
+    cmt_id INT PRIMARY KEY,
+    cmt_date DATETIME,
+    cmt_content NVARCHAR(255),
+    pub_id INT FOREIGN KEY REFERENCES publications(pub_id),
+    acc_id INT FOREIGN KEY REFERENCES users(user_id)
+);
+
+CREATE TABLE likes (
+    like_id INT PRIMARY KEY,
+    like_date DATETIME,
+    like_apreciation INT,
+    pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
 );
