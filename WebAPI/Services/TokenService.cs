@@ -14,7 +14,7 @@ public class TokenService
         _configuration = configuration;
     }
     
-    public string GenerateJwtToken(string username, string role)
+    public string GenerateJwtToken(string username, string role, bool isSessionOnly)
     {
         var issuer = _configuration["JwtSettings:Issuer"];
         var audience = _configuration["JwtSettings:Audience"];
@@ -31,12 +31,15 @@ public class TokenService
             // Add more claims as needed
         };
         var identity = new ClaimsIdentity(claims, "Bearer");
+
+        DateTime expireDate = DateTime.UtcNow.AddHours(Convert.ToDouble(validityHours));
+        if (isSessionOnly) expireDate = DateTime.UtcNow.AddYears(1);
         
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
             claims: identity.Claims,
-            expires: DateTime.UtcNow.AddHours(Convert.ToDouble(validityHours)),
+            expires: expireDate,
             signingCredentials: credentials
         );
         

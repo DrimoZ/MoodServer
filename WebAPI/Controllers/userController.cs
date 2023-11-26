@@ -41,10 +41,15 @@ public class UserController: ControllerBase
     [AllowAnonymous]
     public IActionResult SignIn([FromBody] DtoInputSignIn model)
     {
-        // Temporaire
-        if (!IsUserValid(model.Login, model.Password)) return Unauthorized();
+        //Check User
+        var (isValid, errorMessage) = IsUserValid(model.Login, model.Password);
+        if (!isValid)
+        {
+            return Unauthorized(new { message = errorMessage });
+        }
+        
         // Role a recuperer a partir de la db (username - unique + user role)
-        var tokenValue = _tokenService.GenerateJwtToken(model.Login, "user");
+        var tokenValue = _tokenService.GenerateJwtToken(model.Login, "user", !model.StayLoggedIn);
 
         var cookieOptions = new CookieOptions
         {
@@ -96,8 +101,21 @@ public class UserController: ControllerBase
     }
     
     // Temporaire
-    private static bool IsUserValid(string login, string password)
+    private static (bool, string) IsUserValid(string login, string password)
     {
-        return true;
+        // Fetch the user from the database
+        /*var user = _userService.GetUserByLogin(login);
+
+        if (user == null)
+        {
+            return (false, "404NotFound");
+        }
+
+        if (!user.Password.Equals(password))
+        {
+            return (false, "401Unauthorized");
+        }*/
+
+        return (true, "");
     }
 }
