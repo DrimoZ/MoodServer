@@ -99,11 +99,11 @@ public class UserController: ControllerBase
         }
     }
     
-    [HttpGet("/get={name}")]
+    [HttpGet("/getByName/{userName}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<DtoOutputUser>> GetUserByName(string name)
+    public ActionResult<List<DtoOutputUser>> GetUserByName(string userName)
     {
-        return Ok(_useCaseGetUserByName.Execute(name));
+        return Ok(_useCaseGetUserByName.Execute(userName));
     }
     
     private (bool, Exception?) IsUserValid(string login, string password)
