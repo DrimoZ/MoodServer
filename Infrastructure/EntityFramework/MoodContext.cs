@@ -13,6 +13,7 @@ public class MoodContext: DbContext
     }
     
     public DbSet<DbUser> Users { get; set; }
+    public DbSet<DbAccount> Accounts { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,6 +29,16 @@ public class MoodContext: DbContext
             builder.Property(user => user.Role).HasColumnName("user_role");
             builder.Property(user => user.Title).HasColumnName("user_title");
             builder.Property(user => user.AccountId).HasColumnName("acc_id");
+        });
+        
+        modelBuilder.Entity<DbAccount>(builder =>
+        {
+            builder.ToTable("accounts");
+            builder.HasKey(account => account.Id);
+            builder.Property(account => account.Id).HasColumnName("acc_id");
+            builder.Property(account => account.PhoneNumber).HasColumnName("acc_phone_number");
+            builder.Property(account => account.BirthDate).HasColumnName("acc_birth_date");
+            builder.Property(account => account.Description).HasColumnName("acc_description");
         });
     }
 }
