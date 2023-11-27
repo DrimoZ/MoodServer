@@ -61,7 +61,7 @@ public class UserController: ControllerBase
         {
             HttpOnly = true,
             Secure = true,
-            SameSite = SameSiteMode.None,
+            SameSite = SameSiteMode.None
         };
 
         Response.Cookies.Append("MoodSession", tokenValue, cookieOptions);
@@ -85,7 +85,7 @@ public class UserController: ControllerBase
             }
 
             // Sign out the user
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return Ok();
         }

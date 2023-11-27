@@ -2,7 +2,7 @@
 public class User
 {
     public int IdUser { get; set; }
-    public int IdAccount { get; set; }
+    public Account account { get; set; }
     public int RoleUser { get; set; }
     public string LoginUser { get; set; }
     public string NameUser { get; set; }
