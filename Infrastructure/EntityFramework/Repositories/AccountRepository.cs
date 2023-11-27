@@ -1,3 +1,4 @@
+using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories;
@@ -9,6 +10,11 @@ public class AccountRepository:IAccountRepository
     public AccountRepository(MoodContext context)
     {
         _context = context;
+    }
+
+    public Account create(Account a)
+    {
+        
     }
 
     public DbAccount FetchById(int id)
