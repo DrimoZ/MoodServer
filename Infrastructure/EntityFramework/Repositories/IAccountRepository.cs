@@ -1,6 +1,8 @@
+using Infrastructure.EntityFramework.DbEntities;
+
 namespace Infrastructure.EntityFramework.Repositories;
 
-public class IAccountRepository
+public interface IAccountRepository
 {
-     
+    DbAccount FetchById(int  Id);
 }
