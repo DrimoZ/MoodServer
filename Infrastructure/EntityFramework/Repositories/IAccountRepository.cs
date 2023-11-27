@@ -5,7 +5,7 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IAccountRepository
 {
-    DbAccount create(DbAccount account);
-    DbAccount FetchById(int  Id);
+    DbAccount Create(DbAccount account);
+    DbAccount FetchById(int  id);
     
 }
