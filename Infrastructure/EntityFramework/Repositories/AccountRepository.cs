@@ -4,9 +4,18 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public class AccountRepository:IAccountRepository
 {
-    
-    public DbAccount FetchById(int Id)
+    private readonly MoodContext _context;
+
+    public AccountRepository(MoodContext context)
     {
-        
+        _context = context;
+    }
+
+    public DbAccount FetchById(int id)
+    {
+        var account = _context.Accounts.FirstOrDefault(a => a.Id == id);
+        if (account == null) throw new KeyNotFoundException($"Account Not Found");
+
+        return account;
     }
 }

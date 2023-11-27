@@ -13,6 +13,7 @@ public class MoodContext: DbContext
     }
     
     public DbSet<DbUser> Users { get; set; }
+    public DbSet<DbAccount> Accounts { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
