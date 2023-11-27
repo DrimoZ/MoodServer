@@ -17,7 +17,7 @@ public class UserRepository: IUserRepository
         throw new NotImplementedException();
     }
 
-    public DbUser Create(User user)
+    public DbUser Create(DbUser user)
     {
         throw new NotImplementedException();
     }
