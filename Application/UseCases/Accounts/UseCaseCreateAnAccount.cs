@@ -4,7 +4,7 @@ using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 
-namespace Application.UseCases.Account;
+namespace Application.UseCases.Accounts;
 
 public class UseCaseCreateAnAccount: IUseCaseWriter<DbAccount, DtoInputAccount>
 {

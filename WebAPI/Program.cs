@@ -1,4 +1,5 @@
 using System.Text;
+using Application.UseCases.Accounts;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories;
@@ -32,10 +33,13 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 
 //Database Repositories & Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 builder.Services.AddScoped<UseCaseGetUserByName>();
+builder.Services.AddScoped<UseCaseGetAccountById>();
+builder.Services.AddScoped<UseCaseCreateAnAccount>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
