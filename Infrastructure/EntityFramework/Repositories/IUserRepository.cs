@@ -8,9 +8,9 @@ public interface IUserRepository
     List<DbUser> GetAll();
     DbUser Create(DbUser user);
     bool Update(DbUser user);
-    bool Delete(int id);
+    bool Delete(string id);
 
-    DbUser FetchById(int id);
+    DbUser FetchById(string id);
     DbUser FetchByLoginOrMail(string login);
     DbUser FetchByName(string name);
     

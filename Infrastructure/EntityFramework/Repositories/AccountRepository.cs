@@ -19,7 +19,7 @@ public class AccountRepository:IAccountRepository
         return account;  
     }
 
-    public DbAccount FetchById(int id)
+    public DbAccount FetchById(string id)
     {
         var account = _context.Accounts.FirstOrDefault(a => a.Id == id);
         if (account == null) throw new KeyNotFoundException($"Account Not Found");

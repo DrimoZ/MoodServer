@@ -27,12 +27,12 @@ public class UserRepository: IUserRepository
         throw new NotImplementedException();
     }
 
-    public bool Delete(int id)
+    public bool Delete(string id)
     {
         throw new NotImplementedException();
     }
 
-    public DbUser FetchById(int id)
+    public DbUser FetchById(string id)
     {
         var user = _context.Users.FirstOrDefault(u => u.Id == id);
 

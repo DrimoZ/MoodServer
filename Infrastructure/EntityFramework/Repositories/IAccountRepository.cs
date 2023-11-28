@@ -6,6 +6,6 @@ namespace Infrastructure.EntityFramework.Repositories;
 public interface IAccountRepository
 {
     DbAccount Create(DbAccount account);
-    DbAccount FetchById(int  id);
+    DbAccount FetchById(string  id);
     
 }
