@@ -2,8 +2,9 @@ namespace Domain;
 
 public class Publication
 {
-    public int IdPublication { get; set; }
-    public string ContentPub { get; set; }
+    public int Id { get; set; }
+    public string Content { get; set; }
     
-    public Publication(){}
+    public List<Comment> Comments { get; set; }
+    public List<Like> Likes { get; set; }
 }

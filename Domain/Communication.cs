@@ -1,9 +1,8 @@
 namespace Domain;
 
-public class Comment
+public class Communication
 {
     public int Id { get; set; }
-    
+
     public DateTime Date { get; set; }
-    public string Content { get; set; }
 }

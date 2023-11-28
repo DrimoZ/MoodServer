@@ -2,11 +2,10 @@
 
 public class Group
 {
-    public int IdGroup;
-    public string NameGroup;
+    public int Id { get; set; }
+    
+    public string Name { get; set; }
 
-    public Group()
-    {
-        
-    }
+    public List<User> Users { get; set; }
+    public List<Message> Messages { get; set; }
 }

@@ -2,13 +2,10 @@
 
 public class Account
 {
-    public int IdAccount { get; set; }
-    public string PhoneNumberAccount { get; set; }
-    public string DescriptionAccount { get; set; }
-    public DateOnly BirthDateAccount { get; set; }
-
-    public Account()
-    {
-       
-    }
+    public int Id { get; set; }
+    
+    public string PhoneNumber { get; set; }
+    public string Description { get; set; }
+    
+    public DateOnly BirthDate { get; set; }
 }
