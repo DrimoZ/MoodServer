@@ -1,5 +1,5 @@
+using Application.Dtos.Account;
 using Application.UseCases.Accounts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -16,9 +16,10 @@ public class AccountController
         _useCaseGetAccountById = useCaseGetAccountById;
     }
     
-    [HttpGet("id={id:int")]
-    public IActionResult getAccountById(int id)
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputAccount> GetAccountById(int id)
     {
-        return OkResult(_useCaseGetAccountById.Execute(id));
+        return _useCaseGetAccountById.Execute(id);
     }
 }
