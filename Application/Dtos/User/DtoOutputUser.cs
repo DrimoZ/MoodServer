@@ -2,7 +2,7 @@ namespace Application.Dtos.User;
 
 public class DtoOutputUser
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public string Mail { get; set; }
     public string Login { get; set; }
     public string Name { get; set; }
