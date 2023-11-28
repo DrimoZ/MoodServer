@@ -45,7 +45,16 @@ public class UserRepository: IUserRepository
     {
         var user = _context.Users.FirstOrDefault(u => u.Login == login || u.Mail == login);
 
-        if (user == null) throw new KeyNotFoundException($"userLoginNotFound");
+        if (user == null) throw new KeyNotFoundException($"userLoginOrMailNotFound");
+
+        return user;
+    }
+    
+    public DbUser FetchByLoginAndMail(string login, string mail)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Login == login || u.Mail == mail);
+
+        if (user == null) throw new KeyNotFoundException($"userLoginAndMailNotFound");
 
         return user;
     }
@@ -54,7 +63,25 @@ public class UserRepository: IUserRepository
     {
         var user = _context.Users.FirstOrDefault(u => u.Name == name);
 
+        if (user == null) throw new KeyNotFoundException($"userNameNotFound");
+
+        return user;
+    }
+    
+    public DbUser FetchByLogin(string login)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Login == login);
+
         if (user == null) throw new KeyNotFoundException($"userLoginNotFound");
+
+        return user;
+    }
+    
+    public DbUser FetchByMail(string mail)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Mail == mail);
+
+        if (user == null) throw new KeyNotFoundException($"userMailNotFound");
 
         return user;
     }
