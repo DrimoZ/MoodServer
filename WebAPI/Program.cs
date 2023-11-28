@@ -75,8 +75,9 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-// Load TokenService Class
+// Load Services Class
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<IdService>();
 
 // Initialize Loggers
 builder.Services.AddLogging(b =>
