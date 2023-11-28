@@ -37,7 +37,11 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
+builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
 builder.Services.AddScoped<UseCaseGetUserByName>();
+builder.Services.AddScoped<UseCaseGetUserByLogin>();
+builder.Services.AddScoped<UseCaseGetUserByMail>();
+
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccount>();
 
@@ -77,7 +81,8 @@ builder.Services.AddAuthentication(options =>
 
 // Load Services Class
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<IdService>();
+builder.Services.AddSingleton<IdService>();
+builder.Services.AddSingleton<BCryptService>();
 
 // Initialize Loggers
 builder.Services.AddLogging(b =>
