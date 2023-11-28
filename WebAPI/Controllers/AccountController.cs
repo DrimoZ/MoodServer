@@ -16,9 +16,9 @@ public class AccountController : ControllerBase
         _useCaseGetAccountById = useCaseGetAccountById;
     }
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputAccount> GetAccountById(int id)
+    public ActionResult<DtoOutputAccount> GetAccountById(string id)
     {
         return _useCaseGetAccountById.Execute(id);
     }

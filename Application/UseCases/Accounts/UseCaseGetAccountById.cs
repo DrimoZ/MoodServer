@@ -5,7 +5,7 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseGetAccountById:IUseCaseParameterizedQuery<DtoOutputAccount, int>
+public class UseCaseGetAccountById:IUseCaseParameterizedQuery<DtoOutputAccount, string>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ public class UseCaseGetAccountById:IUseCaseParameterizedQuery<DtoOutputAccount, 
         _mapper = mapper;
     }
 
-    public DtoOutputAccount Execute(int param)
+    public DtoOutputAccount Execute(string param)
     {
         var dbAccount = _accountRepository.FetchById(param);
         return _mapper.Map<DtoOutputAccount>(dbAccount);
