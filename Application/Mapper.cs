@@ -1,4 +1,3 @@
-using Application.Dtos.Account;
 using Application.Dtos.User;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
@@ -16,5 +15,10 @@ public class Mapper: Profile
         //Account
         CreateMap<DbAccount, DtoOutputAccount>();
         CreateMap<DtoInputAccount, DbAccount>();
+        
+        
+        //Publication
+        CreateMap<DbPublication, DtoOutputPublication>();
+
     }
 }

@@ -12,7 +12,7 @@ public class AccountRepository:IAccountRepository
         _context = context;
     }
 
-    public DbAccount Create(DbAccount account)
+    public Account create(Account a)
     {
         _context.Accounts.Add(account);
         _context.SaveChanges();
