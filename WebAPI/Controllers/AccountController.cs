@@ -22,4 +22,11 @@ public class AccountController
     {
         return _useCaseGetAccountById.Execute(id);
     }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoInputAccount> CreateAnAccount
+    {
+        
+    }
 }
