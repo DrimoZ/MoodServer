@@ -14,7 +14,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE users (
     user_id INT PRIMARY KEY,
-    user_mail NVARCHAR(255) NOT NULL,
+    user_mail NVARCHAR(255) UNIQUE NOT NULL,
     user_login NVARCHAR(255) UNIQUE NOT NULL,
     user_name NVARCHAR(255) NOT NULL,
     user_password NVARCHAR(255) NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE video_publications (
 
 CREATE TABLE survey_publications (
     surveyPub_id INT PRIMARY KEY,
-    surveyPub_content NVARCHAR(255 NOT NULL),
+    surveyPub_content NVARCHAR(255) NOT NULL,
     pub_id INT FOREIGN KEY REFERENCES publications(pub_id)
 );
 
@@ -99,11 +99,12 @@ CREATE TABLE likes (
     user_id INT FOREIGN KEY REFERENCES users(user_id)
 );
 
+
 GO
 INSERT INTO accounts VALUES (1, '0600000000', '1990-01-01', 'Compte 1');
 INSERT INTO accounts VALUES (2, '0611111111', '1990-01-01', 'Compte 2');
 
-GO
+
 INSERT INTO users VALUES (1, 'user1@mail.com', 'login1', 'User 1', 'password1', 1, 'Title 1', 1);
 INSERT INTO users VALUES (2, 'user2@mail.com', 'login2', 'User 2', 'password2', 1, 'Title 2', 2);
 
