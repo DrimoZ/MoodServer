@@ -5,10 +5,9 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IUserRepository
 {
-    User? Get(int id);
-    List<User> GetAll();
-    User Create(User user);
-    bool Update(User user);
+    List<DbUser> GetAll();
+    DbUser Create(DbUser user);
+    bool Update(DbUser user);
     bool Delete(int id);
 
     DbUser FetchById(int id);

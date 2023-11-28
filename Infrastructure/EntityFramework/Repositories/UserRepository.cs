@@ -12,22 +12,17 @@ public class UserRepository: IUserRepository
         _context = context;
     }
 
-    public User? Get(int id)
+    public List<DbUser> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public List<User> GetAll()
+    public DbUser Create(DbUser user)
     {
         throw new NotImplementedException();
     }
 
-    public User Create(User user)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Update(User user)
+    public bool Update(DbUser user)
     {
         throw new NotImplementedException();
     }

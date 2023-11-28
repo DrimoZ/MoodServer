@@ -12,9 +12,11 @@ public class AccountRepository:IAccountRepository
         _context = context;
     }
 
-    public Account create(Account a)
+    public DbAccount Create(DbAccount account)
     {
-        return null!;
+        _context.Accounts.Add(account);
+        _context.SaveChanges();
+        return account;  
     }
 
     public DbAccount FetchById(int id)

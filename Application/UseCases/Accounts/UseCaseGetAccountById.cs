@@ -3,7 +3,7 @@ using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
 
-namespace Application.UseCases.Account;
+namespace Application.UseCases.Accounts;
 
 public class UseCaseGetAccountById:IUseCaseParameterizedQuery<DtoOutputAccount, int>
 {
