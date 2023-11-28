@@ -58,7 +58,6 @@ public class UserController: ControllerBase
         {
             // Get User From Database
             var dbUser = _useCaseGetUserByLoginOrMail.Execute(model.Login);
-            
             // Check If Given Password Corresponds
             if (!_bCryptService.VerifyPassword(model.Password, dbUser.Password)) return NotFound();
 
@@ -66,7 +65,7 @@ public class UserController: ControllerBase
             if (GenerateToken(model.Login, dbUser.Role.ToString(), model.StayLoggedIn)) return Ok();
             return NotFound();
         }
-        catch (Exception e)
+        catch (KeyNotFoundException)
         {
             return NotFound();
         }

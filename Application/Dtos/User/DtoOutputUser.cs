@@ -9,5 +9,5 @@ public class DtoOutputUser
     public string Password { get; set; }
     public int Role { get; set; }
     public string Title { get; set; }
-    public int AccountId { get; set; }
+    public string AccountId { get; set; }
 }
