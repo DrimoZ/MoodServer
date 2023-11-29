@@ -1,11 +1,9 @@
-using System.ComponentModel.Design;
 using Application.Dtos.Account;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
+using Application.Services.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
-using Microsoft.Identity.Client;
-using WebApi.Services;
 
 namespace Application;
 
@@ -16,12 +14,20 @@ public class Mapper: Profile
     {
         //Users
         CreateMap<DbUser, DtoOutputUser>();
-        CreateMap<DtoInputUser, DbUser>();
+        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        CreateMap<DtoInputCreateUser, DbUser>()
+            .BeforeMap((s, d) => s.Id = _idService.GenerateRandomId(32) )
+            .BeforeMap((s, d) => d.Role = 1 );
+
         
         //Account
+        CreateMap<DtoInputSignUpUser, DtoInputCreateAccount>();
         CreateMap<DbAccount, DtoOutputAccount>();
-        CreateMap<DtoInputAccount, DbAccount>()
+        CreateMap<DtoInputCreateAccount, DbAccount>()
             .BeforeMap((s, d) => d.Id = _idService.GenerateRandomId(32) );
+
+        CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
+        
         
         //Publication
         CreateMap<DbPublication, DtoOutputPublication>();

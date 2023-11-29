@@ -1,6 +1,6 @@
 ﻿namespace Application.Dtos.User;
 
-public class DtoInputSignIn
+public class DtoInputSignInUser
 {
     public string Login { get; set; }
     public string Password { get; set; }

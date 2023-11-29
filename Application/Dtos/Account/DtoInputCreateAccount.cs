@@ -1,6 +1,6 @@
 namespace Application.Dtos.Account;
 
-public class DtoInputAccount
+public class DtoInputCreateAccount
 {
     public DateTime BirthDate { get; set; }
 }

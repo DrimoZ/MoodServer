@@ -1,4 +1,6 @@
 using System.Text;
+using Application.Services;
+using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
@@ -36,6 +38,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 //Use Cases
+builder.Services.AddScoped<UseCaseCreateUser>();
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
 builder.Services.AddScoped<UseCaseGetUserByName>();

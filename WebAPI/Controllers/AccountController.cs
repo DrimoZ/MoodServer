@@ -25,7 +25,7 @@ public class AccountController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public ActionResult<DtoOutputAccount> Create(DtoInputAccount dto)
+    public ActionResult<DtoOutputAccount> Create(DtoInputCreateAccount dto)
     {
         
         var accountCreated = _useCaseCreateAn.Execute(dto);

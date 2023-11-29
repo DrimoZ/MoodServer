@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace WebApi.Services;
+namespace Application.Services.Utils;
 
 public class IdService
 {
@@ -14,6 +14,8 @@ public class IdService
         {
             result.Append(Chars[_random.Next(Chars.Length)]);
         }
+        
+        
         return result.ToString();
     }
 }

@@ -1,7 +1,6 @@
 using Application.Dtos.User;
+using Application.UseCases.Accounts;
 using Application.UseCases.Users;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Services;
@@ -22,17 +21,22 @@ public class UserController: ControllerBase
     private readonly UseCaseGetUserByName _useCaseGetUserByName;
     private readonly UseCaseGetUserByLogin _useCaseGetUserByLogin;
     private readonly UseCaseGetUserByMail _useCaseGetUserByMail;
+    private readonly UseCaseCreateAnAccount _useCaseCreateAnAccount;
+    private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName, BCryptService bCryptService, UseCaseGetUserByLogin useCaseGetUserByLogin, UseCaseGetUserByMail useCaseGetUserByMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName, BCryptService bCryptService, UseCaseGetUserByLogin useCaseGetUserByLogin, UseCaseGetUserByMail useCaseGetUserByMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseCreateAnAccount useCaseCreateAnAccount, UseCaseCreateUser useCaseCreateUser)
     {
         _tokenService = tokenService;
         _logger = logger;
+        
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
         _useCaseGetUserByName = useCaseGetUserByName;
         _bCryptService = bCryptService;
         _useCaseGetUserByLogin = useCaseGetUserByLogin;
         _useCaseGetUserByMail = useCaseGetUserByMail;
         _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
+        _useCaseCreateAnAccount = useCaseCreateAnAccount;
+        _useCaseCreateUser = useCaseCreateUser;
     }
     
     
@@ -52,7 +56,7 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public IActionResult SignIn([FromBody] DtoInputSignIn model)
+    public IActionResult SignIn([FromBody] DtoInputSignInUser model)
     {
         try
         {
@@ -74,9 +78,9 @@ public class UserController: ControllerBase
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [AllowAnonymous]
-    public IActionResult SignUp([FromBody] DtoInputSignUp model)
+    public IActionResult SignUp([FromBody] DtoInputSignUpUser model)
     {
         try
         {
@@ -86,10 +90,8 @@ public class UserController: ControllerBase
         }
         catch (KeyNotFoundException)
         {
-            //Create account
-        
             //Create User
-        
+            var dbCreatedUser = _useCaseCreateUser.Execute(model);
             //Create Token
             
             return Ok();

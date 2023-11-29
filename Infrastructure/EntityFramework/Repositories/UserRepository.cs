@@ -19,7 +19,9 @@ public class UserRepository: IUserRepository
 
     public DbUser Create(DbUser user)
     {
-        throw new NotImplementedException();
+        _context.Users.Add(user);
+        _context.SaveChanges();
+        return user;
     }
 
     public bool Update(DbUser user)

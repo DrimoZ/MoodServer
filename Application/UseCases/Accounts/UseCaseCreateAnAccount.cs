@@ -6,7 +6,7 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseCreateAnAccount: IUseCaseWriter<DbAccount, DtoInputAccount>
+public class UseCaseCreateAnAccount: IUseCaseWriter<DbAccount, DtoInputCreateAccount>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class UseCaseCreateAnAccount: IUseCaseWriter<DbAccount, DtoInputAccount>
         _mapper = mapper;
     }
 
-    public DbAccount Execute(DtoInputAccount input)
+    public DbAccount Execute(DtoInputCreateAccount inputCreate)
     {
-        var dbAccount = _accountRepository.Create(_mapper.Map<DbAccount>(input));
+        var dbAccount = _accountRepository.Create(_mapper.Map<DbAccount>(inputCreate));
         return dbAccount;
     }
 }
