@@ -8,10 +8,10 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\Users\" />
       <Folder Include="UseCases\Messages\" />
       <Folder Include="UseCases\Publications\" />
     </ItemGroup>

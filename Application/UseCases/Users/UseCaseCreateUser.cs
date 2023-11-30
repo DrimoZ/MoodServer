@@ -32,8 +32,6 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
         user.Account = _mapper.Map<DtoInputCreateUser.DtoAccount>(accountDto);
 
         var identifiedUser = _mapper.Map<DbUser>(user);
-        _logger.LogError(identifiedUser.Id);
-        
         return _userRepository.Create(identifiedUser);
     }
 }

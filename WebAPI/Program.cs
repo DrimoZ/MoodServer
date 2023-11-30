@@ -1,5 +1,7 @@
 using System.Text;
 using Application.Services;
+using Application.Services.Accounts;
+using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Users;
@@ -8,7 +10,6 @@ using Infrastructure.EntityFramework.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Services;
 using Mapper = Application.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,11 +32,14 @@ builder.Services.AddAutoMapper(typeof(Mapper));
 // Setup Database
 builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
     builder.Configuration.GetConnectionString("db")
-));
+).EnableDetailedErrors());
 
 //Database Repositories & Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+// Application Services
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseCreateUser>();

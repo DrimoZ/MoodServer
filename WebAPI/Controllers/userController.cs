@@ -1,9 +1,9 @@
 using Application.Dtos.User;
+using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Services;
 
 namespace WebAPI.Controllers;
 
