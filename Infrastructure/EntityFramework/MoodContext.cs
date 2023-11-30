@@ -52,5 +52,14 @@ public class MoodContext: DbContext
             builder.Property(friend => friend.UserId).HasColumnName("user_id");
             builder.Property(friend => friend.FriendId).HasColumnName("friend_id");
         });
+
+        modelBuilder.Entity<DbPublication>(builder =>
+        {
+            builder.ToTable("publications");
+            builder.HasKey("pub_id");
+            builder.Property(pub => pub.Id).HasColumnName("pub_id");
+            builder.Property(pub => pub.Content).HasColumnName("pub_content");
+            builder.Property(pub => pub.UserId).HasColumnName("user_id");
+        });
     }
 }
