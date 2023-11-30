@@ -8,7 +8,7 @@ public interface IPublicationRepository
     Publication? Get(int id);
     Publication Create(DbPublication publication);
     bool Update(DbPublication publication);
-    bool Delete(int id);
+    bool Delete(string id);
 
-    List<DbPublication> FetchByIdUser(int userId);
+    List<DbPublication> FetchByIdUser(string userId);
 }
