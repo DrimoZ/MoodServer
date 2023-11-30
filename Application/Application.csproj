@@ -13,7 +13,6 @@
 
     <ItemGroup>
       <Folder Include="UseCases\Messages\" />
-      <Folder Include="UseCases\Publications\" />
     </ItemGroup>
 
     <ItemGroup>
