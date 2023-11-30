@@ -37,6 +37,7 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 //Database Repositories & Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();

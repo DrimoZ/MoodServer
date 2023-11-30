@@ -1,11 +1,12 @@
 using Application.Dtos.Publication;
+using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseGetPublicationByUser
+public class UseCaseGetPublicationByUser:IUseCaseParameterizedQuery<List<DtoOutputPublication>, string>
 {
     private readonly IPublicationRepository _publicationRepository;
     private readonly IMapper _mapper;
@@ -15,9 +16,11 @@ public class UseCaseGetPublicationByUser
         _mapper = mapper;
     }
 
-    public DtoOutputPublication Execute(DbUser user)
+    public List<DtoOutputPublication> Execute(string userId)
     {
-        var dbPublication = _publicationRepository.FetchByUser(user);
-        return _mapper.Map<DtoOutputPublication>(dbPublication);
+        return _publicationRepository
+            .FetchByIdUser(userId)
+            .Select(pub => _mapper.Map<DtoOutputPublication>(pub))
+            .ToList();
     }
 }
