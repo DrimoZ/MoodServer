@@ -55,6 +55,7 @@ builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccount>();
 
 builder.Services.AddScoped<UseCaseGetPublicationByUser>();
+builder.Services.AddScoped<UseCaseCreatePublication>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
