@@ -61,6 +61,7 @@ CREATE TABLE friend_requests (
 CREATE TABLE publications (
     pub_id CHAR(32) PRIMARY KEY,
     pub_content NVARCHAR(255) NOT NULL,
+    user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );
 
 CREATE TABLE photo_publications (
