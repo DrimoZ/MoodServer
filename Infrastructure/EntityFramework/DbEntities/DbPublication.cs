@@ -6,5 +6,5 @@ public class DbPublication
     public string UserId { get; set; }
     public string Content { get; set; }
     
-    public DateTime date { get; set; }
+    public DateTime Date { get; set; }
 }

@@ -60,7 +60,7 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.Id).HasColumnName("pub_id");
             builder.Property(pub => pub.Content).HasColumnName("pub_content");
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
-            builder.Property(pub => pub.date).HasColumnName("pub_date");
+            builder.Property(pub => pub.Date).HasColumnName("pub_date");
         });
     }
 }
