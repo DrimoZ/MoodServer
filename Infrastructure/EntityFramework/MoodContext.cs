@@ -16,7 +16,9 @@ public class MoodContext: DbContext
     public DbSet<DbAccount> Accounts { get; set; }
     
     public DbSet<DbPublication> Publications { get; set; }
-    
+
+    public DbSet<DbFriend> Friends { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DbUser>(builder =>
@@ -41,6 +43,14 @@ public class MoodContext: DbContext
             builder.Property(account => account.PhoneNumber).HasColumnName("acc_phone_number");
             builder.Property(account => account.BirthDate).HasColumnName("acc_birth_date");
             builder.Property(account => account.Description).HasColumnName("acc_description");
+        });
+        
+        modelBuilder.Entity<DbFriend>(builder =>
+        {
+            builder.ToTable("friends");
+            builder.HasNoKey();
+            builder.Property(friend => friend.UserId).HasColumnName("user_id");
+            builder.Property(friend => friend.FriendId).HasColumnName("friend_id");
         });
     }
 }
