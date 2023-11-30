@@ -61,6 +61,7 @@ CREATE TABLE friend_requests (
 CREATE TABLE publications (
     pub_id CHAR(32) PRIMARY KEY,
     pub_content NVARCHAR(255) NOT NULL,
+    user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );
 
 CREATE TABLE photo_publications (
@@ -103,6 +104,7 @@ CREATE TABLE likes (
 GO
 INSERT INTO accounts VALUES ("ku784AJalJIwx98kPxQPM6QeLyuPgrno", '0600000000', '1990-01-01', 'Compte 1');
 INSERT INTO accounts VALUES ("fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", '0611111111', '1990-01-01', 'Compte 2');
+INSERT INTO accounts VALUES ("2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna", '0633333333', '2000-01-01', 'Compte 3');
 
 
 INSERT INTO users VALUES ("lXLVeLbaid03vOItRZP11EWdzhq2k7YH", 'user1@mail.com', 'login1', 'User 1', 
@@ -110,3 +112,11 @@ INSERT INTO users VALUES ("lXLVeLbaid03vOItRZP11EWdzhq2k7YH", 'user1@mail.com', 
 INSERT INTO users VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", 'user2@mail.com', 'login2', 'User 2', 
     '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2', "fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE");
 
+INSERT INTO users VALUES ("VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", 'mod3@mail.com', 'login3', 'User 3', 
+    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor', "2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna");
+
+
+INSERT INTO friends VALUES ('lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO friends VALUES ('lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp');
+INSERT INTO friends VALUES ('lXLVeLbaid03vOItRZP11EWdzhq2k7YH', 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
+INSERT INTO friends VALUES ('VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp', 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
