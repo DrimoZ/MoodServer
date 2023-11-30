@@ -5,8 +5,8 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IPublicationRepository
 {
-    Publication? Get(int id);
-    Publication Create(DbPublication publication);
+    DbPublication? Get(int id);
+    DbPublication Create(DbPublication publication);
     bool Update(DbPublication publication);
     bool Delete(string id);
 

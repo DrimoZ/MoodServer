@@ -12,14 +12,16 @@ public class PublicationRepository:IPublicationRepository
         _context = context;
     }
 
-    public Publication? Get(int id)
+    public DbPublication? Get(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Publication Create(DbPublication publication)
+    public DbPublication Create(DbPublication publication)
     {
-        throw new NotImplementedException();
+        _context.Publications.Add(publication);
+        _context.SaveChanges();
+        return publication;
     }
 
     public bool Update(DbPublication publication)
@@ -35,8 +37,8 @@ public class PublicationRepository:IPublicationRepository
     public List<DbPublication> FetchByIdUser(string userId)
     {
         return _context.Publications
-            .Select(history => history)
-            .Where(history => history.UserId == userId)
+            .Select(pub => pub)
+            .Where(pub => pub.UserId == userId)
             .ToList();
     }
 }
