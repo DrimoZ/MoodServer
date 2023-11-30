@@ -6,7 +6,7 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseGetPublicationByUser:IUseCaseParameterizedQuery<List<DtoOutputPublication>, int>
+public class UseCaseGetPublicationByUser:IUseCaseParameterizedQuery<List<DtoOutputPublication>, string>
 {
     private readonly IPublicationRepository _publicationRepository;
     private readonly IMapper _mapper;
@@ -16,8 +16,11 @@ public class UseCaseGetPublicationByUser:IUseCaseParameterizedQuery<List<DtoOutp
         _mapper = mapper;
     }
 
-    public List<DtoOutputPublication> Execute(int userId)
+    public List<DtoOutputPublication> Execute(string userId)
     {
-            
+        return _publicationRepository
+            .FetchByIdUser(userId)
+            .Select(pub => _mapper.Map<DtoOutputPublication>(pub))
+            .ToList();
     }
 }

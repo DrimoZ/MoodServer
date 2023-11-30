@@ -5,6 +5,13 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public class PublicationRepository:IPublicationRepository
 {
+    private readonly MoodContext _context;
+
+    public PublicationRepository(MoodContext context)
+    {
+        _context = context;
+    }
+
     public Publication? Get(int id)
     {
         throw new NotImplementedException();
@@ -20,13 +27,16 @@ public class PublicationRepository:IPublicationRepository
         throw new NotImplementedException();
     }
 
-    public bool Delete(int id)
+    public bool Delete(string id)
     {
         throw new NotImplementedException();
     }
 
-    public List<DbPublication> FetchByIdUser(int userId)
+    public List<DbPublication> FetchByIdUser(string userId)
     {
-        throw new NotImplementedException();
+        return _context.Publications
+            .Select(history => history)
+            .Where(history => history.UserId == userId)
+            .ToList();
     }
 }
