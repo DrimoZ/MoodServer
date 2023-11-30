@@ -61,6 +61,7 @@ CREATE TABLE friend_requests (
 CREATE TABLE publications (
     pub_id CHAR(32) PRIMARY KEY,
     pub_content NVARCHAR(255) NOT NULL,
+    pub_date DATETIME NOT NULL,
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );
 
@@ -110,4 +111,8 @@ INSERT INTO users VALUES ("lXLVeLbaid03vOItRZP11EWdzhq2k7YH", 'user1@mail.com', 
     '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1', "ku784AJalJIwx98kPxQPM6QeLyuPgrno");
 INSERT INTO users VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", 'user2@mail.com', 'login2', 'User 2', 
     '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2', "fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE");
+
+INSERT INTO publications VALUES ("au784AJalJIwx98kPxQPM6QeLyuPgrno", 'content 1', '1990-01-02', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications VALUES ("aa784AJalJIwx98kPxQPM6QeLyuPgrno", 'content 3', '1990-01-03', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications VALUES ("aaPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", 'content 2', '1990-01-02', 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
 
