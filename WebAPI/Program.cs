@@ -4,6 +4,7 @@ using Application.Services.Accounts;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
+using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories;
@@ -52,6 +53,8 @@ builder.Services.AddScoped<UseCaseGetUserByMail>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccount>();
+
+builder.Services.AddScoped<UseCaseGetPublicationByUser>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
