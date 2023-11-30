@@ -68,6 +68,6 @@ public class User
     public override string ToString()
     {
         var friendsString = string.Join("\n\t\t", _friends.Select(f => f.ToString()));
-        return $"User: \n\tId={Id}, \n\tRole={Role}, \n\tLogin={Login}, \n\tMail={Mail}, \n\tName={Name}, \n\tTitle={Title}, \n\tTotalFriends={TotalFriends()}, \n\tTotalPublications={TotalPublications()}, \n\tAccount={Account?.ToString() ?? "No Account"}, \n\tFriends=[{friendsString}\n]";
+        return $"User: \n\tId={Id}, \n\tRole={Role}, \n\tLogin={Login}, \n\tMail={Mail}, \n\tName={Name}, \n\tTitle={Title}, \n\tTotalFriends={TotalFriends()}, \n\tTotalPublications={TotalPublications()}, \n\tAccount={Account?.ToString() ?? "No Account"}, \n\tFriends=[{friendsString}]";
     }
 }

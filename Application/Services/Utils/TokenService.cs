@@ -15,7 +15,7 @@ public class TokenService
         _configuration = configuration;
     }
     
-    public string GenerateJwtToken(string username, string role, bool isSessionOnly)
+    public string GenerateJwtToken(string id, string role, bool isSessionOnly)
     {
         var issuer = _configuration["JwtSettings:Issuer"];
         var audience = _configuration["JwtSettings:Audience"];
@@ -27,7 +27,7 @@ public class TokenService
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Name, id),
             new Claim(ClaimTypes.Role, role)
             // Add more claims as needed
         };
