@@ -19,7 +19,7 @@ public class UserService: IUserService
         _mapper = mapper;
     }
 
-    public User FetchById(string id, IEnumerable<FetchAttribute> attributesToFetch)
+    public User FetchById(string id, IEnumerable<UserFetchAttribute> attributesToFetch)
     {
         var dbUser = _userRepository.FetchById(id);
         var user = _mapper.Map<User>(dbUser);
@@ -28,18 +28,18 @@ public class UserService: IUserService
         {
             switch (attribute)
             {
-                case FetchAttribute.Account:
+                case UserFetchAttribute.Account:
                     var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
                     user.Account =  _mapper.Map<Account>(dbAccount);
                     break;
-                case FetchAttribute.Friends:
+                case UserFetchAttribute.Friends:
                     var dbFriends = _userRepository.FetchFriends(id);
                     user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
-                case FetchAttribute.Publications:
+                case UserFetchAttribute.Publications:
                     //user.AddRange(_userRepository.FetchPublications(id));
                     break;
-                case FetchAttribute.Messages:
+                case UserFetchAttribute.Messages:
                     break;
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");
