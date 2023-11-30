@@ -6,9 +6,9 @@ namespace Infrastructure.EntityFramework.Repositories;
 public interface IPublicationRepository
 {
     Publication? Get(int id);
-    Publication Create(Publication publication);
-    bool Update(Publication publication);
+    Publication Create(DbPublication publication);
+    bool Update(DbPublication publication);
     bool Delete(int id);
 
-    DbPublication FetchByUser(DbUser user);
+    List<DbPublication> FetchByIdUser(int userId);
 }
