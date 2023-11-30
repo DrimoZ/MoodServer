@@ -2,5 +2,5 @@
 
 public enum UserRole
 {
-    User, Moderator, Administrator
+    Unknown, User, Moderator, Administrator
 }
