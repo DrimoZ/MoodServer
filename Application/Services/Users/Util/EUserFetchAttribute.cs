@@ -1,6 +1,6 @@
 ﻿namespace Application.Services.Users.Util;
 
-public enum PublicationFetchAttribute
+public enum EUserFetchAttribute
 {
     Account, Friends, Publications, Messages
 }

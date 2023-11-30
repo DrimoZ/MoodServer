@@ -5,5 +5,5 @@ namespace Application.Services.Users;
 
 public interface IUserService
 {
-    User FetchById(string id, IEnumerable<UserFetchAttribute> attributesToFetch);
+    User FetchById(string id, IEnumerable<EUserFetchAttribute> attributesToFetch);
 }
