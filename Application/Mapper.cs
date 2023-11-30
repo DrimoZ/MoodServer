@@ -41,6 +41,12 @@ public class Mapper: Profile
         
         //Publication
         CreateMap<DbPublication, DtoOutputPublication>();
+        CreateMap<DtoInputCreatePublication, DbPublication>()
+            .BeforeMap((s, d) =>
+            {
+                d.Id = _idService.GenerateRandomId(32);
+                d.Date = DateTime.Now;
+            });
 
     }
 }
