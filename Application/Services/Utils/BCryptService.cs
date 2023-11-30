@@ -1,4 +1,4 @@
-namespace WebApi.Services;
+namespace Application.Services.Utils;
 
 public class BCryptService
 {
