@@ -41,4 +41,9 @@ public class PublicationRepository:IPublicationRepository
             .Where(pub => pub.UserId == userId)
             .ToList();
     }
+
+    public object FetchById(string id)
+    {
+        throw new NotImplementedException();
+    }
 }

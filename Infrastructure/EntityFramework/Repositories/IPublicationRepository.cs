@@ -11,4 +11,5 @@ public interface IPublicationRepository
     bool Delete(string id);
 
     List<DbPublication> FetchByIdUser(string userId);
+    object FetchById(string id);
 }
