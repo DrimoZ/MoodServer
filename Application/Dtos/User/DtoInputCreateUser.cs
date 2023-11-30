@@ -1,21 +1,24 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace Application.Dtos.User;
 
 public class DtoInputCreateUser
 {
-    public string Id { get; set; }
+    [JsonIgnore] public string Id { get; set; }
     
-    public string Mail { get; set; }
-    public string Login { get; set; }
-    public string Name { get; set; }
-    public string Password { get; set; }
+    [Required] public string Mail { get; set; }
+    [Required] public string Login { get; set; }
+    [Required] public string Name { get; set; }
+    [Required] public string Password { get; set; }
     
-    public DtoAccount Account { get; set; }
+    [Required] public DtoAccount Account { get; set; }
     
     public class DtoAccount
     {
-        public string Id { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Description { get; set; }
-        public DateTime BirthDate { get; set; }
+        [Required] public string Id { get; set; }
+        [JsonIgnore] public string PhoneNumber { get; set; }
+        [JsonIgnore] public string Description { get; set; }
+        [Required] public DateTime BirthDate { get; set; }
     }
 }
