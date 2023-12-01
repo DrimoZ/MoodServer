@@ -19,6 +19,7 @@ public class PublicationRepository:IPublicationRepository
 
     public DbPublication Create(DbPublication publication)
     {
+        publication.Date = DateTime.Now;
         _context.Publications.Add(publication);
         _context.SaveChanges();
         return publication;
