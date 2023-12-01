@@ -33,7 +33,8 @@ public class PublicationRepository:IPublicationRepository
     {
         var entity = FetchById(id);
         if (entity == null) throw new KeyNotFoundException("PublicationIdNotFound");
-        entity.isDeleted = true;
+        entity.IsDeleted = true;
+        _context.SaveChanges();
         return true;
     }
 

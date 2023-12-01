@@ -26,7 +26,7 @@ public class MoodContext: DbContext
             builder.Property(user => user.Role).HasColumnName("user_role");
             builder.Property(user => user.Title).HasColumnName("user_title");
             builder.Property(user => user.AccountId).HasColumnName("acc_id");
-            builder.Property(user => user.isDeleted).HasColumnName("user_isDeleted");
+            builder.Property(user => user.IsDeleted).HasColumnName("user_isDeleted");
         });
         
         modelBuilder.Entity<DbAccount>(builder =>
@@ -55,7 +55,7 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.Content).HasColumnName("pub_content");
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
             builder.Property(pub => pub.Date).HasColumnName("pub_date");
-            builder.Property(pub => pub.isDeleted).HasColumnName("pub_isDeleted");
+            builder.Property(pub => pub.IsDeleted).HasColumnName("pub_isDeleted");
         });
     }
 }

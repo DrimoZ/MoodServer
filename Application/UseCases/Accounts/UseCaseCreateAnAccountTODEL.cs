@@ -6,12 +6,12 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Accounts;
 
-public class UseCaseCreateAnAccount: IUseCaseWriter<DbAccount, DtoInputCreateAccount>
+public class UseCaseCreateAnAccountTODEL: IUseCaseWriter<DbAccount, DtoInputCreateAccount>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseCreateAnAccount(IAccountRepository accountRepository, IMapper mapper)
+    public UseCaseCreateAnAccountTODEL(IAccountRepository accountRepository, IMapper mapper)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;

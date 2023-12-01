@@ -6,4 +6,5 @@ public class DtoOutputPublication
     public string UserId { get; set; }
     public string Content { get; set; }
     public DateTime date { get; set; }
+    public bool IsDeleted { get; set; }
 }

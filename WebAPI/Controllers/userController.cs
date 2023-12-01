@@ -21,10 +21,10 @@ public class UserController: ControllerBase
     private readonly UseCaseGetUserByName _useCaseGetUserByName;
     private readonly UseCaseGetUserByLogin _useCaseGetUserByLogin;
     private readonly UseCaseGetUserByMail _useCaseGetUserByMail;
-    private readonly UseCaseCreateAnAccount _useCaseCreateAnAccount;
+    private readonly UseCaseCreateAnAccountTODEL _useCaseCreateAnAccountTodel;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName, BCryptService bCryptService, UseCaseGetUserByLogin useCaseGetUserByLogin, UseCaseGetUserByMail useCaseGetUserByMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseCreateAnAccount useCaseCreateAnAccount, UseCaseCreateUser useCaseCreateUser)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName, BCryptService bCryptService, UseCaseGetUserByLogin useCaseGetUserByLogin, UseCaseGetUserByMail useCaseGetUserByMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseCreateAnAccountTODEL useCaseCreateAnAccountTodel, UseCaseCreateUser useCaseCreateUser)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -35,7 +35,7 @@ public class UserController: ControllerBase
         _useCaseGetUserByLogin = useCaseGetUserByLogin;
         _useCaseGetUserByMail = useCaseGetUserByMail;
         _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
-        _useCaseCreateAnAccount = useCaseCreateAnAccount;
+        _useCaseCreateAnAccountTodel = useCaseCreateAnAccountTodel;
         _useCaseCreateUser = useCaseCreateUser;
     }
     

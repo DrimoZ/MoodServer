@@ -8,5 +8,5 @@ public class DbPublication
     
     public DateTime Date { get; set; }
     
-    public bool isDeleted { get; set; }
+    public bool IsDeleted { get; set; }
 }

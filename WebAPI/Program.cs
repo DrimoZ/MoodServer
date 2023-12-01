@@ -53,11 +53,12 @@ builder.Services.AddScoped<UseCaseGetUserByLogin>();
 builder.Services.AddScoped<UseCaseGetUserByMail>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
-builder.Services.AddScoped<UseCaseCreateAnAccount>();
+builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
 
 builder.Services.AddScoped<UseCaseGetPublicationByUser>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
+builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();

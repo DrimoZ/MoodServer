@@ -7,10 +7,10 @@ namespace WebAPI.Controllers;
 [Route("api/v1/account")]
 public class AccountController : ControllerBase
 {
-    private readonly UseCaseCreateAnAccount _useCaseCreateAn;
+    private readonly UseCaseCreateAnAccountTODEL _useCaseCreateAn;
     private readonly UseCaseGetAccountById _useCaseGetAccountById;
 
-    public AccountController(UseCaseCreateAnAccount useCaseCreateAn, UseCaseGetAccountById useCaseGetAccountById)
+    public AccountController(UseCaseCreateAnAccountTODEL useCaseCreateAn, UseCaseGetAccountById useCaseGetAccountById)
     {
         _useCaseCreateAn = useCaseCreateAn;
         _useCaseGetAccountById = useCaseGetAccountById;

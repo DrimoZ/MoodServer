@@ -5,9 +5,9 @@ namespace Application.UseCases.Publications;
 
 public class UseCaseSetPublicationDeleted:IUseCaseParameterizedWriter<bool, int, bool>
 {
-    private readonly PublicationRepository _publicationRepository;
+    private readonly IPublicationRepository _publicationRepository;
 
-    public UseCaseSetPublicationDeleted(PublicationRepository publicationRepository)
+    public UseCaseSetPublicationDeleted(IPublicationRepository publicationRepository)
     {
         _publicationRepository = publicationRepository;
     }

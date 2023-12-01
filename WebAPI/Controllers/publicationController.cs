@@ -48,13 +48,13 @@ public class PublicationController: ControllerBase
     }
     
     [HttpPatch]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult UpdateIsDeleted(int id, bool isDeleted)
     {
         if (_useCaseSetPublicationDeleted.Execute(id, isDeleted))
         {
-            return NoContent();
+            return Ok();
         }
 
         return NotFound();
