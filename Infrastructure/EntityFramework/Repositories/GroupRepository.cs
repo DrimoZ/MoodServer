@@ -1,3 +1,6 @@
 namespace Infrastructure.EntityFramework.Repositories;
 
-public record IGroupController();
+public class GroupRepository
+{
+    
+}
