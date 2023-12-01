@@ -5,9 +5,6 @@ namespace Application.Dtos.User;
 
 public class DtoInputCreateUser
 {
-    [JsonIgnore] 
-    public string Id { get; set; }
-    
     [Required] 
     public string Mail { get; set; }
     

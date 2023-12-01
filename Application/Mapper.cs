@@ -12,33 +12,28 @@ public class Mapper: Profile
 {
     public Mapper()
     {
+        //UseCaseCreateUser
+        CreateMap<DtoInputSignUpUser, DbAccount>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        //UseCaseCreateUser
+        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        //UseCaseCreateUser
+        CreateMap<DtoInputCreateUser, DbUser>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Role, opt => opt.Ignore());
+        
+        
+        
         //Users
         CreateMap<DbUser, DtoOutputUser>();
         CreateMap<DbUser, User>();
         CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-        CreateMap<DtoInputCreateUser, DbUser>();
-            /*.BeforeMap((s, d) =>
-            {
-                s.Id = _idService.GenerateRandomId(32);
-                d.Role = (int) UserRole.User;
-                s.Password = _bCryptService.HashPassword(s.Password);
-            });*/
 
         
         //Account
         CreateMap<DbAccount, DtoOutputAccount>();
         CreateMap<DbAccount, Account>();
         CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
-        
-        
-        //UseCaseCreateUser
-        CreateMap<DtoInputSignUpUser, DbAccount>();
-        
-        
-        CreateMap<DtoInputCreateAccount, DbAccount>();
-            //.BeforeMap((s, d) => d.Id = _idService.GenerateRandomId(32) );
-
-        
         
         
         //Publication
