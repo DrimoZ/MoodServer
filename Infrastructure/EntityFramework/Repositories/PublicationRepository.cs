@@ -29,13 +29,16 @@ public class PublicationRepository:IPublicationRepository
         throw new NotImplementedException();
     }
 
-    public bool UpdateDelete(string id, bool isDeleted)
+    public bool UpdateDelete(int id, bool isDeleted)
     {
         var entity = FetchById(id);
+        if (entity == null) throw new KeyNotFoundException("PublicationIdNotFound");
+        entity.isDeleted = true;
+        return true;
     }
 
 
-    public bool Delete(string id)
+    public bool Delete(int id)
     {
         var entity = _context.Publications.FirstOrDefault(e => e.Id == id);
 
@@ -64,7 +67,7 @@ public class PublicationRepository:IPublicationRepository
         return count;
     }
 
-    public DbPublication FetchById(string id)
+    public DbPublication FetchById(int id)
     {
         var entity = _context.Publications
             .FirstOrDefault(pub => pub.Id == id);

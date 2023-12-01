@@ -3,7 +3,7 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseDeletePublication:IUseCaseParameterizedQuery<bool, string>
+public class UseCaseDeletePublication:IUseCaseParameterizedQuery<bool, int>
 {
     private readonly IPublicationRepository _publicationRepository;
 
@@ -12,7 +12,7 @@ public class UseCaseDeletePublication:IUseCaseParameterizedQuery<bool, string>
         _publicationRepository = publicationRepository;
     }
 
-    public bool Execute(string id)
+    public bool Execute(int id)
     {
         return _publicationRepository.Delete(id);
     }

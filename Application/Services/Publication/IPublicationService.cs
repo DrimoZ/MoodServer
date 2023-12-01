@@ -4,5 +4,5 @@ namespace Application.Services.Users.Util;
 
 public interface IPublicationService
 {
-    Publication FetchById(string id, IEnumerable<EPublicationFetchAttribute> attributesToFetch);
+    Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch);
 }

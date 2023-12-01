@@ -40,7 +40,7 @@ public class PublicationController: ControllerBase
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult Delete(string id)
+    public ActionResult Delete(int id)
     {
         if (_useCaseDeletePublication.Execute(id))
             return NoContent();
@@ -50,7 +50,7 @@ public class PublicationController: ControllerBase
     [HttpPatch]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult UpdateIsDeleted(string id, bool isDeleted)
+    public ActionResult UpdateIsDeleted(int id, bool isDeleted)
     {
         if (_useCaseSetPublicationDeleted.Execute(id, isDeleted))
         {

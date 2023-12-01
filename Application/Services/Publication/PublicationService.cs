@@ -15,7 +15,7 @@ public class PublicationService:IPublicationService
         _mapper = mapper;
     }
 
-    public Publication FetchById(string id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
+    public Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
     {
         var dbPublication = _publicationRepository.FetchById(id);
         var user = _mapper.Map<Publication>(dbPublication);

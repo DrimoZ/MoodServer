@@ -34,23 +34,23 @@ public class UserService: IUserService
         {
             switch (attribute)
             {
-                case UserFetchAttribute.Data:
+                case EUserFetchAttribute.Data:
                     user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
                     user.PublicationCount = _publicationRepository.FetchPublicationCount(user.Id);
                     break;
-                case UserFetchAttribute.Account:
+                case EUserFetchAttribute.Account:
                     var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
                     user.Account =  _mapper.Map<Account>(dbAccount);
                     break;
-                case UserFetchAttribute.Friends:
+                case EUserFetchAttribute.Friends:
                     var dbFriends = _friendRepository.FetchFriends(user.Id);
                     user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
-                case UserFetchAttribute.Publications:
+                case EUserFetchAttribute.Publications:
                     var dbPublications = _publicationRepository.FetchPublications(user.Id);
                     user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     break;
-                case UserFetchAttribute.Messages:
+                case EUserFetchAttribute.Messages:
                     break;
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");
