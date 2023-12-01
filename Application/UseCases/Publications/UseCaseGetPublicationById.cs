@@ -1,6 +1,25 @@
+using Application.Dtos.Publication;
+using Application.Dtos.User;
+using Application.UseCases.Utils;
+using AutoMapper;
+using Infrastructure.EntityFramework.Repositories;
+
 namespace Application.UseCases.Publications;
 
-public class UseCaseGetPublicationById
+public class UseCaseGetPublicationById:IUseCaseParameterizedQuery<DtoOutputPublication, string>
 {
-    
+    private readonly IPublicationRepository _publicationRepository;
+    private readonly IMapper _mapper;
+
+    public UseCaseGetPublicationById(IPublicationRepository publicationRepository, IMapper mapper)
+    {
+        _publicationRepository = publicationRepository;
+        _mapper = mapper;
+    }
+
+    public DtoOutputPublication Execute(string id)
+    {
+        var dbPublication = _publicationRepository.FetchById(id);
+        return _mapper.Map<DtoOutputPublication>(dbPublication);
+    }
 }

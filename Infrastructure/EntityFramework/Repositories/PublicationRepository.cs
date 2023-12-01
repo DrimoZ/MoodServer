@@ -50,8 +50,12 @@ public class PublicationRepository:IPublicationRepository
             .ToList();
     }
 
-    public object FetchById(string id)
+    public DbPublication FetchById(string id)
     {
-        throw new NotImplementedException();
+        var entity = _context.Publications
+            .FirstOrDefault(pub => pub.Id == id);
+        if (entity == null) throw new KeyNotFoundException("PublicationIdNotFound");
+
+        return entity;
     }
 }
