@@ -29,6 +29,7 @@ public class UserService: IUserService
         var dbUser = _userRepository.FetchById(id);
         var user = _mapper.Map<User>(dbUser);
 
+        //Factory pour chaque attribut
         foreach (var attribute in attributesToFetch)
         {
             switch (attribute)

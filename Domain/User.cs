@@ -10,6 +10,7 @@ public class User
     public string Name { get; set; }
     public string Title { get; set; }
     
+    public bool isDeleted { get; set; }
     
     private int _friendCount;
     public int FriendCount { get => _friendCount; set { if (_friendCount == 0 && value > 0) _friendCount = value; } }

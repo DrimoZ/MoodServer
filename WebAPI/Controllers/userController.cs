@@ -68,6 +68,7 @@ public class UserController: ControllerBase
             // Try Generating a Token and publish it
             if (!GenerateToken(dbUser.Id, dbUser.Role.ToString(), !model.StayLoggedIn)) return NotFound();
             
+            
             return Ok();
         }
         catch (KeyNotFoundException)

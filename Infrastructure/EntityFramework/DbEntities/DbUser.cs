@@ -10,4 +10,5 @@ public class DbUser
     public int Role { get; set; }
     public string? Title { get; set; }
     public string AccountId { get; set; }
+    public bool isDeleted { get; set; }
 }

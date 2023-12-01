@@ -1,14 +1,14 @@
 using System.Text;
-using Application.Services;
-using Application.Services.Accounts;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
+using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Mapper = Application.Mapper;

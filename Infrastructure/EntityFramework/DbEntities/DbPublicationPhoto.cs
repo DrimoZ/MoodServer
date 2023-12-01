@@ -2,8 +2,8 @@ namespace Infrastructure.EntityFramework.DbEntities;
 
 public class DbPublicationPhoto
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
     public string Extension { get; set; }
     public string Content { get; set; }
-    public string IdPublication { get; set; }
+    public int IdPublication { get; set; }
 }
