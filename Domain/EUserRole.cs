@@ -1,6 +1,6 @@
 ﻿namespace Domain;
 
-public enum UserRole
+public enum EUserRole
 {
     Unknown, User, Moderator, Administrator
 }

@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Domain;
+﻿using Application.Services.Users.Util;
+using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
 
-namespace Application.Services.Users.Util;
+namespace Application.Services.Publication;
 
-public class PublicationService:IPublicationService
+public class PublicationService: IPublicationService
 {
     private readonly IPublicationRepository _publicationRepository;
     private readonly IMapper _mapper;
@@ -15,10 +15,10 @@ public class PublicationService:IPublicationService
         _mapper = mapper;
     }
 
-    public Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
+    public Domain.Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
     {
         var dbPublication = _publicationRepository.FetchById(id);
-        var user = _mapper.Map<Publication>(dbPublication);
+        var user = _mapper.Map<Domain.Publication>(dbPublication);
 
         foreach (var attribute in attributesToFetch)
         {

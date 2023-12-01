@@ -107,26 +107,26 @@ CREATE TABLE likes (
 );
 
 GO
-INSERT INTO accounts VALUES ("ku784AJalJIwx98kPxQPM6QeLyuPgrno", '0600000000', '1990-01-01', 'Compte 1');
-INSERT INTO accounts VALUES ("fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", '0611111111', '1990-01-01', 'Compte 2');
-INSERT INTO accounts VALUES ("2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna", '0633333333', '2000-01-01', 'Compte 3');
+INSERT INTO accounts VALUES ("acc_ku784AJalJIwx98kPxQPM6QeLyuPgrno", '0600000000', '1990-01-01', 'Compte 1');
+INSERT INTO accounts VALUES ("acc_fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", '0611111111', '1990-01-01', 'Compte 2');
+INSERT INTO accounts VALUES ("acc_2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna", '0633333333', '2000-01-01', 'Compte 3');
 
 
-INSERT INTO users VALUES ('lXLVeLbaid03vOItRZP11EWdzhq2k7YH', 'user1@mail.com', 'login1', 'User 1',
-    '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'ku784AJalJIwx98kPxQPM6QeLyuPgrno');
-INSERT INTO users VALUES ('lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'user2@mail.com', 'login2', 'User 2',
-    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE');
-INSERT INTO users VALUES ("VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", 'mod3@mail.com', 'login3', 'User 3', 
-    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0, "2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna");
+INSERT INTO users VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH', 'user1@mail.com', 'login1', 'User 1',
+    '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'acc_ku784AJalJIwx98kPxQPM6QeLyuPgrno');
+INSERT INTO users VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'user2@mail.com', 'login2', 'User 2',
+    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'acc_fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE');
+INSERT INTO users VALUES ("usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", 'mod3@mail.com', 'login3', 'User 3', 
+    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0, "acc_2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna");
 
 
 
-INSERT INTO friends VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "lXLVeLbaid03vOItRZP11EWdzhq2k7YH");
-INSERT INTO friends VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp");
-INSERT INTO friends VALUES ("lXLVeLbaid03vOItRZP11EWdzhq2k7YH", "lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
-INSERT INTO friends VALUES ("VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", "lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
+INSERT INTO friends VALUES ("usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH");
+INSERT INTO friends VALUES ("usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp");
+INSERT INTO friends VALUES ("usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH", "usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
+INSERT INTO friends VALUES ("usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", "usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
 
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ('content 1', '1990-01-02', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 3', '1990-01-03', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 2', '1990-01-02', 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ('content 1', '1990-01-02', 'usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 3', '1990-01-03', 'usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 2', '1990-01-02', 'usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
 

@@ -12,7 +12,6 @@ namespace WebAPI.Controllers;
 public class UserController: ControllerBase
 {
     private readonly TokenService _tokenService;
-    private readonly BCryptService _bCryptService;
     
     private readonly ILogger<UserController> _logger;
     
@@ -31,7 +30,6 @@ public class UserController: ControllerBase
         
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
         _useCaseGetUserByName = useCaseGetUserByName;
-        _bCryptService = bCryptService;
         _useCaseGetUserByLogin = useCaseGetUserByLogin;
         _useCaseGetUserByMail = useCaseGetUserByMail;
         _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
@@ -63,7 +61,7 @@ public class UserController: ControllerBase
             // Get User From Database
             var dbUser = _useCaseGetUserByLoginOrMail.Execute(model.Login);
             // Check If Given Password Corresponds
-            if (!_bCryptService.VerifyPassword(model.Password, dbUser.Password)) return NotFound();
+            if (!BCryptService.VerifyPassword(model.Password, dbUser.Password)) return NotFound();
 
             // Try Generating a Token and publish it
             if (!GenerateToken(dbUser.Id, dbUser.Role.ToString(), !model.StayLoggedIn)) return NotFound();
@@ -98,7 +96,7 @@ public class UserController: ControllerBase
                 var dbCreatedUser = _useCaseCreateUser.Execute(model);
                 
                 //Verify Password has not changed
-                if (!_bCryptService.VerifyPassword(model.Password, dbCreatedUser.Password)) return Problem("MismatchData");
+                if (!BCryptService.VerifyPassword(model.Password, dbCreatedUser.Password)) return Problem("MismatchData");
                 
                 // Try Generating a Token and publish it
                 if (!GenerateToken(dbCreatedUser.Id, dbCreatedUser.Role.ToString(), true)) return NotFound();
