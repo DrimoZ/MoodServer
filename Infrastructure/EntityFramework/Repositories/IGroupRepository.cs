@@ -1,3 +1,8 @@
+using Infrastructure.EntityFramework.DbEntities;
+
 namespace Infrastructure.EntityFramework.Repositories;
 
-public record IGroupRepository();
+public interface IGroupRepository
+{
+    DbGroup Create(DbGroup map);
+}
