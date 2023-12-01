@@ -12,7 +12,7 @@ public class FriendRepository: IFriendRepository
         _context = context;
     }
 
-    public List<DbUser> FetchFriends(string userId)
+    public IEnumerable<DbUser> FetchFriends(string userId)
     {
         var friends = _context.Friends
             .Where(f => f.UserId == userId)
@@ -24,5 +24,12 @@ public class FriendRepository: IFriendRepository
 
         return friends;
     }
-    
+
+    public int FetchFriendCount(string userId)
+    {
+        var count = _context.Friends
+            .Count(f => f.UserId == userId);
+        
+        return count;
+    }
 }

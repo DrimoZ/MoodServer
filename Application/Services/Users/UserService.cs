@@ -36,16 +36,16 @@ public class UserService: IUserService
                     user.Account =  _mapper.Map<Account>(dbAccount);
                     break;
                 case UserFetchAttribute.Friends:
-                    var dbFriends = _friendRepository.FetchFriends(id);
+                    var dbFriends = _friendRepository.FetchFriends(user.Id);
                     user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
                 case UserFetchAttribute.Publications:
-                    //user.AddRange(_userRepository.FetchPublications(id));
+                    //user.AddRange(_userRepository.FetchPublications(user.Id));
                     break;
                 case UserFetchAttribute.Messages:
                     break;
                 case UserFetchAttribute.Data:
-                    
+                    user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
                     break;
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");

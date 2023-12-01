@@ -2,5 +2,5 @@
 
 public enum UserFetchAttribute
 {
-    Account, Friends, Publications, Messages
+    Account, Friends, Publications, Messages, Data
 }
