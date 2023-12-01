@@ -108,16 +108,26 @@ CREATE TABLE likes (
 );
 
 GO
-INSERT INTO accounts VALUES ('ku784AJalJIwx98kPxQPM6QeLyuPgrno', '0600000000', '1990-01-01', 'Compte 1', 0);
-INSERT INTO accounts VALUES ('fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE', '0611111111', '1990-01-01', 'Compte 2', 0);
+INSERT INTO accounts VALUES ("ku784AJalJIwx98kPxQPM6QeLyuPgrno", '0600000000', '1990-01-01', 'Compte 1');
+INSERT INTO accounts VALUES ("fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", '0611111111', '1990-01-01', 'Compte 2');
+INSERT INTO accounts VALUES ("2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna", '0633333333', '2000-01-01', 'Compte 3');
 
 
 INSERT INTO users VALUES ('lXLVeLbaid03vOItRZP11EWdzhq2k7YH', 'user1@mail.com', 'login1', 'User 1',
     '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'ku784AJalJIwx98kPxQPM6QeLyuPgrno');
 INSERT INTO users VALUES ('lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'user2@mail.com', 'login2', 'User 2',
     '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE');
+INSERT INTO users VALUES ("VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", 'mod3@mail.com', 'login3', 'User 3', 
+    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor', "2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna");
 
-INSERT INTO publications VALUES ('au784AJalJIwx98kPxQPM6QeLyuPgrno', 'content 1', '1990-01-02',0, 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications VALUES ('aa784AJalJIwx98kPxQPM6QeLyuPgrno', 'content 3', '1990-01-03',0, 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications VALUES ('aaPBu7Dtuqn32rAp7ocsonMiK6MAkOoE', 'content 2', '1990-01-02',0, 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
+
+
+INSERT INTO friends VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "lXLVeLbaid03vOItRZP11EWdzhq2k7YH");
+INSERT INTO friends VALUES ("lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp");
+INSERT INTO friends VALUES ("lXLVeLbaid03vOItRZP11EWdzhq2k7YH", "lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
+INSERT INTO friends VALUES ("VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", "lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
+
+INSERT INTO publications VALUES ("au784AJalJIwx98kPxQPM6QeLyuPgrno", 'content 1', '1990-01-02', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications VALUES ("aa784AJalJIwx98kPxQPM6QeLyuPgrno", 'content 3', '1990-01-03', 'lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
+INSERT INTO publications VALUES ("aaPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", 'content 2', '1990-01-02', 'lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
 

@@ -9,10 +9,12 @@ namespace WebAPI.Controllers;
 public class PublicationController: ControllerBase
 {
     private UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
+    private UseCaseCreatePublication _useCaseCreatePublication;
 
-    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser)
+    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication)
     {
         _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
+        _useCaseCreatePublication = useCaseCreatePublication;
     }
 
     [HttpGet("{userId}")]
@@ -20,5 +22,14 @@ public class PublicationController: ControllerBase
     public ActionResult<DtoOutputPublication> GetAccountById(string userId)
     {
         return Ok(_useCaseGetPublicationByUser.Execute(userId));
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public ActionResult<DtoOutputPublication> Create(DtoInputCreatePublication dto)
+    {
+        var publicationCreated = _useCaseCreatePublication.Execute(dto);
+            
+        return StatusCode(201, publicationCreated);
     }
 }

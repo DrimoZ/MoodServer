@@ -12,6 +12,7 @@ public class Mapper: Profile
 {
     private readonly IdService _idService = new IdService();
     private readonly BCryptService _bCryptService = new BCryptService();
+    
     public Mapper()
     {
         //Users
@@ -41,6 +42,12 @@ public class Mapper: Profile
         
         //Publication
         CreateMap<DbPublication, DtoOutputPublication>();
+        CreateMap<DtoInputCreatePublication, DbPublication>()
+            .BeforeMap((s, d) =>
+            {
+                d.Id = _idService.GenerateRandomId(32);
+                d.Date = DateTime.Now;
+            });
 
     }
 }

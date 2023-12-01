@@ -4,6 +4,7 @@ using Application.Services.Accounts;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
+using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories;
@@ -38,6 +39,7 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -52,6 +54,9 @@ builder.Services.AddScoped<UseCaseGetUserByMail>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccount>();
+
+builder.Services.AddScoped<UseCaseGetPublicationByUser>();
+builder.Services.AddScoped<UseCaseCreatePublication>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
@@ -111,6 +116,14 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// Add Session Storage
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);              
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -125,6 +138,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Dev");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Allow Session manips
+app.UseSession();
 
 app.MapControllers();
 

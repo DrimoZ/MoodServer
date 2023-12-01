@@ -5,14 +5,23 @@ namespace Application.Dtos.User;
 
 public class DtoInputCreateUser
 {
-    [JsonIgnore] public string Id { get; set; }
+    [JsonIgnore] 
+    public string Id { get; set; }
     
-    [Required] public string Mail { get; set; }
-    [Required] public string Login { get; set; }
-    [Required] public string Name { get; set; }
-    [Required] public string Password { get; set; }
+    [Required] 
+    public string Mail { get; set; }
     
-    [Required] public DtoAccount Account { get; set; }
+    [Required] 
+    public string Login { get; set; }
+    
+    [Required] 
+    public string Name { get; set; }
+    
+    [Required] 
+    public string Password { get; set; }
+    
+    [Required] 
+    public DtoAccount Account { get; set; }
     
     public class DtoAccount
     {

@@ -87,17 +87,4 @@ public class UserRepository: IUserRepository
 
         return user;
     }
-    
-    public List<DbUser> FetchFriends(string userId)
-    {
-        var friends = _context.Friends
-            .Where(f => f.UserId == userId)
-            .Join(_context.Users,
-                friend => friend.FriendId,
-                user => user.Id,
-                (friend, user) => user)
-            .ToList();
-
-        return friends;
-    }
 }
