@@ -10,13 +10,16 @@ public class UserService: IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
+    private readonly IFriendRepository _friendRepository;
     private readonly IMapper _mapper;
 
-    public UserService(IUserRepository userRepository, IAccountRepository accountRepository, IMapper mapper)
+    public UserService(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IFriendRepository friendRepository)
     {
+        _mapper = mapper;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _mapper = mapper;
+       
+        _friendRepository = friendRepository;
     }
 
     public User FetchById(string id, IEnumerable<UserFetchAttribute> attributesToFetch)
@@ -33,13 +36,16 @@ public class UserService: IUserService
                     user.Account =  _mapper.Map<Account>(dbAccount);
                     break;
                 case UserFetchAttribute.Friends:
-                    var dbFriends = _userRepository.FetchFriends(id);
+                    var dbFriends = _friendRepository.FetchFriends(id);
                     user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
                 case UserFetchAttribute.Publications:
                     //user.AddRange(_userRepository.FetchPublications(id));
                     break;
                 case UserFetchAttribute.Messages:
+                    break;
+                case UserFetchAttribute.Data:
+                    
                     break;
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");

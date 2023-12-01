@@ -16,5 +16,4 @@ public interface IUserRepository
     DbUser FetchByName(string name);
     DbUser FetchByLogin(string login);
     DbUser FetchByMail(string mail);
-    List<DbUser> FetchFriends(string userId);
 }
