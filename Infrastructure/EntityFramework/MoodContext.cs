@@ -1,5 +1,3 @@
-using System.Collections.Immutable;
-using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +5,13 @@ namespace Infrastructure.EntityFramework;
 
 public class MoodContext: DbContext
 {
-    public MoodContext(DbContextOptions options) : base(options)
-    {
-        
-    }
+    public MoodContext(DbContextOptions options) : base(options) { }
     
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
-    
     public DbSet<DbPublication> Publications { get; set; }
-
     public DbSet<DbFriend> Friends { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DbUser>(builder =>
@@ -33,6 +26,7 @@ public class MoodContext: DbContext
             builder.Property(user => user.Role).HasColumnName("user_role");
             builder.Property(user => user.Title).HasColumnName("user_title");
             builder.Property(user => user.AccountId).HasColumnName("acc_id");
+            builder.Property(user => user.isDeleted).HasColumnName("user_isDeleted");
         });
         
         modelBuilder.Entity<DbAccount>(builder =>
@@ -61,6 +55,7 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.Content).HasColumnName("pub_content");
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
             builder.Property(pub => pub.Date).HasColumnName("pub_date");
+            builder.Property(pub => pub.isDeleted).HasColumnName("pub_isDeleted");
         });
     }
 }

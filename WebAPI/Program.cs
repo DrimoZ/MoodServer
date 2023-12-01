@@ -1,14 +1,14 @@
 using System.Text;
-using Application.Services;
-using Application.Services.Accounts;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
+using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Mapper = Application.Mapper;
@@ -39,6 +39,7 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
+builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -116,6 +117,14 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+// Add Session Storage
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);              
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -130,6 +139,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Dev");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Allow Session manips
+app.UseSession();
 
 app.MapControllers();
 

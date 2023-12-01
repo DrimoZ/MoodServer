@@ -66,8 +66,10 @@ public class UserController: ControllerBase
             if (!_bCryptService.VerifyPassword(model.Password, dbUser.Password)) return NotFound();
 
             // Try Generating a Token and publish it
-            if (GenerateToken(dbUser.Id, dbUser.Role.ToString(), model.StayLoggedIn)) return Ok();
-            return NotFound();
+            if (!GenerateToken(dbUser.Id, dbUser.Role.ToString(), !model.StayLoggedIn)) return NotFound();
+            
+            
+            return Ok();
         }
         catch (KeyNotFoundException)
         {
@@ -94,8 +96,13 @@ public class UserController: ControllerBase
             {
                 //Create User
                 var dbCreatedUser = _useCaseCreateUser.Execute(model);
-                //Create Token
-            
+                
+                //Verify Password has not changed
+                if (!_bCryptService.VerifyPassword(model.Password, dbCreatedUser.Password)) return Problem("MismatchData");
+                
+                // Try Generating a Token and publish it
+                if (!GenerateToken(dbCreatedUser.Id, dbCreatedUser.Role.ToString(), true)) return NotFound();
+                
                 return Ok();
             }
             catch (Exception e)

@@ -2,5 +2,5 @@
 
 public enum EUserFetchAttribute
 {
-    Account, Friends, Publications, Messages
+    Account, Friends, Publications, Messages, Data
 }

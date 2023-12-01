@@ -48,12 +48,20 @@ public class PublicationRepository:IPublicationRepository
         return true;
     }
 
-    public List<DbPublication> FetchByIdUser(string userId)
+    public IEnumerable<DbPublication> FetchPublications(string userId)
     {
         return _context.Publications
             .Select(pub => pub)
             .Where(pub => pub.UserId == userId)
             .ToList();
+    }
+    
+    public int FetchPublicationCount(string userId)
+    {
+        var count = _context.Publications
+            .Count(p => p.UserId == userId);
+        
+        return count;
     }
 
     public DbPublication FetchById(string id)

@@ -11,6 +11,6 @@ public interface IPublicationRepository
     bool UpdateDelete(string id, bool isDeleted);
     bool Delete(string id);
 
-    List<DbPublication> FetchByIdUser(string userId);
-    DbPublication FetchById(string id);
+    IEnumerable<DbPublication> FetchPublications(string userId);
+    int FetchPublicationCount(string userId);
 }

@@ -10,8 +10,17 @@ public class User
     public string Name { get; set; }
     public string Title { get; set; }
     
-    public Account Account { get; set; }
+    public bool isDeleted { get; set; }
+    
+    private int _friendCount;
+    public int FriendCount { get => _friendCount; set { if (_friendCount == 0 && value > 0) _friendCount = value; } }
 
+    private int _publicationCount;
+    public int PublicationCount { get => _publicationCount; set { if (_publicationCount == 0 && value > 0) _publicationCount = value; } }
+    
+    
+    public Account Account { get; set; }
+    
     private readonly List<User> _friends = new();
     private readonly List<Publication> _publications = new();
 
@@ -19,12 +28,12 @@ public class User
 
     public int TotalFriends()
     {
-        return _friends.Count;
+        return _friendCount == 0 ? _friends.Count : _friendCount;
     }
     
     public int TotalPublications()
     {
-        return _publications.Count;
+        return _publicationCount == 0 ?_publications.Count : _publicationCount;
     }
     
     public IEnumerable<User> Friends()

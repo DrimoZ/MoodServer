@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using Application.Services.Utils;
 
 namespace Application.Dtos.User;
 
 public class DtoInputSignUpUser
 {
-    
     [Required] 
     public string Name { get; set; }
     

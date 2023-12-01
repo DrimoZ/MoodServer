@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Infrastructure.EntityFramework.DbEntities;
 
 public class DbAccount
