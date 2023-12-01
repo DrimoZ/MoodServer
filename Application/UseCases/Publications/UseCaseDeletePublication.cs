@@ -1,6 +1,9 @@
-﻿namespace Application.UseCases.Publications;
+﻿using Application.UseCases.Utils;
+using Infrastructure.EntityFramework.Repositories;
 
-public class UseCaseDeletePublication
+namespace Application.UseCases.Publications;
+
+public class UseCaseDeletePublication:IUseCaseParameterizedQuery<bool, string>
 {
     
 }
