@@ -31,7 +31,15 @@ public class PublicationRepository:IPublicationRepository
 
     public bool Delete(string id)
     {
-        throw new NotImplementedException();
+        var entity = _context.Publications.FirstOrDefault(e => e.Id == id);
+
+        if (entity == null)
+            return false;
+
+        _context.Publications.Remove(entity);
+        _context.SaveChanges();
+
+        return true;
     }
 
     public List<DbPublication> FetchByIdUser(string userId)
