@@ -9,23 +9,32 @@ namespace WebAPI.Controllers;
 public class PublicationController: ControllerBase
 {
     private UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
+    private UseCaseGetPublicationById _useCaseGetPublicationById;
     private UseCaseCreatePublication _useCaseCreatePublication;
     private UseCaseDeletePublication _useCaseDeletePublication;
     private UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
 
-    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted)
+    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById)
     {
         _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
+        _useCaseGetPublicationById = useCaseGetPublicationById;
     }
 
     [HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputPublication> GetAccountById(string userId)
+    public ActionResult<DtoOutputPublication> GetPublicationByUserId(string userId)
     {
         return Ok(_useCaseGetPublicationByUser.Execute(userId));
+    }
+    
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputPublication> GetPublicationById(int id)
+    {
+        return Ok(_useCaseGetPublicationById.Execute(id));
     }
     
     [HttpPost]
