@@ -29,6 +29,12 @@ public class PublicationRepository:IPublicationRepository
         throw new NotImplementedException();
     }
 
+    public bool UpdateDelete(string id, bool isDeleted)
+    {
+        var entity = FetchById(id);
+    }
+
+
     public bool Delete(string id)
     {
         var entity = _context.Publications.FirstOrDefault(e => e.Id == id);
