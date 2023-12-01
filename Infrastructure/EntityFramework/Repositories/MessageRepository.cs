@@ -1,6 +1,6 @@
 namespace Infrastructure.EntityFramework.Repositories;
 
-public class MessageRepository
+public class MessageRepository:IMessageRepository
 {
     
 }

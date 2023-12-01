@@ -2,6 +2,7 @@ using System.Text;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
+using Application.UseCases.Groups;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
@@ -40,6 +41,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 builder.Services.AddScoped<IFriendRepository, FriendRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -60,6 +63,8 @@ builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
+
+builder.Services.AddScoped<UseCaseCreateGroup>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
