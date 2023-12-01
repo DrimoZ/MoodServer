@@ -11,15 +11,17 @@ public class UserService: IUserService
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IFriendRepository _friendRepository;
+    private readonly IPublicationRepository _publicationRepository;
     private readonly IMapper _mapper;
 
-    public UserService(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IFriendRepository friendRepository)
+    public UserService(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IFriendRepository friendRepository, IPublicationRepository publicationRepository)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
        
         _friendRepository = friendRepository;
+        _publicationRepository = publicationRepository;
     }
 
     public User FetchById(string id, IEnumerable<UserFetchAttribute> attributesToFetch)
@@ -31,6 +33,10 @@ public class UserService: IUserService
         {
             switch (attribute)
             {
+                case UserFetchAttribute.Data:
+                    user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
+                    user.PublicationCount = _publicationRepository.FetchPublicationCount(user.Id);
+                    break;
                 case UserFetchAttribute.Account:
                     var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
                     user.Account =  _mapper.Map<Account>(dbAccount);
@@ -40,12 +46,10 @@ public class UserService: IUserService
                     user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
                 case UserFetchAttribute.Publications:
-                    //user.AddRange(_userRepository.FetchPublications(user.Id));
+                    var dbPublications = _publicationRepository.FetchPublications(user.Id);
+                    user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     break;
                 case UserFetchAttribute.Messages:
-                    break;
-                case UserFetchAttribute.Data:
-                    user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
                     break;
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");
