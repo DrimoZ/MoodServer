@@ -1,8 +1,8 @@
-﻿using Domain;
+﻿using Application.Services.Users.Util;
 
-namespace Application.Services.Users.Util;
+namespace Application.Services.Publication;
 
 public interface IPublicationService
 {
-    Publication FetchById(string id, IEnumerable<EPublicationFetchAttribute> attributesToFetch);
+    Domain.Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch);
 }
