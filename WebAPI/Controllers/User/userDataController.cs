@@ -17,27 +17,65 @@ public class UserDataController: ControllerBase
     private readonly ILogger<UserController> _logger;
     private readonly IConfiguration _configuration;
 
-    private readonly UseCaseFetchUserProfile _useCaseFetchUserProfile;
+    private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
+    private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
+    private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
 
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserProfile useCaseFetchUserProfile)
+    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends)
     {
         _tokenService = tokenService;
         _logger = logger;
         _configuration = configuration;
         
-        _useCaseFetchUserProfile = useCaseFetchUserProfile;
+        _useCaseFetchUserAccount = useCaseFetchUserAccount;
+        _useCaseFetchUserPublications = useCaseFetchUserPublications;
+        _useCaseFetchUserFriends = useCaseFetchUserFriends;
     }
     
-    [HttpGet("userProfile")]
+    [HttpGet("userAccount")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
-    public IActionResult GetUserProfileData()
+    public IActionResult GetUserAccountData()
     {
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserProfile.Execute(data.Token));
+            return Ok(_useCaseFetchUserAccount.Execute(data.Token));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+    
+    [HttpGet("userPublications")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Authorize]
+    public IActionResult GetUserPublicationsData()
+    {
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(_useCaseFetchUserPublications.Execute(data.Token));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e);
+        }
+    }
+    
+    [HttpGet("userFriends")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Authorize]
+    public IActionResult GetUserFriendsData()
+    {
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(_useCaseFetchUserFriends.Execute(data.Token));
         }
         catch (Exception e)
         {
