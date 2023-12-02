@@ -2,7 +2,8 @@ using Application.Dtos.Account;
 using Application.Dtos.Group;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
-using Application.Services.Utils;
+using Application.Dtos.User.UserAuthentication;
+using Application.Dtos.User.UserData;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;
@@ -23,7 +24,10 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore());
         
-        
+        //UseCaseFetchUserProfile
+        CreateMap<User, DtoOutputProfileUser>();
+        //UseCaseFetchUserProfile
+        CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
         
         //Users
         CreateMap<DbUser, DtoOutputUser>();

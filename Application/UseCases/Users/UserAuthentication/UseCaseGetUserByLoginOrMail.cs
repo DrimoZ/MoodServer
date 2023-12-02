@@ -1,11 +1,9 @@
-using Application.Dtos.User;
-using Application.Services.Users;
+using Application.Dtos.User.UserAuthentication;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
-using Microsoft.Extensions.Logging;
 
-namespace Application.UseCases.Users;
+namespace Application.UseCases.Users.UserAuthentication;
 
 public class UseCaseGetUserByLoginOrMail : IUseCaseParameterizedQuery<DtoOutputUser, string>
 {

@@ -1,8 +1,8 @@
-using Application.Dtos.User;
+using Application.Dtos.User.UserAuthentication;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
 
-namespace Application.UseCases.Users;
+namespace Application.UseCases.Users.UserAuthentication;
 
 public class UseCaseGetUserByMail
 {

@@ -1,11 +1,13 @@
 using Application.Dtos.User;
+using Application.Dtos.User.UserAuthentication;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Users;
+using Application.UseCases.Users.UserAuthentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers;
+namespace WebAPI.Controllers.User;
 
 [ApiController]
 [Route("api/v1/user")]
@@ -18,23 +20,17 @@ public class UserController: ControllerBase
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
     private readonly UseCaseGetUserByLoginAndMail _useCaseGetUserByLoginAndMail;
     private readonly UseCaseGetUserByName _useCaseGetUserByName;
-    private readonly UseCaseGetUserByLogin _useCaseGetUserByLogin;
-    private readonly UseCaseGetUserByMail _useCaseGetUserByMail;
-    private readonly UseCaseCreateAnAccountTODEL _useCaseCreateAnAccountTodel;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByName useCaseGetUserByName, BCryptService bCryptService, UseCaseGetUserByLogin useCaseGetUserByLogin, UseCaseGetUserByMail useCaseGetUserByMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseCreateAnAccountTODEL useCaseCreateAnAccountTodel, UseCaseCreateUser useCaseCreateUser)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseGetUserByName useCaseGetUserByName)
     {
         _tokenService = tokenService;
         _logger = logger;
         
-        _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
-        _useCaseGetUserByName = useCaseGetUserByName;
-        _useCaseGetUserByLogin = useCaseGetUserByLogin;
-        _useCaseGetUserByMail = useCaseGetUserByMail;
-        _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
-        _useCaseCreateAnAccountTodel = useCaseCreateAnAccountTodel;
         _useCaseCreateUser = useCaseCreateUser;
+        _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
+        _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
+        _useCaseGetUserByName = useCaseGetUserByName;
     }
     
     
