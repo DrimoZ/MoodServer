@@ -1,7 +1,6 @@
 using Application.Dtos.Account;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
-using Application.Services.Utils;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;

@@ -35,7 +35,6 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
         //Create a dbAccount 
         var dbAccount = _mapper.Map<DbAccount>(input);
         
-        
         try
         {
             //Generate Custom Id
