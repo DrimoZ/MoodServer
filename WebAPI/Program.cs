@@ -5,6 +5,8 @@ using Application.UseCases.Accounts;
 using Application.UseCases.Groups;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
+using Application.UseCases.Users.UserAuthentication;
+using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
@@ -127,13 +129,6 @@ builder.Services.AddCors(options =>
 });
 
 
-// Add Session Storage
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(10);              
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -148,9 +143,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Dev");
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Allow Session manips
-app.UseSession();
 
 app.MapControllers();
 

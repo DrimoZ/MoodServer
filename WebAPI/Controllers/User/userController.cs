@@ -1,7 +1,9 @@
 using Application.Dtos.User;
+using Application.Dtos.User.UserAuthentication;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Users;
+using Application.UseCases.Users.UserAuthentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

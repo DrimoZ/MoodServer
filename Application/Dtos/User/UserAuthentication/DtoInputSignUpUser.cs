@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
-using Application.Services.Utils;
 
-namespace Application.Dtos.User;
+namespace Application.Dtos.User.UserAuthentication;
 
 public class DtoInputSignUpUser
 {

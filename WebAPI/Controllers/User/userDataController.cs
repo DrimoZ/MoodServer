@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Services.Utils;
-using Application.UseCases.Users;
+using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -37,8 +37,7 @@ public class UserDataController: ControllerBase
         try
         {
             var data =  GetAuthCookieData();
-            
-            return Ok(new {user = _useCaseFetchUserProfile.Execute(data.Item1)});
+            return Ok(_useCaseFetchUserProfile.Execute(data.Token));
         }
         catch (Exception e)
         {
@@ -46,7 +45,7 @@ public class UserDataController: ControllerBase
         }
     }
 
-    private (string, int) GetAuthCookieData()
+    private (string Token, int Role) GetAuthCookieData()
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = _configuration["JwtSettings:SecretKey"];

@@ -1,4 +1,4 @@
-namespace Application.Dtos.User;
+namespace Application.Dtos.User.UserAuthentication;
 
 public class DtoOutputUser
 {

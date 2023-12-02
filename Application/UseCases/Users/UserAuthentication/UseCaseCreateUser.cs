@@ -1,4 +1,4 @@
-using Application.Dtos.User;
+using Application.Dtos.User.UserAuthentication;
 using Application.Services.Users;
 using Application.Services.Users.Util;
 using Application.Services.Utils;
@@ -8,7 +8,7 @@ using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 
-namespace Application.UseCases.Users;
+namespace Application.UseCases.Users.UserAuthentication;
 
 public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignUpUser>
 {
