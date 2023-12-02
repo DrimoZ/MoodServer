@@ -20,6 +20,6 @@ public class GroupController:ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputGroup> Create(DtoInputCreateGroup group)
     {
-        return Ok(_useCaseCreateGroup.Execute(group));
+        return Ok(_useCaseCreateGroup.Execute(group, group.userIds));
     }
 }

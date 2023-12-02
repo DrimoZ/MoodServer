@@ -4,5 +4,5 @@ namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IGroupRepository
 {
-    DbGroup Create(DbGroup map);
+    DbGroup Create(DbGroup map, IEnumerable<string> userIds);
 }

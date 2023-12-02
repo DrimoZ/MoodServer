@@ -6,7 +6,7 @@ using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Groups;
 
-public class UseCaseCreateGroup:IUseCaseWriter<DbGroup, DtoInputCreateGroup>
+public class UseCaseCreateGroup:IUseCaseParameterizedWriter<DbGroup, DtoInputCreateGroup, IEnumerable<string>>
 {
     private readonly IGroupRepository _groupRepository;
     private IMapper _mapper;
@@ -16,9 +16,9 @@ public class UseCaseCreateGroup:IUseCaseWriter<DbGroup, DtoInputCreateGroup>
         _mapper = mapper;
     }
 
-    public DbGroup Execute(DtoInputCreateGroup input)
+    public DbGroup Execute(DtoInputCreateGroup input, IEnumerable<string> userIds)
     {
-        var dbAccount = _groupRepository.Create(_mapper.Map<DbGroup>(input));
+        var dbAccount = _groupRepository.Create(_mapper.Map<DbGroup>(input), userIds);
         return dbAccount;
     }
 }
