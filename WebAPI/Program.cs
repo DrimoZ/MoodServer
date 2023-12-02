@@ -2,6 +2,7 @@ using System.Text;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
+using Application.UseCases.Groups;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Infrastructure.EntityFramework;
@@ -63,6 +64,8 @@ builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 
 builder.Services.AddScoped<UseCaseFetchUserProfile>();
 
+
+builder.Services.AddScoped<UseCaseCreateGroup>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();

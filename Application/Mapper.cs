@@ -1,4 +1,5 @@
 using Application.Dtos.Account;
+using Application.Dtos.Group;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
 using AutoMapper;
@@ -34,15 +35,18 @@ public class Mapper: Profile
         CreateMap<DbAccount, Account>();
         CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
         
+        //Group
+        CreateMap<DbGroup, DtoOutputGroup>();
+        CreateMap<DtoInputCreateGroup, DbGroup>()
+            .ForMember(dest => dest.Id, opt =>opt.Ignore())
+            .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore());
         
         //Publication
         CreateMap<DbPublication, DtoOutputPublication>();
-        CreateMap<DtoInputCreatePublication, DbPublication>();
-        /*.BeforeMap((s, d) =>
-        {
-            d.Id = _idService.GenerateRandomId(32);
-            d.Date = DateTime.Now;
-        });*/
+        CreateMap<DtoInputCreatePublication, DbPublication>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
+            .ForMember(dest => dest.Date, opt => opt.Ignore());
 
     }
 }

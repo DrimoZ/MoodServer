@@ -11,6 +11,7 @@ public class MoodContext: DbContext
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
     public DbSet<DbFriend> Friends { get; set; }
+    public DbSet<DbGroup> Groups { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,6 +57,15 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
             builder.Property(pub => pub.Date).HasColumnName("pub_date");
             builder.Property(pub => pub.IsDeleted).HasColumnName("pub_isDeleted");
+        });
+
+        modelBuilder.Entity<DbGroup>(builder =>
+        {
+            builder.ToTable("groups");
+            builder.HasKey(grp => grp.Id);
+            builder.Property(grp => grp.Id).HasColumnName("group_id");
+            builder.Property(grp => grp.IsDeleted).HasColumnName("group_isDeleted");
+            builder.Property(grp => grp.Name).HasColumnName("group_name");
         });
     }
 }
