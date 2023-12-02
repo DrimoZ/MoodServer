@@ -13,6 +13,8 @@ public class MoodContext: DbContext
     public DbSet<DbFriend> Friends { get; set; }
     public DbSet<DbGroup> Groups { get; set; }
     public DbSet<DbUserGroup> UserGroups { get; set; }
+    public DbSet<DbCommunication> Communications { get; set; }
+    public DbSet<DbMessage> Messages { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,6 +78,24 @@ public class MoodContext: DbContext
             builder.Property(usrgrp => usrgrp.Id).HasColumnName("user_group_id");
             builder.Property(usrgrp => usrgrp.UserId).HasColumnName("user_id");
             builder.Property(usrgrp => usrgrp.GroupId).HasColumnName("group_id");
+        });
+        modelBuilder.Entity<DbCommunication>(builder =>
+        {
+            builder.ToTable("communications");
+            builder.HasKey(com => com.Id);
+            builder.Property(com => com.Id).HasColumnName("comm_id");
+            builder.Property(com => com.Date).HasColumnName("comm_date");
+            builder.Property(com => com.IsDeleted).HasColumnName("comm_date");
+        });
+        
+        modelBuilder.Entity<DbMessage>(builder =>
+        {
+            builder.ToTable("messages");
+            builder.HasKey(msg => msg.Id);
+            builder.Property(msg => msg.Id).HasColumnName("msg_id");
+            builder.Property(msg => msg.Content).HasColumnName("msg_content");
+            builder.Property(msg => msg.UserGroupId).HasColumnName("user_group_id");
+            builder.Property(msg => msg.CommId).HasColumnName("comm_id");
         });
     }
 }
