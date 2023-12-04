@@ -3,6 +3,7 @@ using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Groups;
+using Application.UseCases.Messages;
 using Application.UseCases.Publications;
 using Application.UseCases.Users;
 using Application.UseCases.Users.UserAuthentication;
@@ -10,6 +11,7 @@ using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,12 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
+
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -71,6 +79,7 @@ builder.Services.AddScoped<UseCaseFetchUserFriends>();
 
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
+builder.Services.AddScoped<UseCaseCreateMessage>();
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();

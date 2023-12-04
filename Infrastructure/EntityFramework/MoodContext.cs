@@ -85,7 +85,7 @@ public class MoodContext: DbContext
             builder.HasKey(com => com.Id);
             builder.Property(com => com.Id).HasColumnName("comm_id");
             builder.Property(com => com.Date).HasColumnName("comm_date");
-            builder.Property(com => com.IsDeleted).HasColumnName("comm_date");
+            builder.Property(com => com.IsDeleted).HasColumnName("comm_isDeleted");
         });
         
         modelBuilder.Entity<DbMessage>(builder =>

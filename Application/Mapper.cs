@@ -1,5 +1,6 @@
 using Application.Dtos.Account;
 using Application.Dtos.Group;
+using Application.Dtos.Message;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
 using Application.Dtos.User.UserAuthentication;
@@ -57,6 +58,8 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
-
+        //Message
+        CreateMap<DtoInputMessage, DbMessage>();
+        CreateMap<DbMessage, DtoOutputMessage>();
     }
 }
