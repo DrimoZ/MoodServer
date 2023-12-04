@@ -6,12 +6,12 @@ using AutoMapper;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseFetchUserProfile: IUseCaseParameterizedQuery<DtoOutputProfileUser, string>
+public class UseCaseFetchUserFriends: IUseCaseParameterizedQuery<DtoOutputProfileUser, string>
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
 
-    public UseCaseFetchUserProfile(IUserService userService, IMapper mapper)
+    public UseCaseFetchUserFriends(IUserService userService, IMapper mapper)
     {
         _userService = userService;
         _mapper = mapper;
@@ -19,7 +19,7 @@ public class UseCaseFetchUserProfile: IUseCaseParameterizedQuery<DtoOutputProfil
 
     public DtoOutputProfileUser Execute(string userId)
     {
-        var user = _userService.FetchById(userId, new[] { EUserFetchAttribute.Data, EUserFetchAttribute.Account});
+        var user = _userService.FetchById(userId, new[] { EUserFetchAttribute.Data, EUserFetchAttribute.Account, EUserFetchAttribute.Friends});
         return _mapper.Map<DtoOutputProfileUser>(user);
     }
 }

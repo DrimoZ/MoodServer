@@ -107,26 +107,30 @@ CREATE TABLE likes (
 );
 
 GO
-INSERT INTO accounts VALUES ("acc_ku784AJalJIwx98kPxQPM6QeLyuPgrno", '0600000000', '1990-01-01', 'Compte 1');
-INSERT INTO accounts VALUES ("acc_fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE", '0611111111', '1990-01-01', 'Compte 2');
-INSERT INTO accounts VALUES ("acc_2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna", '0633333333', '2000-01-01', 'Compte 3');
+INSERT INTO accounts VALUES ('acc_ku784AJalJIkPxQPM6QeLyuPgrno', '0600000000', '1990-01-01', 'Compte 1');
+INSERT INTO accounts VALUES ('acc_f7Dtuqn32rAp7ocsonMiK6MAkOoE', '0611111111', '1990-01-01', 'Mec trop chaud au lit');
+INSERT INTO accounts VALUES ('acc_caTaXKCD7D9AgGAQxT9kPOxxxIna', '0633333333', '2000-01-01', 'Yo moi cest mod3 : ) ');
+INSERT INTO accounts VALUES ('acc_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', '0633333333', '2003-01-01', 'Je stream tous les jours sur Womix, rejoignez moi !');
 
-
-INSERT INTO users VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH', 'user1@mail.com', 'login1', 'User 1',
-    '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'acc_ku784AJalJIwx98kPxQPM6QeLyuPgrno');
-INSERT INTO users VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t', 'user2@mail.com', 'login2', 'User 2',
-    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'acc_fQPBu7Dtuqn32rAp7ocsonMiK6MAkOoE');
-INSERT INTO users VALUES ("usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", 'mod3@mail.com', 'login3', 'User 3', 
-    '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0, "acc_2TIxcaTaXKCD7D9AgGAQxT9kPOxxxIna");
+INSERT INTO users VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'user1@mail.com', 'login1', 'Arthur', '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'acc_ku784AJalJIkPxQPM6QeLyuPgrno'); --password1
+INSERT INTO users VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t', 'user2@mail.com', 'login2', 'UserAAAA', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'acc_f7Dtuqn32rAp7ocsonMiK6MAkOoE'); --password2
+INSERT INTO users VALUES ('usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd', 'mod3@mail.com', 'login3', 'User 3', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0, "acc_caTaXKCD7D9AgGAQxT9kPOxxxIna"); --password2
+INSERT INTO users VALUES ('usr_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', 'cestmoihaha@me.be', 'coucou', 'Theo Mille', '$2a$11$hbAXocUS0vEih436Lw8ddeaVN21kvdkHDruRyv/CTir2B1ZbJvuXW', 1, 'Verified',0, "acc_8vLHdpRjrqF_RRM2NJcVEFqmZkGt"); --Strong#1
 
 
 
-INSERT INTO friends VALUES ("usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH");
-INSERT INTO friends VALUES ("usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t", "usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp");
-INSERT INTO friends VALUES ("usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH", "usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
-INSERT INTO friends VALUES ("usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSdEhHp", "usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t");
+INSERT INTO friends VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t', 'usr_lXLVeLbaid03vOItRZP11EWdzhqH');
+INSERT INTO friends VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t', 'usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd');
+INSERT INTO friends VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t');
+INSERT INTO friends VALUES ('usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd', 'usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t');
+INSERT INTO friends VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd');
+INSERT INTO friends VALUES ('usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd', 'usr_lXLVeLbaid03vOItRZP11EWdzhqH');
+INSERT INTO friends VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'usr_8vLHdpRjrqF_RRM2NJcVEFqmZkGt');
+INSERT INTO friends VALUES ('usr_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', 'usr_lXLVeLbaid03vOItRZP11EWdzhqH');
 
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ('content 1', '1990-01-02', 'usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 3', '1990-01-03', 'usr_lXLVeLbaid03vOItRZP11EWdzhq2k7YH');
-INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 2', '1990-01-02', 'usr_lSELhMwz5sB3mvcOwvHQKzGzhmqk5D0t');
+
+
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ('content 1', '1990-01-02', 'usr_lXLVeLbaid03vOItRZP11EWdzhqH');
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 3', '1990-01-03', 'usr_lXLVeLbaid03vOItRZP11EWdzhqH');
+INSERT INTO publications(pub_content, pub_date, user_id) VALUES ( 'content 2', '1990-01-02', 'usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t');
 

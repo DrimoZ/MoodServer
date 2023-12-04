@@ -24,10 +24,15 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore());
         
-        //UseCaseFetchUserProfile
+        
+        //UseCaseFetchUserAccount //UseCaseFetchUserFriends
         CreateMap<User, DtoOutputProfileUser>();
-        //UseCaseFetchUserProfile
+        //UseCaseFetchUserAccount
         CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
+        //UseCaseFetchUserPublications
+        CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
+        
+        
         
         //Users
         CreateMap<DbUser, DtoOutputUser>();

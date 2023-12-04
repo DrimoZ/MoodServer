@@ -13,11 +13,24 @@ public class DtoOutputProfileUser
     public int FriendCount { get; set; }
     
     public DtoOutputAccount Account { get; set; }
+    
+    public IEnumerable<DtoOutputProfileUser> Friends { get; set; }
+    public IEnumerable<DtoOutputPublication> Publications { get; set; }
 
+    
     public class DtoOutputAccount
     {
         public string PhoneNumber { get; set; }
         public string Description { get; set; }
         public DateTime BirthDate { get; set; }
+    }
+    
+    public class DtoOutputPublication
+    {
+        public string Id { get; set; }
+        public string UserId { get; set; }
+        public string Content { get; set; }
+        public DateTime date { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

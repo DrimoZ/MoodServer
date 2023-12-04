@@ -65,7 +65,9 @@ builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 
-builder.Services.AddScoped<UseCaseFetchUserProfile>();
+builder.Services.AddScoped<UseCaseFetchUserAccount>();
+builder.Services.AddScoped<UseCaseFetchUserPublications>();
+builder.Services.AddScoped<UseCaseFetchUserFriends>();
 
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
