@@ -68,6 +68,7 @@ builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
 
 builder.Services.AddScoped<UseCaseGetPublicationByUser>();
+builder.Services.AddScoped<UseCaseGetPublicationByFriend>();
 builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
