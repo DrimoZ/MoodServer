@@ -12,6 +12,7 @@ public interface IPublicationRepository
     public bool UpdateDelete(int id, bool isDeleted);
 
     IEnumerable<DbPublication> FetchPublications(string userId);
+    IEnumerable<DbPublication> FetchFriendPublications(string userId);
     DbPublication FetchById(int id);
     int FetchPublicationCount(string userId);
 }

@@ -60,7 +60,15 @@ public class PublicationRepository:IPublicationRepository
             .Where(pub => pub.UserId == userId)
             .ToList();
     }
-    
+
+    public IEnumerable<DbPublication> FetchFriendPublications(string userId)
+    {
+        return _context.Publications
+            .Select(pub => pub)
+            .Where(pub => pub.UserId == userId)
+            .ToList();
+    }
+
     public int FetchPublicationCount(string userId)
     {
         var count = _context.Publications

@@ -9,14 +9,16 @@ namespace WebAPI.Controllers;
 public class PublicationController: ControllerBase
 {
     private UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
+    private UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
     private UseCaseGetPublicationById _useCaseGetPublicationById;
     private UseCaseCreatePublication _useCaseCreatePublication;
     private UseCaseDeletePublication _useCaseDeletePublication;
     private UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
 
-    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById)
+    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend)
     {
         _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
+        _useCaseGetPublicationByFriend = useCaseGetPublicationByFriend;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
@@ -28,6 +30,13 @@ public class PublicationController: ControllerBase
     public ActionResult<DtoOutputPublication> GetPublicationByUserId(string userId)
     {
         return Ok(_useCaseGetPublicationByUser.Execute(userId));
+    }
+    
+    [HttpGet("/newsfeed/{userId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputPublication> GetPublicationByFriend(string userId)
+    {
+        return Ok(_useCaseGetPublicationByFriend.Execute(userId));
     }
     
     [HttpGet("{id:int}")]
