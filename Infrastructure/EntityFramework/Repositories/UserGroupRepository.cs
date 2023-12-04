@@ -17,4 +17,10 @@ public class UserGroupRepository:IUserGroupRepository
         if (usergroup == null) throw new KeyNotFoundException("userGroupNotFound");
         return usergroup;
     }
+
+    public DbUserGroup Create(DbUserGroup usrGrp)
+    {
+        _context.UserGroups.Add(usrGrp);
+        return usrGrp;
+    }
 }
