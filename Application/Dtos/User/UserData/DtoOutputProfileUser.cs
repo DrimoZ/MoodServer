@@ -3,6 +3,8 @@ namespace Application.Dtos.User.UserData;
 
 public class DtoOutputProfileUser
 {
+    public string Id { get; set; }
+    
     public string Login { get; set; }
     public string Name { get; set; }
 
