@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.EntityFramework.UnitOfWork;
@@ -19,6 +20,7 @@ public class UnitOfWork:IUnitOfWork
 
     public void Commit()
     {
+        Save();
         _transaction.Commit();
     }
 

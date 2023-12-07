@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Dtos.User.UserAuthentication;
+using Application.Dtos.User.UserData;
 using Application.Services.Utils;
 using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
@@ -20,8 +22,9 @@ public class UserDataController: ControllerBase
     private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
     private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
     private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
+    private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
 
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends)
+    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -30,6 +33,7 @@ public class UserDataController: ControllerBase
         _useCaseFetchUserAccount = useCaseFetchUserAccount;
         _useCaseFetchUserPublications = useCaseFetchUserPublications;
         _useCaseFetchUserFriends = useCaseFetchUserFriends;
+        _useCaseUpdateUserData = useCaseUpdateUserData;
     }
     
     [HttpGet("userAccount")]
@@ -82,7 +86,19 @@ public class UserDataController: ControllerBase
             return Unauthorized();
         }
     }
+    
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult Update(DtoInputUpdateUser dto)
+    {
+        if (_useCaseUpdateUserData.Execute(dto))
+        {
+            return NoContent();
+        }
 
+        return NotFound();
+    }
     private (string Token, int Role) GetAuthCookieData()
     {
         var tokenHandler = new JwtSecurityTokenHandler();

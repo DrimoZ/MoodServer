@@ -12,6 +12,20 @@ public class AccountRepository:IAccountRepository
         _context = context;
     }
 
+
+    public bool Update(DbAccount account)
+    {
+        var entity = _context.Accounts.FirstOrDefault(a => a.Id == account.Id);
+        if (entity == null)
+            return false;
+        entity.Description = account.Description;
+        entity.BirthDate = account.BirthDate;
+        
+        _context.SaveChanges();
+            
+        return true;
+    }
+
     public DbAccount Create(DbAccount account)
     {
         _context.Accounts.Add(account);

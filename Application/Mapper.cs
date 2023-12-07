@@ -39,6 +39,12 @@ public class Mapper: Profile
         CreateMap<DbUser, DtoOutputUser>();
         CreateMap<DbUser, User>();
         CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        CreateMap<DtoInputUpdateUser, DbUser>()
+            .ForMember(dest => dest.Login, opt => opt.Ignore())
+            .ForMember(dest => dest.Role, opt => opt.Ignore())
+            .ForMember(dest => dest.Password, opt => opt.Ignore())
+            .ForMember(dest => dest.AccountId, opt => opt.Ignore())
+            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
 
         
         //Account

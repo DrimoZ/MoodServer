@@ -26,7 +26,18 @@ public class UserRepository: IUserRepository
 
     public bool Update(DbUser user)
     {
-        throw new NotImplementedException();
+        var entity = _context.Users.FirstOrDefault(e => e.Id == user.Id);
+
+        if (entity == null)
+            return false;
+
+        entity.Mail = user.Mail;
+        entity.Name = user.Name;
+        entity.Title = user.Title;
+        
+        _context.SaveChanges();
+
+        return true;
     }
 
     public bool Delete(string id)
