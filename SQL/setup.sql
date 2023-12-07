@@ -21,6 +21,9 @@ CREATE TABLE users (
     user_role INT NOT NULL,
     user_title NVARCHAR(255),
     user_isDeleted BIT NOT NULL DEFAULT 0,
+    user_isPublic BIT NOT NULL DEFAULT 0,
+    user_isFriendPublic BIT NOT NULL DEFAULT 0,
+    user_isPublicationPublic BIT NOT NULL DEFAULT 0,
     acc_id CHAR(32) FOREIGN KEY REFERENCES accounts(acc_id)
 );
 
