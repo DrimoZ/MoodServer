@@ -19,10 +19,9 @@ public class UserController: ControllerBase
     
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
     private readonly UseCaseGetUserByLoginAndMail _useCaseGetUserByLoginAndMail;
-    private readonly UseCaseGetUserByName _useCaseGetUserByName;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, UseCaseGetUserByName useCaseGetUserByName)
+    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -30,7 +29,6 @@ public class UserController: ControllerBase
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
         _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
-        _useCaseGetUserByName = useCaseGetUserByName;
     }
     
     
@@ -135,13 +133,6 @@ public class UserController: ControllerBase
             // Return an error response
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while logging out the user.");
         }
-    }
-    
-    [HttpGet("{userName}")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<DtoOutputUser>> GetUserByName(string userName)
-    {
-        return Ok(_useCaseGetUserByName.Execute(userName));
     }
 
     private bool GenerateToken(string login, string role, bool isSessionOnly)

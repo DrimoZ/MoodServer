@@ -60,7 +60,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UseCaseCreateUser>();
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
-builder.Services.AddScoped<UseCaseGetUserByName>();
 builder.Services.AddScoped<UseCaseGetUserByLogin>();
 builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
