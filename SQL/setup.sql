@@ -21,6 +21,9 @@ CREATE TABLE users (
     user_role INT NOT NULL,
     user_title NVARCHAR(255),
     user_isDeleted BIT NOT NULL DEFAULT 0,
+    user_isPublic BIT NOT NULL DEFAULT 0,
+    user_isFriendPublic BIT NOT NULL DEFAULT 0,
+    user_isPublicationPublic BIT NOT NULL DEFAULT 0,
     acc_id CHAR(32) FOREIGN KEY REFERENCES accounts(acc_id)
 );
 
@@ -112,10 +115,10 @@ INSERT INTO accounts VALUES ('acc_f7Dtuqn32rAp7ocsonMiK6MAkOoE', '0611111111', '
 INSERT INTO accounts VALUES ('acc_caTaXKCD7D9AgGAQxT9kPOxxxIna', '0633333333', '2000-01-01', 'Yo moi cest mod3 : ) ');
 INSERT INTO accounts VALUES ('acc_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', '0633333333', '2003-01-01', 'Je stream tous les jours sur Womix, rejoignez moi !');
 
-INSERT INTO users VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'user1@mail.com', 'login1', 'Arthur', '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0, 'acc_ku784AJalJIkPxQPM6QeLyuPgrno'); --password1
-INSERT INTO users VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t', 'user2@mail.com', 'login2', 'UserAAAA', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0, 'acc_f7Dtuqn32rAp7ocsonMiK6MAkOoE'); --password2
-INSERT INTO users VALUES ('usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd', 'mod3@mail.com', 'login3', 'User 3', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0, "acc_caTaXKCD7D9AgGAQxT9kPOxxxIna"); --password2
-INSERT INTO users VALUES ('usr_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', 'cestmoihaha@me.be', 'coucou', 'Theo Mille', '$2a$11$hbAXocUS0vEih436Lw8ddeaVN21kvdkHDruRyv/CTir2B1ZbJvuXW', 1, 'Verified',0, "acc_8vLHdpRjrqF_RRM2NJcVEFqmZkGt"); --Strong#1
+INSERT INTO users VALUES ('usr_lXLVeLbaid03vOItRZP11EWdzhqH', 'user1@mail.com', 'login1', 'Arthur', '$2a$11$SKVecUmTEzKAF43qk.QsFuziowabj9HKHpp5UkGacGb./YI6/7Yaa', 1, 'Title 1',0,0,0,0, 'acc_ku784AJalJIkPxQPM6QeLyuPgrno'); --password1
+INSERT INTO users VALUES ('usr_lSELhMwz5sB3mvcOwvHQKzqk5D0t', 'user2@mail.com', 'login2', 'UserAAAA', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 1, 'Title 2',0,0,0,0, 'acc_f7Dtuqn32rAp7ocsonMiK6MAkOoE'); --password2
+INSERT INTO users VALUES ('usr_VpKvQZ6zpEJt9y2ykFptGRX4gaSd', 'mod3@mail.com', 'login3', 'User 3', '$2a$11$40l2odRdREdQrMK75k57euzAHPmHsEGIb7SL8zEnXjzeAdDI1hvAS', 2, 'MegaTropFor',0,0,0,0, "acc_caTaXKCD7D9AgGAQxT9kPOxxxIna"); --password2
+INSERT INTO users VALUES ('usr_8vLHdpRjrqF_RRM2NJcVEFqmZkGt', 'cestmoihaha@me.be', 'coucou', 'Theo Mille', '$2a$11$hbAXocUS0vEih436Lw8ddeaVN21kvdkHDruRyv/CTir2B1ZbJvuXW', 1, 'Verified',0,0,0,0, "acc_8vLHdpRjrqF_RRM2NJcVEFqmZkGt"); --Strong#1
 
 
 
