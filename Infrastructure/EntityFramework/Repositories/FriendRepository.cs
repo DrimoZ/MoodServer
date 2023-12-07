@@ -24,6 +24,12 @@ public class FriendRepository: IFriendRepository
 
         return friends;
     }
+    
+    public bool IsFriend(string userId, string friendId)
+    {
+        var friend = _context.Friends.FirstOrDefault(u => u.UserId == userId && u.FriendId == friendId);
+        return friend != null;
+    }
 
     public int FetchFriendCount(string userId)
     {
