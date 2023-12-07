@@ -11,4 +11,7 @@ public class DbUser
     public string? Title { get; set; }
     public string AccountId { get; set; }
     public bool IsDeleted { get; set; }
+    public bool IsPublic { get; set; }
+    public bool IsFriendPublic { get; set; }
+    public bool IsPublicationPublic { get; set; }
 }

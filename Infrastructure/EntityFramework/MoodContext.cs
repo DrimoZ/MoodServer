@@ -31,6 +31,9 @@ public class MoodContext: DbContext
             builder.Property(user => user.Title).HasColumnName("user_title");
             builder.Property(user => user.AccountId).HasColumnName("acc_id");
             builder.Property(user => user.IsDeleted).HasColumnName("user_isDeleted");
+            builder.Property(user => user.IsPublic).HasColumnName("user_isPublic");
+            builder.Property(user => user.IsFriendPublic).HasColumnName("user_isFriendPublic");
+            builder.Property(user => user.IsPublicationPublic).HasColumnName("user_isPublicationPublic");
         });
         
         modelBuilder.Entity<DbAccount>(builder =>
