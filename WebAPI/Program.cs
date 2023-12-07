@@ -79,6 +79,7 @@ builder.Services.AddScoped<UseCaseFetchUserAccount>();
 builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriends>();
 builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
+builder.Services.AddScoped<UseCaseGetAllUsers>();
 
 
 builder.Services.AddScoped<UseCaseCreateGroup>();

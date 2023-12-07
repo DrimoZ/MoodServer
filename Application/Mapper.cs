@@ -35,6 +35,8 @@ public class Mapper: Profile
         
         
         
+        //UseCaseGetAllUsers
+        CreateMap<DbUser, DtoOutputProfileUser>();
         //Users
         CreateMap<DbUser, DtoOutputUser>();
         CreateMap<DbUser, User>();
