@@ -87,7 +87,7 @@ public class UserDataController: ControllerBase
         }
     }
     
-    [HttpPut]
+    [HttpPut("/userUpdateAccount")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult Update(DtoInputUpdateUser dto)
