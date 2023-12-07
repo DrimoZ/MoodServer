@@ -23,8 +23,9 @@ public class UserDataController: ControllerBase
     private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
     private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
+    private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
 
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData)
+    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -34,6 +35,7 @@ public class UserDataController: ControllerBase
         _useCaseFetchUserPublications = useCaseFetchUserPublications;
         _useCaseFetchUserFriends = useCaseFetchUserFriends;
         _useCaseUpdateUserData = useCaseUpdateUserData;
+        _useCaseGetAllUsers = useCaseGetAllUsers;
     }
     
     [HttpGet("userAccount")]
@@ -45,7 +47,7 @@ public class UserDataController: ControllerBase
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserAccount.Execute(data.Token));
+            return Ok(_useCaseFetchUserAccount.Execute(data.UserId));
         }
         catch (Exception e)
         {
@@ -62,7 +64,7 @@ public class UserDataController: ControllerBase
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserPublications.Execute(data.Token));
+            return Ok(_useCaseFetchUserPublications.Execute(data.UserId));
         }
         catch (Exception e)
         {
@@ -79,12 +81,19 @@ public class UserDataController: ControllerBase
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserFriends.Execute(data.Token));
+            return Ok(_useCaseFetchUserFriends.Execute(data.UserId));
         }
         catch (Exception e)
         {
             return Unauthorized();
         }
+    }
+    
+    [HttpGet("getUsers")]
+    public ActionResult<List<DtoOutputUser>> GetAll()
+    {
+        var data =  GetAuthCookieData();
+        return Ok(_useCaseGetAllUsers.Execute(data.UserId));
     }
     
     [HttpPut]
@@ -99,7 +108,7 @@ public class UserDataController: ControllerBase
 
         return NotFound();
     }
-    private (string Token, int Role) GetAuthCookieData()
+    private (string UserId, int Role) GetAuthCookieData()
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = _configuration["JwtSettings:SecretKey"];
