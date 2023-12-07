@@ -18,7 +18,15 @@ public class UseCaseGetUserByLogin
 
     public DtoOutputUser Execute(string login)
     {
-        var dbUser = _userRepository.FetchByLogin(login);
-        return _mapper.Map<DtoOutputUser>(dbUser);
+        try
+        {
+            var dbUser = _userRepository.FetchByLogin(login);
+            return _mapper.Map<DtoOutputUser>(dbUser);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

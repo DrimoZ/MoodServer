@@ -11,6 +11,10 @@ public class User
     public string Title { get; set; }
     
     public bool isDeleted { get; set; }
+    public bool IsPublic { get; set; }
+    public bool IsFriendPublic { get; set; }
+    public bool IsPublicationPublic { get; set; }
+    
     
     private int _friendCount;
     public int FriendCount { get => _friendCount; set { if (_friendCount == 0 && value > 0) _friendCount = value; } }

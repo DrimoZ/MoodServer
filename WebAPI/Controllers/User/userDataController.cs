@@ -23,8 +23,9 @@ public class UserDataController: ControllerBase
     private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
     private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
+    private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
 
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData)
+    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -34,6 +35,7 @@ public class UserDataController: ControllerBase
         _useCaseFetchUserPublications = useCaseFetchUserPublications;
         _useCaseFetchUserFriends = useCaseFetchUserFriends;
         _useCaseUpdateUserData = useCaseUpdateUserData;
+        _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
     }
     
     [HttpGet("userAccount")]
@@ -87,7 +89,25 @@ public class UserDataController: ControllerBase
         }
     }
     
-    [HttpPut("/userUpdateAccount")]
+    [HttpGet("otherUsers/{login}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Authorize]
+    public IActionResult GetOtherUserData(string login)
+    {
+        try
+        {
+            var data = GetAuthCookieData();
+            return Ok(_useCaseGetUserInfoByLogin.Execute(data.Token, login));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Unauthorized();
+        }
+    }
+    
+    [HttpPut("userUpdateAccount")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult Update(DtoInputUpdateUser dto)
