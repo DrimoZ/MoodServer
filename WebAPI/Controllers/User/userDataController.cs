@@ -26,8 +26,7 @@ public class UserDataController: ControllerBase
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
 
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
-    public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers)
+   public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -109,7 +108,7 @@ public class UserDataController: ControllerBase
         try
         {
             var data = GetAuthCookieData();
-            return Ok(_useCaseGetUserInfoByLogin.Execute(data.Token, login));
+            return Ok(_useCaseGetUserInfoByLogin.Execute(data.UserId, login));
         }
         catch (Exception e)
         {
