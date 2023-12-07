@@ -14,7 +14,7 @@ public class UserRepository: IUserRepository
 
     public List<DbUser> GetAll()
     {
-        throw new NotImplementedException();
+        return _context.Users.ToList();
     }
 
     public DbUser Create(DbUser user)
