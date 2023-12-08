@@ -37,7 +37,6 @@ public class AccountRepository:IAccountRepository
     {
         var account = _context.Accounts.FirstOrDefault(a => a.Id == id);
         if (account == null) throw new KeyNotFoundException($"Account Not Found");
-
         return account;
     }
 }
