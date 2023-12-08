@@ -12,7 +12,7 @@ public class UseCaseCreateGroup:IUseCaseParameterizedWriter<DbGroup, DtoInputCre
     private readonly IGroupRepository _groupRepository;
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IUserRepository _userRepository;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     public UseCaseCreateGroup(IGroupRepository groupRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserGroupRepository userGroupRepository, IUserRepository userRepository)
     {

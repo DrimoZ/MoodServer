@@ -1,7 +1,5 @@
-using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Infrastructure.EntityFramework.Repositories;
 
@@ -14,15 +12,16 @@ public class PublicationRepository:IPublicationRepository
         _context = context;
     }
     
-    public DbComplexPublication Create(DbComplexPublication publication)
+    public DbPublication Create(DbPublication publication)
     {
         publication.Date = DateTime.Now;
+
         _context.Publications.Add(publication);
         _context.SaveChanges();
         return publication;
     }
 
-    public bool Update(DbComplexPublication publication)
+    public bool Update(DbPublication publication)
     {
         throw new NotImplementedException();
     }
@@ -50,14 +49,11 @@ public class PublicationRepository:IPublicationRepository
         return true;
     }
 
-    public IEnumerable<DbComplexPublication> FetchPublications(string userId)
+    public IEnumerable<DbPublication> FetchUserPublications(string userId)
     {
-        
-    }
-
-    public IEnumerable<DbComplexPublication> FetchFriendPublications(string userId)
-    {
-        
+        return _context.Publications
+            .Where(p => p.UserId == userId)
+            .ToList();
     }
 
     public int FetchPublicationCount(string userId)
@@ -67,11 +63,12 @@ public class PublicationRepository:IPublicationRepository
         return count;
     }
 
-    public DbComplexPublication FetchById(int id)
+    public DbPublication FetchById(int id)
     {
         var entity = _context.Publications
             .FirstOrDefault(pub => pub.Id == id);
-        if (entity == null) throw new KeyNotFoundException("PublicationIdNotFound");
+        
+        if (entity == null) throw new KeyNotFoundException("PublicationNotFound");
 
         return entity;
     }

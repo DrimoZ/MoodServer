@@ -47,7 +47,7 @@ public class UserService: IUserService
                         user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
                     break;
                 case EUserFetchAttribute.Publications:
-                        var dbPublications = _publicationRepository.FetchPublications(user.Id);
+                        var dbPublications = _publicationRepository.FetchUserPublications(user.Id);
                         user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     break;
                 case EUserFetchAttribute.Messages:
@@ -100,7 +100,7 @@ public class UserService: IUserService
                 case EUserFetchAttribute.Publications:
                     if(isFriend || user.IsPublicationPublic)
                     {
-                        var dbPublications = _publicationRepository.FetchPublications(user.Id);
+                        var dbPublications = _publicationRepository.FetchUserPublications(user.Id);
                         user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     }
                     break;
