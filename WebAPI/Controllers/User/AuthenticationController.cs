@@ -10,21 +10,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers.User;
 
 [ApiController]
-[Route("api/v1/user")]
-public class UserController: ControllerBase
+[Route("api/v1/auth")]
+public class AuthenticationController: ControllerBase
 {
     private readonly TokenService _tokenService;
-    
-    private readonly ILogger<UserController> _logger;
     
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
     private readonly UseCaseGetUserByLoginAndMail _useCaseGetUserByLoginAndMail;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public UserController(TokenService tokenService, ILogger<UserController> logger, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail)
+    public AuthenticationController(TokenService tokenService, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail)
     {
         _tokenService = tokenService;
-        _logger = logger;
         
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
@@ -69,10 +66,12 @@ public class UserController: ControllerBase
         }
     }
     
+    
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
     public IActionResult SignUp([FromBody] DtoInputSignUpUser model)
     {
@@ -90,7 +89,8 @@ public class UserController: ControllerBase
                 var dbCreatedUser = _useCaseCreateUser.Execute(model);
                 
                 //Verify Password has not changed
-                if (!BCryptService.VerifyPassword(model.Password, dbCreatedUser.Password)) return Problem("MismatchData");
+                if (!BCryptService.VerifyPassword(model.Password, dbCreatedUser.Password))
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the user account.");
                 
                 // Try Generating a Token and publish it
                 if (!GenerateToken(dbCreatedUser.Id, dbCreatedUser.Role.ToString(), true)) return NotFound();
@@ -99,18 +99,19 @@ public class UserController: ControllerBase
             }
             catch (Exception e)
             {
-                return Problem(e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
             
         }
     }
     
-    [HttpPost("logOut")]
+    
+    [HttpPost("signOut")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize]
-    public IActionResult Logout()
+    public IActionResult SignOut()
     {
         try
         {
@@ -120,16 +121,10 @@ public class UserController: ControllerBase
                 Response.Cookies.Delete("MoodSession");
             }
 
-            // Sign out the user
-            //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
             return Ok();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log the error
-            _logger.LogError(ex, "An error occurred while logging out the user.");
-
             // Return an error response
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while logging out the user.");
         }

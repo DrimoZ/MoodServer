@@ -13,10 +13,9 @@ namespace WebAPI.Controllers.User;
 
 [ApiController]
 [Route("api/v1/user")]
-public class UserDataController: ControllerBase
+public class UserController: ControllerBase
 {
-    private readonly TokenService _tokenService;
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<AuthenticationController> _logger;
     private readonly IConfiguration _configuration;
 
     private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
@@ -26,9 +25,8 @@ public class UserDataController: ControllerBase
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
 
-   public UserDataController(TokenService tokenService, ILogger<UserController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
+   public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
     {
-        _tokenService = tokenService;
         _logger = logger;
         _configuration = configuration;
         
@@ -40,7 +38,7 @@ public class UserDataController: ControllerBase
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
     }
     
-    [HttpGet("userAccount")]
+    [HttpGet("profile/account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
@@ -57,7 +55,7 @@ public class UserDataController: ControllerBase
         }
     }
     
-    [HttpGet("userPublications")]
+    [HttpGet("profile/publications")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
@@ -74,7 +72,7 @@ public class UserDataController: ControllerBase
         }
     }
     
-    [HttpGet("userFriends")]
+    [HttpGet("profile/friends")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
