@@ -62,6 +62,8 @@ public class Mapper: Profile
         
         //Publication
         CreateMap<DbPublication, DtoOutputPublication>();
+        CreateMap<DbPublication, Publication>();
+            
         CreateMap<DtoInputCreatePublication, DbPublication>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
