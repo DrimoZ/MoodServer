@@ -1,18 +1,18 @@
 using Domain;
+using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories;
 
 public interface IPublicationRepository
 {
-    DbPublication? Get(int id);
-    DbPublication Create(DbPublication publication);
-    bool Update(DbPublication publication);
+    DbComplexPublication Create(DbComplexPublication publication);
+    bool Update(DbComplexPublication publication);
     bool Delete(int id);
     public bool UpdateDelete(int id, bool isDeleted);
 
-    IEnumerable<DbPublication> FetchPublications(string userId);
-    IEnumerable<DbPublication> FetchFriendPublications(string userId);
-    DbPublication FetchById(int id);
+    IEnumerable<DbComplexPublication> FetchPublications(string userId);
+    IEnumerable<DbComplexPublication> FetchFriendPublications(string userId);
+    DbComplexPublication FetchById(int id);
     int FetchPublicationCount(string userId);
 }

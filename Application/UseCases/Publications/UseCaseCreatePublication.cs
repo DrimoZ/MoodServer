@@ -2,12 +2,13 @@
 using Application.Dtos.Publication;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseCreatePublication: IUseCaseWriter<DbPublication, DtoInputCreatePublication>
+public class UseCaseCreatePublication: IUseCaseWriter<DbComplexPublication, DtoInputCreatePublication>
 {
     private IPublicationRepository _publicationRepository;
     private IMapper _mapper;
@@ -18,9 +19,9 @@ public class UseCaseCreatePublication: IUseCaseWriter<DbPublication, DtoInputCre
         _mapper = mapper;
     }
 
-    public DbPublication Execute(DtoInputCreatePublication input)
+    public DbComplexPublication Execute(DtoInputCreatePublication input)
     {
-        var dbAccount = _publicationRepository.Create(_mapper.Map<DbPublication>(input));
+        var dbAccount = _publicationRepository.Create(_mapper.Map<DbComplexPublication>(input));
         return dbAccount;
     }
 }
