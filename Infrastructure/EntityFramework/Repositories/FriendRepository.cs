@@ -12,6 +12,28 @@ public class FriendRepository: IFriendRepository
         _context = context;
     }
 
+    public DbFriend Create(DbFriend friend)
+    {
+        _context.Friends.Add(friend);
+        _context.SaveChanges();
+        return friend;
+    }
+
+    public bool Delete(string userId)
+    {
+        var friend = _context.Friends.FirstOrDefault(f => f.UserId == userId);
+        if (friend == null)
+            return false;
+        var otherFriend = _context.Friends.FirstOrDefault(f => f.FriendId == userId);
+        if (otherFriend == null)
+            return false;
+        _context.Friends.Remove(friend);
+        _context.Friends.Remove(otherFriend);
+        _context.SaveChanges();
+
+        return true;
+    }
+
     public IEnumerable<DbUser> FetchFriends(string userId)
     {
         var friends = _context.Friends
@@ -29,6 +51,15 @@ public class FriendRepository: IFriendRepository
     {
         var friend = _context.Friends.FirstOrDefault(u => u.UserId == userId && u.FriendId == friendId);
         return friend != null;
+    }
+    
+
+    public DbFriend FetchById(string userId, string otherId)
+    {
+        var friend = _context.Friends.FirstOrDefault(f => f.UserId == userId && f.FriendId == otherId);
+        if(friend == null) throw new KeyNotFoundException($"Friend Not Found");
+        
+        return friend;
     }
 
     public int FetchFriendCount(string userId)
