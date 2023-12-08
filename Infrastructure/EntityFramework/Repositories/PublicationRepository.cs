@@ -1,4 +1,5 @@
 using Domain;
+using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -12,13 +13,8 @@ public class PublicationRepository:IPublicationRepository
     {
         _context = context;
     }
-
-    public DbPublication? Get(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public DbPublication Create(DbPublication publication)
+    
+    public DbComplexPublication Create(DbComplexPublication publication)
     {
         publication.Date = DateTime.Now;
         _context.Publications.Add(publication);
@@ -26,7 +22,7 @@ public class PublicationRepository:IPublicationRepository
         return publication;
     }
 
-    public bool Update(DbPublication publication)
+    public bool Update(DbComplexPublication publication)
     {
         throw new NotImplementedException();
     }
@@ -54,39 +50,24 @@ public class PublicationRepository:IPublicationRepository
         return true;
     }
 
-    public IEnumerable<DbPublication> FetchPublications(string userId)
+    public IEnumerable<DbComplexPublication> FetchPublications(string userId)
     {
-        return _context.Publications
-            .Select(pub => pub)
-            .Join(_context.PublicationPhotos,
-                pub => pub.Id,
-                photo => photo.IdPublication,
-                (pub, photo) => pub)
-            .Join(_context.PublicationVideos,
-                pub => pub.Id,
-                photo => photo.IdPublication,
-                (pub, photo) => pub)
-            .Where(pub => pub.UserId == userId)
-            .ToList();
+        
     }
 
-    public IEnumerable<DbPublication> FetchFriendPublications(string userId)
+    public IEnumerable<DbComplexPublication> FetchFriendPublications(string userId)
     {
-        return _context.Publications
-            .Select(pub => pub)
-            .Where(pub => pub.UserId == userId)
-            .ToList();
+        
     }
 
     public int FetchPublicationCount(string userId)
     {
         var count = _context.Publications
             .Count(p => p.UserId == userId);
-        
         return count;
     }
 
-    public DbPublication FetchById(int id)
+    public DbComplexPublication FetchById(int id)
     {
         var entity = _context.Publications
             .FirstOrDefault(pub => pub.Id == id);

@@ -1,4 +1,5 @@
 using Domain;
+using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.DbComplexEntities;
 
@@ -12,5 +13,5 @@ public class DbComplexPublication
     
     public bool IsDeleted { get; set; }
     
-    public List<PhotoPublication> Photos { get; set; }
+    public IEnumerable<DbPublicationElement> Elements { get; set; }
 }
