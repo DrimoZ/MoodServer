@@ -7,15 +7,17 @@ namespace Infrastructure.EntityFramework;
 public class MoodContext: DbContext
 {
     public MoodContext(DbContextOptions options) : base(options) { }
+    
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
-    public DbSet<DbPublicationElement> PublicationPhotos { get; set; }
+    public DbSet<DbPublicationElement> PublicationElements { get; set; }
     public DbSet<DbFriend> Friends { get; set; }
     public DbSet<DbGroup> Groups { get; set; }
     public DbSet<DbUserGroup> UserGroups { get; set; }
     public DbSet<DbCommunication> Communications { get; set; }
     public DbSet<DbMessage> Messages { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<DbUser>(builder =>

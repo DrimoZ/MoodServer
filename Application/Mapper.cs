@@ -1,9 +1,7 @@
 using Application.Dtos.Account;
-using Application.Dtos.Friend;
 using Application.Dtos.Group;
 using Application.Dtos.Message;
 using Application.Dtos.Publication;
-using Application.Dtos.User;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using AutoMapper;
@@ -64,6 +62,7 @@ public class Mapper: Profile
         
         //Publication
         CreateMap<DbComplexPublication, DtoOutputPublication>();
+        
         CreateMap<DtoInputCreatePublication, DbComplexPublication>()
         CreateMap<DbPublication, DtoOutputPublication>();
         CreateMap<DbPublication, Publication>();
@@ -72,11 +71,12 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
+        CreateMap<DbComplexPublication, DbPublication>();
+        
+        
+        
         //Message
         CreateMap<DtoInputMessage, DbMessage>();
         CreateMap<DbMessage, DtoOutputMessage>();
-        
-        //Friend
-        CreateMap<DbFriend, DtoOutputFriend>();
     }
 }

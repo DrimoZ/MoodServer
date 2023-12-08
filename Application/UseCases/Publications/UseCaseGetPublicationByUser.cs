@@ -19,7 +19,7 @@ public class UseCaseGetPublicationByUser:IUseCaseParameterizedQuery<List<DtoOutp
     public List<DtoOutputPublication> Execute(string userId)
     {
         return _publicationRepository
-            .FetchPublications(userId)
+            .FetchUserPublications(userId)
             .Select(pub => _mapper.Map<DtoOutputPublication>(pub))
             .ToList();
     }

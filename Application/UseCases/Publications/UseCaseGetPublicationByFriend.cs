@@ -26,7 +26,7 @@ public class UseCaseGetPublicationByFriend:IUseCaseParameterizedQuery<List<DtoOu
         foreach (var friend in u.Friends())
         {
             p = _publicationRepository
-                .FetchPublications(friend.Id)
+                .FetchUserPublications(friend.Id)
                 .Select(pub => _mapper.Map<DtoOutputPublication>(pub))
                 .ToList();
         }

@@ -44,7 +44,7 @@ public class UserService: IUserService
                     break;
                 case EUserFetchAttribute.Friends:
                         var dbFriends = _friendRepository.FetchFriends(user.Id);
-                        user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
+                        user.AddRange(dbFriends.Select(dbU => _mapper.Map<Domain.User>(dbU)).ToList());
                     break;
                 case EUserFetchAttribute.Publications:
                         var dbPublications = _publicationRepository.FetchPublications(user.Id);
@@ -101,7 +101,7 @@ public class UserService: IUserService
                     if(isFriend || user.IsPublicationPublic)
                     {
                         var dbPublications = _publicationRepository.FetchPublications(user.Id);
-                        user.AddRange(dbPublications.Select(dbP => _mapper.Map<Domain.Publication>(dbP)).ToList());
+                        user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     }
                     break;
                 default:
