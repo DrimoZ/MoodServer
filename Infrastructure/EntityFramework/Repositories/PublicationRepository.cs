@@ -1,5 +1,6 @@
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Infrastructure.EntityFramework.Repositories;
 
@@ -57,6 +58,14 @@ public class PublicationRepository:IPublicationRepository
     {
         return _context.Publications
             .Select(pub => pub)
+            .Join(_context.PublicationPhotos,
+                pub => pub.Id,
+                photo => photo.IdPublication,
+                (pub, photo) => pub)
+            .Join(_context.PublicationVideos,
+                pub => pub.Id,
+                photo => photo.IdPublication,
+                (pub, photo) => pub)
             .Where(pub => pub.UserId == userId)
             .ToList();
     }

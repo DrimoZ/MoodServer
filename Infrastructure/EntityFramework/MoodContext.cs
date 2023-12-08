@@ -10,6 +10,8 @@ public class MoodContext: DbContext
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
+    public DbSet<DbPublicationPhoto> PublicationPhotos { get; set; }
+    public DbSet<DbPublicationVideo> PublicationVideos { get; set; }
     public DbSet<DbFriend> Friends { get; set; }
     public DbSet<DbGroup> Groups { get; set; }
     public DbSet<DbUserGroup> UserGroups { get; set; }
@@ -63,6 +65,26 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
             builder.Property(pub => pub.Date).HasColumnName("pub_date");
             builder.Property(pub => pub.IsDeleted).HasColumnName("pub_isDeleted");
+        });
+
+        modelBuilder.Entity<DbPublicationPhoto>(builder =>
+        {
+            builder.ToTable("photo_publications");
+            builder.HasKey(pub => pub.Id);
+            builder.Property(pub => pub.Id).HasColumnName("photoPub_id");
+            builder.Property(pub => pub.Extension).HasColumnName("photoPub_extention");
+            builder.Property(pub => pub.Content).HasColumnName("photoPub_content");
+            builder.Property(pub => pub.IdPublication).HasColumnName("pub_id");
+        });
+        
+        modelBuilder.Entity<DbPublicationVideo>(builder =>
+        {
+            builder.ToTable("video_publications");
+            builder.HasKey(pub => pub.Id);
+            builder.Property(pub => pub.Id).HasColumnName("videoPub_id");
+            builder.Property(pub => pub.Extension).HasColumnName("videoPub_extention");
+            builder.Property(pub => pub.Content).HasColumnName("videoPub_content");
+            builder.Property(pub => pub.IdPublication).HasColumnName("pub_id");
         });
 
         modelBuilder.Entity<DbGroup>(builder =>
