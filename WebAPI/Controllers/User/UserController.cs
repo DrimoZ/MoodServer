@@ -89,6 +89,19 @@ public class UserController: ControllerBase
         }
     }
     
+    [HttpPut("profile/account")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult Update(DtoInputUpdateUser dto)
+    {
+        if (_useCaseUpdateUserData.Execute(dto))
+        {
+            return NoContent();
+        }
+
+        return NotFound();
+    }
+    
     [HttpGet("getUsers")]
     public ActionResult<List<DtoOutputUser>> GetAll()
     {
@@ -115,18 +128,7 @@ public class UserController: ControllerBase
         }
     }
     
-    [HttpPut("userUpdateAccount")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult Update(DtoInputUpdateUser dto)
-    {
-        if (_useCaseUpdateUserData.Execute(dto))
-        {
-            return NoContent();
-        }
-
-        return NotFound();
-    }
+    
     private (string UserId, int Role) GetAuthCookieData()
     {
         var tokenHandler = new JwtSecurityTokenHandler();
