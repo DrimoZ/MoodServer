@@ -6,7 +6,6 @@ namespace Infrastructure.EntityFramework;
 public class MoodContext: DbContext
 {
     public MoodContext(DbContextOptions options) : base(options) { }
-    
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
@@ -49,7 +48,7 @@ public class MoodContext: DbContext
         modelBuilder.Entity<DbFriend>(builder =>
         {
             builder.ToTable("friends");
-            builder.HasNoKey();
+            builder.HasKey(f =>new {f.UserId, f.FriendId});
             builder.Property(friend => friend.UserId).HasColumnName("user_id");
             builder.Property(friend => friend.FriendId).HasColumnName("friend_id");
         });

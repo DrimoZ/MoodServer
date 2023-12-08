@@ -6,7 +6,7 @@ namespace Infrastructure.EntityFramework.Repositories;
 public interface IFriendRepository
 {
     DbFriend Create(DbFriend friend);
-    bool Delete(string userId);
+    bool Delete(string userId, string friendId);
     IEnumerable<DbUser> FetchFriends(string userId);
     int FetchFriendCount(string userId);
     bool IsFriend(string userId, string friendId);

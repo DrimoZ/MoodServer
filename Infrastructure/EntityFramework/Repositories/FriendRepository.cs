@@ -19,12 +19,12 @@ public class FriendRepository: IFriendRepository
         return friend;
     }
 
-    public bool Delete(string userId)
+    public bool Delete(string userId, string otherId)
     {
-        var friend = _context.Friends.FirstOrDefault(f => f.UserId == userId);
+        var friend = _context.Friends.FirstOrDefault(f => f.UserId == userId && f.FriendId == otherId);
         if (friend == null)
             return false;
-        var otherFriend = _context.Friends.FirstOrDefault(f => f.FriendId == userId);
+        var otherFriend = _context.Friends.FirstOrDefault(f =>f.UserId == otherId && f.FriendId == userId);
         if (otherFriend == null)
             return false;
         _context.Friends.Remove(friend);

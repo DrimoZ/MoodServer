@@ -2,6 +2,7 @@ using System.Text;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
+using Application.UseCases.Friends;
 using Application.UseCases.Groups;
 using Application.UseCases.Messages;
 using Application.UseCases.Publications;
@@ -80,6 +81,9 @@ builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriends>();
 builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
 
+builder.Services.AddScoped<UseCaseCreateFriend>();
+builder.Services.AddScoped<UseCaseGetFriendByUserId>();
+builder.Services.AddScoped<UseCaseDeleteFriend>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
