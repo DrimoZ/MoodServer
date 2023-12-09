@@ -9,7 +9,7 @@ public class DtoOutputPublication
     public int LikeCount { get; set; }
     public int CommentCount { get; set; }
 
-    public IEnumerable<DtoElements> Elements;
+    public IEnumerable<DtoElements> Elements { get; set; }
 
    public class DtoElements
    {

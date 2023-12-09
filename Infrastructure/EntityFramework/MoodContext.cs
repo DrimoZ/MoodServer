@@ -71,12 +71,11 @@ public class MoodContext: DbContext
 
         modelBuilder.Entity<DbPublicationElement>(builder =>
         {
-            builder.ToTable("photo_publications");
-            builder.HasKey(pub => pub.Id);
-            builder.Property(pub => pub.Id).HasColumnName("photoPub_id");
-            builder.Property(pub => pub.Extension).HasColumnName("photoPub_extention");
-            builder.Property(pub => pub.Content).HasColumnName("photoPub_content");
-            builder.Property(pub => pub.IdPublication).HasColumnName("pub_id");
+            builder.ToTable("publication_elements");
+            builder.HasKey(elem => elem.Id);
+            builder.Property(elem => elem.Id).HasColumnName("elmt_id");
+            builder.Property(elem => elem.IdImage).HasColumnName("img_id");
+            builder.Property(elem => elem.IdPublication).HasColumnName("pub_id");
         });
 
         modelBuilder.Entity<DbGroup>(builder =>
@@ -137,6 +136,15 @@ public class MoodContext: DbContext
             builder.Property(cmt => cmt.IsDeleted).HasColumnName("cmt_isDeleted");
             builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
             builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
+        });
+        
+        modelBuilder.Entity<DbImage>(builder =>
+        {
+            builder.ToTable("images");
+            builder.HasKey(img => img.Id);
+            builder.Property(img => img.Id).HasColumnName("img_id");
+            builder.Property(img => img.Path).HasColumnName("img_path");
+            builder.Property(img => img.Date).HasColumnName("img_date");
         });
     }
 }

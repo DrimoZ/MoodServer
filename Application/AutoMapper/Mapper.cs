@@ -83,6 +83,10 @@ public class Mapper: Profile
         CreateMap<DbPublication, DbComplexPublication>();
         
         CreateMap<DbComplexPublication, Publication>();
+
+        
+        CreateMap<DbPublicationElement, PublicationElement>();
+        CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
     }
 
     private void GroupMappings()
@@ -99,4 +103,6 @@ public class Mapper: Profile
         CreateMap<DtoInputMessage, DbMessage>();
         CreateMap<DbMessage, DtoOutputMessage>();
     }
+    
+    
 }
