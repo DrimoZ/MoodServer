@@ -1,4 +1,5 @@
 using Application.Dtos.Account;
+using Application.Dtos.Friend;
 using Application.Dtos.Group;
 using Application.Dtos.Message;
 using Application.Dtos.Publication;
@@ -71,5 +72,7 @@ public class Mapper: Profile
         //Message
         CreateMap<DtoInputMessage, DbMessage>();
         CreateMap<DbMessage, DtoOutputMessage>();
+        //Friend
+        CreateMap<DbFriend, DtoOutputFriend>();
     }
 }
