@@ -2,7 +2,7 @@ using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories.Publications;
 
-public class CommentRepository: ICommentElementRepository
+public class CommentRepository: ICommentRepository
 {
     private readonly MoodContext _context;
 
@@ -46,5 +46,13 @@ public class CommentRepository: ICommentElementRepository
         return _context.Comments
             .Where(e => e.PublicationId == pubId)
             .ToList();
+    }
+    
+    public int FetchCommentCountByPublicationId(int pubId)
+    {
+        var count = _context.Comments
+            .Count(l => l.PublicationId == pubId);
+        
+        return count;
     }
 }

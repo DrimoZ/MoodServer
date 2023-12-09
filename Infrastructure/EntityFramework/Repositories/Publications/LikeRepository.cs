@@ -47,4 +47,12 @@ public class LikeRepository: ILikeRepository
             .Where(e => e.PublicationId == pubId)
             .ToList();
     }
+    
+    public int FetchLikeCountByPublicationId(int pubId)
+    {
+        var count = _context.Likes
+            .Count(l => l.PublicationId == pubId);
+        
+        return count;
+    }
 }

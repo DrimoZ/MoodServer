@@ -1,4 +1,5 @@
 using System.Text;
+using Application.Services.Publication;
 using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Accounts;
@@ -8,7 +9,6 @@ using Application.UseCases.Publications;
 using Application.UseCases.Users.UserAuthentication;
 using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Publications;
@@ -17,7 +17,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Mapper = Application.Mapper;
+using Mapper = Application.AutoMapper.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +41,7 @@ builder.Services.AddDbContext<MoodContext>(cfg => cfg.UseSqlServer(
     builder.Configuration.GetConnectionString("db")
 ).EnableDetailedErrors());
 
+
 //Database Repositories & Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -51,12 +52,15 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
 builder.Services.AddScoped<IPublicationElementRepository, PublicationElementRepository>();
-
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPublicationService, PublicationService>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseCreateUser>();

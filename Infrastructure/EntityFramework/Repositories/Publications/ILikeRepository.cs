@@ -8,4 +8,5 @@ public interface ILikeRepository
     bool Delete(int likeId);
     DbLike FetchById(int likeId);
     IEnumerable<DbLike> FetchLikesByPublicationId(int pubId);
+    int FetchLikeCountByPublicationId(int pubId);
 }
