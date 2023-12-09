@@ -1,6 +1,6 @@
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Infrastructure.EntityFramework.Repositories;
+namespace Infrastructure.EntityFramework.Repositories.Communications;
 
 public interface IMessageRepository
 {

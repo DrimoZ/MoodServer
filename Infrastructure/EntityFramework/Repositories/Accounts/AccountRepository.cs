@@ -1,7 +1,6 @@
-using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Infrastructure.EntityFramework.Repositories;
+namespace Infrastructure.EntityFramework.Repositories.Accounts;
 
 public class AccountRepository:IAccountRepository
 {

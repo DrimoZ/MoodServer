@@ -1,8 +1,6 @@
-using Domain;
-using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Infrastructure.EntityFramework.Repositories;
+namespace Infrastructure.EntityFramework.Repositories.Publications;
 
 public interface IPublicationRepository
 {

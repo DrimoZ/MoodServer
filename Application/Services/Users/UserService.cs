@@ -2,6 +2,9 @@ using Application.Services.Users.Util;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
+using Infrastructure.EntityFramework.Repositories.Publications;
+using Infrastructure.EntityFramework.Repositories.Users;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Users;

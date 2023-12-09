@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Users.Util;
+﻿namespace Application.Services.Publication.Util;
 
 public enum EPublicationFetchAttribute
 {

@@ -1,7 +1,6 @@
 using Infrastructure.EntityFramework.DbEntities;
-using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.EntityFramework.Repositories;
+namespace Infrastructure.EntityFramework.Repositories.Communications;
 
 public class GroupRepository:IGroupRepository
 {

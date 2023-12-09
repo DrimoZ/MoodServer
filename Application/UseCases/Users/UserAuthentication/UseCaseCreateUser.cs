@@ -7,6 +7,8 @@ using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
+using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserAuthentication;
 

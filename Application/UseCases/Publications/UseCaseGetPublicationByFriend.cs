@@ -4,6 +4,7 @@ using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 

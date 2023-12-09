@@ -1,6 +1,6 @@
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Infrastructure.EntityFramework.Repositories;
+namespace Infrastructure.EntityFramework.Repositories.Users;
 
 public interface IUserGroupRepository
 {

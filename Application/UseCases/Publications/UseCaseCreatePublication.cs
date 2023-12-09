@@ -4,6 +4,7 @@ using AutoMapper;
 using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 

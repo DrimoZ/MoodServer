@@ -2,6 +2,8 @@ using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
+using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Users.UserData;

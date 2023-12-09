@@ -9,8 +9,6 @@ public class User
     
     public string Name { get; set; }
     public string Title { get; set; }
-    
-    public bool isDeleted { get; set; }
     public bool IsPublic { get; set; }
     public bool IsFriendPublic { get; set; }
     public bool IsPublicationPublic { get; set; }

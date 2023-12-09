@@ -1,6 +1,7 @@
-﻿using Application.Services.Users.Util;
+﻿using Application.Services.Publication.Util;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.Services.Publication;
 
