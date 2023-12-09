@@ -68,8 +68,8 @@ public class Mapper: Profile
         CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
 
         CreateMap<Publication, DtoOutputPublication>();
-        
-        CreateMap<DtoInputCreatePublication, DbComplexPublication>()
+
+        CreateMap<DtoInputCreatePublication, DbComplexPublication>();
         CreateMap<DbPublication, DtoOutputPublication>();
         CreateMap<DbPublication, Publication>();
             
