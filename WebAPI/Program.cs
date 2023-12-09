@@ -57,7 +57,6 @@ builder.Services.AddScoped<ILikeRepository, LikeRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
 // Application Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPublicationService, PublicationService>();
