@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Infrastructure.EntityFramework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -45,5 +46,30 @@ public class TokenService
         );
         
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+    
+    public (string UserId, int Role) GetAuthCookieData(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var secretKey = _configuration["JwtSettings:SecretKey"];
+        var key = Encoding.ASCII.GetBytes(secretKey!);
+        
+        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = true,
+            ValidIssuer = _configuration["JwtSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = _configuration["JwtSettings:Audience"],
+            ClockSkew = TimeSpan.Zero
+        }, out SecurityToken validatedToken);
+        
+        var jwtToken = (JwtSecurityToken)validatedToken;
+        
+        var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+        var role = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.Role).Value);
+        
+        return (userId, role);
     }
 }

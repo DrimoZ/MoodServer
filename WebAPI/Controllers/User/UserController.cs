@@ -17,6 +17,7 @@ public class UserController: ControllerBase
 {
     private readonly ILogger<AuthenticationController> _logger;
     private readonly IConfiguration _configuration;
+    private readonly TokenService _tokenService;
 
     private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
     private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
@@ -25,7 +26,7 @@ public class UserController: ControllerBase
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
 
-   public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
+   public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, TokenService tokenService)
     {
         _logger = logger;
         _configuration = configuration;
@@ -36,6 +37,7 @@ public class UserController: ControllerBase
         _useCaseUpdateUserData = useCaseUpdateUserData;
         _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
+        _tokenService = tokenService;
     }
     
     [HttpGet("profile/account")]
@@ -131,27 +133,7 @@ public class UserController: ControllerBase
     
     private (string UserId, int Role) GetAuthCookieData()
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var secretKey = _configuration["JwtSettings:SecretKey"];
-        var key = Encoding.ASCII.GetBytes(secretKey!);
-        var token = HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!];
-        
-        tokenHandler.ValidateToken(token, new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = true,
-            ValidIssuer = _configuration["JwtSettings:Issuer"],
-            ValidateAudience = true,
-            ValidAudience = _configuration["JwtSettings:Audience"],
-            ClockSkew = TimeSpan.Zero
-        }, out SecurityToken validatedToken);
-        
-        var jwtToken = (JwtSecurityToken)validatedToken;
-        
-        var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
-        var role = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.Role).Value);
-        
-        return (userId, role);
+        var token = HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!;
+        return _tokenService.GetAuthCookieData(token);
     }
 }

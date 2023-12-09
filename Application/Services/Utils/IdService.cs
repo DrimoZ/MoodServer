@@ -21,6 +21,7 @@ public class IdService
         {
             EClassType.User => "usr_" + result.ToString(),
             EClassType.Account => "acc_" + result.ToString(),
+            EClassType.Image => "img_" + result.ToString(),
             _ => throw new KeyNotFoundException("Unknown Class Type")
         };
     }
