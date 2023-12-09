@@ -9,58 +9,64 @@ using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 
-namespace Application;
+namespace Application.AutoMapper;
 
 public class Mapper: Profile
 {
     public Mapper()
     {
-        //UseCaseCreateUser
+        UserMappings();
+        AccountMappings();
+        PublicationMappings();
+        GroupMappings();
+        MessageMappings();
+    }
+
+    private void UserMappings()
+    {
         CreateMap<DtoInputSignUpUser, DbAccount>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        //UseCaseCreateUser
+        
         CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-        //UseCaseCreateUser
+
         CreateMap<DtoInputCreateUser, DbUser>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore());
-        
-        
-        //UseCaseFetchUserAccount //UseCaseFetchUserFriends
+
         CreateMap<User, DtoOutputProfileUser>();
-        //UseCaseFetchUserAccount
-        CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
-        //UseCaseFetchUserPublications
-        CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
         
-        
-        
-        //UseCaseGetAllUsers
         CreateMap<DbUser, DtoOutputProfileUser>();
-        //Users
+
         CreateMap<DbUser, DtoOutputUser>();
+        
         CreateMap<DbUser, User>();
+        
         CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        
         CreateMap<DtoInputUpdateUser, DbUser>()
             .ForMember(dest => dest.Login, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore())
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForMember(dest => dest.AccountId, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+    }
 
+    private void AccountMappings()
+    {
+        CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
         
-        //Account
         CreateMap<DbAccount, DtoOutputAccount>();
+        
         CreateMap<DbAccount, Account>();
+        
         CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
         
-        //Group
-        CreateMap<DbGroup, DtoOutputGroup>();
-        CreateMap<DtoInputCreateGroup, DbGroup>()
-            .ForMember(dest => dest.Id, opt =>opt.Ignore())
-            .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore());
-        
-        //Publication
+    }
+
+    private void PublicationMappings()
+    {
+        CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
+
         CreateMap<DbComplexPublication, DtoOutputPublication>();
         
         CreateMap<DtoInputCreatePublication, DbComplexPublication>()
@@ -71,11 +77,25 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
+        
         CreateMap<DbComplexPublication, DbPublication>();
         
+        CreateMap<DbPublication, DbComplexPublication>();
         
+        CreateMap<DbComplexPublication, Publication>();
+    }
+
+    private void GroupMappings()
+    {
+        CreateMap<DbGroup, DtoOutputGroup>();
         
-        //Message
+        CreateMap<DtoInputCreateGroup, DbGroup>()
+            .ForMember(dest => dest.Id, opt =>opt.Ignore())
+            .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore());
+    }
+
+    private void MessageMappings()
+    {
         CreateMap<DtoInputMessage, DbMessage>();
         CreateMap<DbMessage, DtoOutputMessage>();
     }
