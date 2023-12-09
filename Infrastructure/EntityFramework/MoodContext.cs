@@ -17,6 +17,8 @@ public class MoodContext: DbContext
     public DbSet<DbUserGroup> UserGroups { get; set; }
     public DbSet<DbCommunication> Communications { get; set; }
     public DbSet<DbMessage> Messages { get; set; }
+    public DbSet<DbLike> Likes { get; set; }
+    public DbSet<DbComment> Comments { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -111,6 +113,30 @@ public class MoodContext: DbContext
             builder.Property(msg => msg.Content).HasColumnName("msg_content");
             builder.Property(msg => msg.UserGroupId).HasColumnName("user_group_id");
             builder.Property(msg => msg.CommId).HasColumnName("comm_id");
+        });
+        
+        
+        modelBuilder.Entity<DbLike>(builder =>
+        {
+            builder.ToTable("likes");
+            builder.HasKey(like => like.Id);
+            builder.Property(like => like.Id).HasColumnName("like_id");
+            builder.Property(like => like.Date).HasColumnName("like_date");
+            builder.Property(like => like.Type).HasColumnName("like_type");
+            builder.Property(like => like.PublicationId).HasColumnName("pub_id");
+            builder.Property(like => like.UserId).HasColumnName("user_id");
+        });
+        
+        modelBuilder.Entity<DbComment>(builder =>
+        {
+            builder.ToTable("comments");
+            builder.HasKey(cmt => cmt.Id);
+            builder.Property(cmt => cmt.Id).HasColumnName("cmt_id");
+            builder.Property(cmt => cmt.Date).HasColumnName("cmt_date");
+            builder.Property(cmt => cmt.Content).HasColumnName("cmt_content");
+            builder.Property(cmt => cmt.IsDeleted).HasColumnName("cmt_isDeleted");
+            builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
+            builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
         });
     }
 }
