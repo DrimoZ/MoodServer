@@ -8,12 +8,12 @@ namespace WebAPI.Controllers;
 [Route("api/v1/publication")]
 public class PublicationController: ControllerBase
 {
-    private UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
-    private UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
-    private UseCaseGetPublicationById _useCaseGetPublicationById;
-    private UseCaseCreatePublication _useCaseCreatePublication;
-    private UseCaseDeletePublication _useCaseDeletePublication;
-    private UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
+    private readonly UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
+    private readonly UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
+    private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
+    private readonly UseCaseCreatePublication _useCaseCreatePublication;
+    private readonly UseCaseDeletePublication _useCaseDeletePublication;
+    private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
 
     public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend)
     {

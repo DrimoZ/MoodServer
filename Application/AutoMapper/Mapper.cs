@@ -67,7 +67,7 @@ public class Mapper: Profile
     {
         CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
 
-        CreateMap<DbComplexPublication, DtoOutputPublication>();
+        CreateMap<Publication, DtoOutputPublication>();
         
         CreateMap<DtoInputCreatePublication, DbComplexPublication>()
         CreateMap<DbPublication, DtoOutputPublication>();
