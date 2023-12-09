@@ -14,6 +14,7 @@ public class MoodContext: DbContext
     public DbSet<DbUserGroup> UserGroups { get; set; }
     public DbSet<DbCommunication> Communications { get; set; }
     public DbSet<DbMessage> Messages { get; set; }
+    public DbSet<DbImage> Images { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,6 +99,15 @@ public class MoodContext: DbContext
             builder.Property(msg => msg.Content).HasColumnName("msg_content");
             builder.Property(msg => msg.UserGroupId).HasColumnName("user_group_id");
             builder.Property(msg => msg.CommId).HasColumnName("comm_id");
+        });
+
+        modelBuilder.Entity<DbImage>(builder =>
+        {
+            builder.ToTable("images");
+            builder.HasKey(img => img.Id);
+            builder.Property(img => img.Id).HasColumnName(("img_id"));
+            builder.Property(img => img.Path).HasColumnName("img_path");
+            builder.Property(img => img.Date).HasColumnName("img_date");
         });
     }
 }

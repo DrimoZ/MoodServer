@@ -4,17 +4,16 @@ using Application.Services.Utils;
 using Application.UseCases.Accounts;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
+using Application.UseCases.Images;
 using Application.UseCases.Messages;
 using Application.UseCases.Publications;
-using Application.UseCases.Users;
 using Application.UseCases.Users.UserAuthentication;
 using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
-using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Images;
 using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Mapper = Application.Mapper;
@@ -50,7 +49,7 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
 builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
-
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -87,6 +86,9 @@ builder.Services.AddScoped<UseCaseDeleteFriend>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
+
+builder.Services.AddScoped<UseCaseCreateImage>();
+
 
 // Initialize JWT Bearer
 builder.Services.AddAuthorization();
@@ -148,7 +150,6 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,6 +1,7 @@
 using Application.Dtos.Account;
 using Application.Dtos.Friend;
 using Application.Dtos.Group;
+using Application.Dtos.Images;
 using Application.Dtos.Message;
 using Application.Dtos.Publication;
 using Application.Dtos.User;
@@ -74,5 +75,9 @@ public class Mapper: Profile
         CreateMap<DbMessage, DtoOutputMessage>();
         //Friend
         CreateMap<DbFriend, DtoOutputFriend>();
+        //Image
+        CreateMap<DtoInputImage, DbImage>()
+            .ForMember(dest => dest.Date, opt => opt.Ignore());
+
     }
 }
