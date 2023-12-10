@@ -4,6 +4,7 @@ using Application.Dtos.Message;
 using Application.Dtos.Publication;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
+using Application.Dtos.User.UserProfile;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
@@ -49,6 +50,13 @@ public class Mapper: Profile
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForMember(dest => dest.AccountId, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+
+
+        CreateMap<DbUser, DtoOutputUserProfile>()
+            .ForMember(dest => dest.FriendCount, opt => opt.Ignore())
+            .ForMember(dest => dest.PublicationCount, opt => opt.Ignore())
+            .ForMember(dest => dest.IsConnectedUser, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.Ignore());
     }
 
     private void AccountMappings()

@@ -4,6 +4,7 @@ using System.Text;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.Services.Utils;
+using Application.UseCases.Publications;
 using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,25 +20,64 @@ public class UserController: ControllerBase
     private readonly IConfiguration _configuration;
 
     private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
-    private readonly UseCaseFetchUserPublications _useCaseFetchUserPublications;
+    private readonly UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
     private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
+    private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
 
-   public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserPublications useCaseFetchUserPublications, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin)
+    public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
     {
         _logger = logger;
         _configuration = configuration;
         
         _useCaseFetchUserAccount = useCaseFetchUserAccount;
-        _useCaseFetchUserPublications = useCaseFetchUserPublications;
         _useCaseFetchUserFriends = useCaseFetchUserFriends;
         _useCaseUpdateUserData = useCaseUpdateUserData;
         _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
+        _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
+        _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
     }
     
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize]
+    public IActionResult GetUserIdAndRole()
+    {
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(new {userId = data.UserId, userRole = data.Role});
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpGet("{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize]
+    public IActionResult GetUserProfileByUserId(string userId)
+    {
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(_useCaseFetchUserProfileByUserId.Execute(data.UserId, userId));
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
+    }
+   
+   
     [HttpGet("profile/account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -64,7 +104,7 @@ public class UserController: ControllerBase
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserPublications.Execute(data.UserId));
+            return Ok(_useCaseGetPublicationByUser.Execute(data.UserId));
         }
         catch (Exception e)
         {
