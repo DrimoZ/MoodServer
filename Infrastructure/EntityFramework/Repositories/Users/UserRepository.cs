@@ -48,7 +48,7 @@ public class UserRepository: IUserRepository
     {
         var user = _context.Users.FirstOrDefault(u => u.Id == id);
 
-        if (user == null) throw new KeyNotFoundException("userIdNotFound");
+        if (user == null || user.IsDeleted) throw new KeyNotFoundException("userIdNotFound");
 
         return user;
     }

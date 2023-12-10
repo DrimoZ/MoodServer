@@ -8,16 +8,16 @@ namespace WebAPI.Controllers;
 [Route("api/v1/publication")]
 public class PublicationController: ControllerBase
 {
-    private readonly UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
+    private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
     private readonly UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
     private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
 
-    public PublicationController(UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend)
     {
-        _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
+        _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _useCaseGetPublicationByFriend = useCaseGetPublicationByFriend;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
@@ -29,7 +29,7 @@ public class PublicationController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputPublication> GetPublicationByUserId(string userId)
     {
-        return Ok(_useCaseGetPublicationByUser.Execute(userId));
+        return Ok(_useCaseFetchUserPublicationByUser.Execute(userId, userId));
     }
     
     [HttpGet("/newsfeed/{userId}")]

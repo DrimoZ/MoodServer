@@ -37,4 +37,33 @@ public class FriendRepository: IFriendRepository
         
         return count;
     }
+    
+    public int FetchCommonFriendsCount(string userId, string friendId)
+    {
+        return _context.Friends
+            .Join(_context.Friends, f1 => f1.FriendId, f2 => f2.FriendId, (f1, f2) => new { f1, f2 })
+            .Count(x => x.f1.UserId == userId && x.f2.UserId == friendId);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

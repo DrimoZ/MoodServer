@@ -27,6 +27,33 @@ public class UserService: IUserService
         _publicationRepository = publicationRepository;
     }
 
+    //A voir
+    public User FetchUserByUserId(string id, EUserRequestType attributeType)
+    {
+        var dbUser = _userRepository.FetchById(id);
+        var user = _mapper.Map<User>(dbUser);
+
+        switch (attributeType)
+        {
+            case EUserRequestType.Profile: {
+                user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
+                user.PublicationCount = _publicationRepository.FetchPublicationCount(user.Id);
+                break;
+            }
+                
+            case EUserRequestType.Account:
+                break;
+            case EUserRequestType.Friends:
+                break;
+            case EUserRequestType.Publications:
+                break;
+            default:
+                throw new ArgumentException($"Unknown attribute: {attributeType}");
+        }
+
+        return user;
+    }
+    
     public User FetchById(string id, IEnumerable<EUserFetchAttribute> attributesToFetch)
     {
         var dbUser = _userRepository.FetchById(id);

@@ -52,11 +52,26 @@ public class Mapper: Profile
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
 
 
+        //User Profile
         CreateMap<DbUser, DtoOutputUserProfile>()
             .ForMember(dest => dest.FriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.PublicationCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsConnectedUser, opt => opt.Ignore())
             .ForMember(dest => dest.Description, opt => opt.Ignore());
+        
+        //User Profile Account
+        CreateMap<DbUser, DtoOutputUserAccount>()
+            .ForMember(dest => dest.Description, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.Ignore())
+            .ForMember(dest => dest.BirthDate, opt => opt.Ignore())
+            .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore());
+        
+        //User Profile Friends
+        CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>()
+            .ForMember(dest => dest.CommonFriendCount, opt => opt.Ignore())
+            .ForMember(dest => dest.IsFriendWithConnected, opt => opt.Ignore());
+
+
     }
 
     private void AccountMappings()
@@ -75,26 +90,34 @@ public class Mapper: Profile
     {
         CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
 
-        CreateMap<Publication, DtoOutputPublication>();
 
         CreateMap<DtoInputCreatePublication, DbComplexPublication>();
-        CreateMap<DbPublication, DtoOutputPublication>();
         CreateMap<DbPublication, Publication>();
-            
+
         CreateMap<DtoInputCreatePublication, DbPublication>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
-        
+
         CreateMap<DbComplexPublication, DbPublication>();
-        
+
         CreateMap<DbPublication, DbComplexPublication>();
-        
+
         CreateMap<DbComplexPublication, Publication>();
 
-        
+
         CreateMap<DbPublicationElement, PublicationElement>();
+
+
+        CreateMap<DbPublication, DtoOutputPublication>();
+        CreateMap<Publication, DtoOutputPublication>();
         CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
+        
+        
+        //User Profile Publications
+        CreateMap<Publication, DtoOutputUserPublications.DtoPublication>();
+        CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoElement>();
+
     }
 
     private void GroupMappings()

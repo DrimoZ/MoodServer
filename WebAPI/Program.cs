@@ -73,16 +73,16 @@ builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
 
-builder.Services.AddScoped<UseCaseGetPublicationByUser>();
+builder.Services.AddScoped<UseCaseFetchUserPublicationByUser>();
 builder.Services.AddScoped<UseCaseGetPublicationByFriend>();
 builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 
-builder.Services.AddScoped<UseCaseFetchUserAccount>();
+builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserPublications>();
-builder.Services.AddScoped<UseCaseFetchUserFriends>();
+builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
 builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
 builder.Services.AddScoped<UseCaseGetAllUsers>();
 

@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Text;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
-using Application.Services.Utils;
 using Application.UseCases.Publications;
 using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
@@ -19,33 +18,33 @@ public class UserController: ControllerBase
     private readonly ILogger<AuthenticationController> _logger;
     private readonly IConfiguration _configuration;
 
-    private readonly UseCaseFetchUserAccount _useCaseFetchUserAccount;
-    private readonly UseCaseGetPublicationByUser _useCaseGetPublicationByUser;
-    private readonly UseCaseFetchUserFriends _useCaseFetchUserFriends;
+    private readonly UseCaseFetchUserAccountByUserId _useCaseFetchUserAccountByUserId;
+    private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
+    private readonly UseCaseFetchUserFriendsByUserId _useCaseFetchUserFriendsByUserId;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
 
-    public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccount useCaseFetchUserAccount, UseCaseFetchUserFriends useCaseFetchUserFriends, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetPublicationByUser useCaseGetPublicationByUser, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
+    public UserController(ILogger<AuthenticationController> logger, IConfiguration configuration, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
     {
         _logger = logger;
         _configuration = configuration;
         
-        _useCaseFetchUserAccount = useCaseFetchUserAccount;
-        _useCaseFetchUserFriends = useCaseFetchUserFriends;
+        _useCaseFetchUserAccountByUserId = useCaseFetchUserAccountByUserId;
+        _useCaseFetchUserFriendsByUserId = useCaseFetchUserFriendsByUserId;
         _useCaseUpdateUserData = useCaseUpdateUserData;
         _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
-        _useCaseGetPublicationByUser = useCaseGetPublicationByUser;
+        _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
     }
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
+    //Get the connected User Id and his Role 
     public IActionResult GetUserIdAndRole()
     {
         try
@@ -55,7 +54,7 @@ public class UserController: ControllerBase
         }
         catch (Exception)
         {
-            return NotFound();
+            return Unauthorized();
         }
     }
     
@@ -64,6 +63,7 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
+    //Get the public profile information of given userId
     public IActionResult GetUserProfileByUserId(string userId)
     {
         try
@@ -78,54 +78,60 @@ public class UserController: ControllerBase
     }
    
    
-    [HttpGet("profile/account")]
+    [HttpGet("{userId}/account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
-    public IActionResult GetUserAccountData()
+    //Get the public profile account information of given userId
+    public IActionResult GetUserAccountByUserId(string userId)
     {
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserAccount.Execute(data.UserId));
+            return Ok(_useCaseFetchUserAccountByUserId.Execute(data.UserId, userId));
         }
         catch (Exception e)
         {
-            return Unauthorized();
+            return NotFound();
         }
     }
     
-    [HttpGet("profile/publications")]
+    [HttpGet("{userId}/friends")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
-    public IActionResult GetUserPublicationsData()
+    //Get the friends information of given userId
+    public IActionResult GetUserFriendsByUserId(string userId)
     {
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseGetPublicationByUser.Execute(data.UserId));
+            return Ok(_useCaseFetchUserFriendsByUserId.Execute(data.UserId, userId));
         }
         catch (Exception e)
         {
-            return Unauthorized(e);
+            return NotFound();
         }
     }
     
-    [HttpGet("profile/friends")]
+    [HttpGet("{userId}/publications")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
-    public IActionResult GetUserFriendsData()
+    //Get the publications information of given userId
+    public IActionResult GetUserPublicationsData(string userId)
     {
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserFriends.Execute(data.UserId));
+            return Ok(_useCaseFetchUserPublicationByUser.Execute(data.UserId, userId));
         }
         catch (Exception e)
         {
-            return Unauthorized();
+            return NotFound(e);
         }
     }
     
