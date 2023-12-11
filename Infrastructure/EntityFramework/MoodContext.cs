@@ -9,12 +9,15 @@ public class MoodContext: DbContext
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
+    public DbSet<DbPublicationElement> PublicationElements { get; set; }
     public DbSet<DbFriend> Friends { get; set; }
     public DbSet<DbGroup> Groups { get; set; }
     public DbSet<DbUserGroup> UserGroups { get; set; }
     public DbSet<DbCommunication> Communications { get; set; }
     public DbSet<DbMessage> Messages { get; set; }
     public DbSet<DbImage> Images { get; set; }
+    public DbSet<DbLike> Likes { get; set; }
+    public DbSet<DbComment> Comments { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,6 +68,15 @@ public class MoodContext: DbContext
             builder.Property(pub => pub.IsDeleted).HasColumnName("pub_isDeleted");
         });
 
+        modelBuilder.Entity<DbPublicationElement>(builder =>
+        {
+            builder.ToTable("publication_elements");
+            builder.HasKey(elem => elem.Id);
+            builder.Property(elem => elem.Id).HasColumnName("elmt_id");
+            builder.Property(elem => elem.IdImage).HasColumnName("img_id");
+            builder.Property(elem => elem.IdPublication).HasColumnName("pub_id");
+        });
+
         modelBuilder.Entity<DbGroup>(builder =>
         {
             builder.ToTable("groups");
@@ -108,6 +120,30 @@ public class MoodContext: DbContext
             builder.Property(img => img.Id).HasColumnName(("img_id"));
             builder.Property(img => img.Data).HasColumnName("img_data");
             builder.Property(img => img.Date).HasColumnName("img_date");
+        });
+        
+        
+        modelBuilder.Entity<DbLike>(builder =>
+        {
+            builder.ToTable("likes");
+            builder.HasKey(like => like.Id);
+            builder.Property(like => like.Id).HasColumnName("like_id");
+            builder.Property(like => like.Date).HasColumnName("like_date");
+            builder.Property(like => like.Type).HasColumnName("like_type");
+            builder.Property(like => like.PublicationId).HasColumnName("pub_id");
+            builder.Property(like => like.UserId).HasColumnName("user_id");
+        });
+        
+        modelBuilder.Entity<DbComment>(builder =>
+        {
+            builder.ToTable("comments");
+            builder.HasKey(cmt => cmt.Id);
+            builder.Property(cmt => cmt.Id).HasColumnName("cmt_id");
+            builder.Property(cmt => cmt.Date).HasColumnName("cmt_date");
+            builder.Property(cmt => cmt.Content).HasColumnName("cmt_content");
+            builder.Property(cmt => cmt.IsDeleted).HasColumnName("cmt_isDeleted");
+            builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
+            builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
         });
     }
 }

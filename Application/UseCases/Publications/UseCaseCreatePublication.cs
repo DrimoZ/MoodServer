@@ -1,26 +1,40 @@
-﻿using Application.Dtos.Account;
-using Application.Dtos.Publication;
+﻿using Application.Dtos.Publication;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Infrastructure.EntityFramework.DbComplexEntities;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseCreatePublication: IUseCaseWriter<DbPublication, DtoInputCreatePublication>
+public class UseCaseCreatePublication: IUseCaseWriter<DbComplexPublication, DtoInputCreatePublication>
 {
-    private IPublicationRepository _publicationRepository;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
+    
+    private readonly IPublicationRepository _publicationRepository;
+    private readonly IPublicationElementRepository _publicationElementRepository;
 
-    public UseCaseCreatePublication(IPublicationRepository publicationRepository, IMapper mapper)
+    public UseCaseCreatePublication(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository publicationElementRepository)
     {
-        _publicationRepository = publicationRepository;
         _mapper = mapper;
+        
+        _publicationRepository = publicationRepository;
+        _publicationElementRepository = publicationElementRepository;
     }
 
-    public DbPublication Execute(DtoInputCreatePublication input)
+    public DbComplexPublication Execute(DtoInputCreatePublication input)
     {
-        var dbAccount = _publicationRepository.Create(_mapper.Map<DbPublication>(input));
-        return dbAccount;
+        var complexPub = _mapper.Map<DbComplexPublication>(input);
+
+        var dbPub = _publicationRepository.Create(_mapper.Map<DbPublication>(complexPub));
+
+        foreach (var element in complexPub.Elements)
+        {
+            element.IdPublication = dbPub.Id;
+            _publicationElementRepository.Create(element);
+        }
+
+        return complexPub;
     }
 }

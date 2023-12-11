@@ -67,7 +67,7 @@ CREATE TABLE friend_requests (
 CREATE TABLE publications (
     pub_id INT PRIMARY KEY IDENTITY,
     pub_content NVARCHAR(255) NOT NULL,
-    pub_date DATETIME DEFAULT (GETDATE()),
+    pub_date DATETIME NOT NULL,
     pub_isDeleted BIT NOT NULL DEFAULT 0,
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );

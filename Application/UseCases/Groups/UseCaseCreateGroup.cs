@@ -3,6 +3,8 @@ using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Communications;
+using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Groups;
@@ -12,7 +14,7 @@ public class UseCaseCreateGroup:IUseCaseParameterizedWriter<DbGroup, DtoInputCre
     private readonly IGroupRepository _groupRepository;
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IUserRepository _userRepository;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     public UseCaseCreateGroup(IGroupRepository groupRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserGroupRepository userGroupRepository, IUserRepository userRepository)
     {

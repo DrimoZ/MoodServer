@@ -2,6 +2,7 @@ using Application.Dtos.Account;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
 
 namespace Application.UseCases.Accounts;
 

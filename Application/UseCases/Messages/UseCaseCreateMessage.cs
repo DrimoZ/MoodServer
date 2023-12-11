@@ -3,6 +3,8 @@ using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Communications;
+using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Messages;

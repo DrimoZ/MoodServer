@@ -4,6 +4,7 @@ using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 
@@ -26,7 +27,7 @@ public class UseCaseGetPublicationByFriend:IUseCaseParameterizedQuery<List<DtoOu
         foreach (var friend in u.Friends())
         {
             p = _publicationRepository
-                .FetchPublications(friend.Id)
+                .FetchUserPublications(friend.Id)
                 .Select(pub => _mapper.Map<DtoOutputPublication>(pub))
                 .ToList();
         }
