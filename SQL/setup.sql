@@ -74,7 +74,7 @@ CREATE TABLE publications (
 
 CREATE TABLE images (
     img_id INT PRIMARY KEY IDENTITY,
-    img_path NVARCHAR(MAX) NOT NULL,
+    img_data varbinary(MAX) NOT NULL,
     img_date DATETIME DEFAULT (GETDATE())
 );
 
