@@ -13,6 +13,8 @@ RUN ( /opt/mssql/bin/sqlservr --accept-eula & ) | grep -q "Service Broker manage
     && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'yourStrong(!)Password' -i "./setup.sql" \
     && pkill sqlservr
 
+WORKDIR /uploads/image
+
 # Exposez le port SQL Server (par défaut 1433)
 EXPOSE 1433
 
