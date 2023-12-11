@@ -2,6 +2,7 @@ using Application.Dtos.Group;
 using Application.Services.Utils;
 using Application.UseCases.Groups;
 using Infrastructure.EntityFramework.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 
@@ -30,6 +31,7 @@ public class GroupController:ControllerBase
     }
     
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputGroup> Create(DtoInputCreateGroup group)
     {
@@ -37,8 +39,9 @@ public class GroupController:ControllerBase
     }
     
     [HttpGet]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<IEnumerable<DbGroup>> FetchGroupByUserId()
+    public ActionResult<IEnumerable<DtoOutputGroup>> FetchGroupByUserId()
     {
         return Ok(_useCaseGetGroupsByUserId.Execute(GetAuthCookieData()));
     }

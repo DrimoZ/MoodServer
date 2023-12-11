@@ -23,4 +23,10 @@ public class UserGroupRepository:IUserGroupRepository
         _context.UserGroups.Add(usrGrp);
         return usrGrp;
     }
+
+    public IEnumerable<DbUserGroup> FetchAllByUserId(string userId)
+    {
+        var groups =_context.UserGroups.Where(userGroup => userGroup.UserId == userId);
+        return groups;
+    }
 }
