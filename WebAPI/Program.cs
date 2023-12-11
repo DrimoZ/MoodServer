@@ -158,15 +158,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseFileServer();
 }
 
 //app.UseHttpsRedirection();
 
 app.UseCors("Dev");
 app.UseAuthentication();
-
-app.UseStaticFiles();
 
 app.UseAuthorization();
 
