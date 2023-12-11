@@ -1,25 +1,43 @@
-﻿using Application.Services.Users.Util;
+﻿using Application.Services.Publication.Util;
 using AutoMapper;
-using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.DbComplexEntities;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.Services.Publication;
 
 public class PublicationService: IPublicationService
 {
-    private readonly IPublicationRepository _publicationRepository;
     private readonly IMapper _mapper;
+    
+    private readonly IPublicationRepository _publicationRepository;
+    private readonly IPublicationElementRepository _elementRepository;
+    private readonly ILikeRepository _likeRepository;
+    private readonly ICommentRepository _commentRepository;
 
-    public PublicationService(IPublicationRepository publicationRepository, IMapper mapper)
+    public PublicationService(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository elementRepository, ICommentRepository commentRepository, ILikeRepository likeRepository)
     {
-        _publicationRepository = publicationRepository;
         _mapper = mapper;
+        _publicationRepository = publicationRepository;
+        _elementRepository = elementRepository;
+        _commentRepository = commentRepository;
+        _likeRepository = likeRepository;
     }
 
-    public Domain.Publication FetchById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
+    public IEnumerable<Domain.Publication> FetchPublicationsByUserId(string userId)
     {
-        var dbPublication = _publicationRepository.FetchById(id);
-        var user = _mapper.Map<Domain.Publication>(dbPublication);
+        return _publicationRepository
+            .FetchUserPublications(userId)
+            .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
+    }
 
+    public Domain.Publication FetchPublicationById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
+    {
+        var dbComplex = FetchComplexByPublicationId(id);
+        var publication = _mapper.Map<Domain.Publication>(dbComplex);
+
+        publication.LikeCount = _likeRepository.FetchLikeCountByPublicationId(id);
+        publication.CommentCount = _commentRepository.FetchCommentCountByPublicationId(id);
+        
         foreach (var attribute in attributesToFetch)
         {
             switch (attribute)
@@ -30,10 +48,20 @@ public class PublicationService: IPublicationService
                 case EPublicationFetchAttribute.Likes:
                     
                     break;
+                
                 default:
                     throw new ArgumentException($"Unknown attribute: {attribute}");
             }
         }
-        return user;
+        return publication;
+    }
+
+    protected DbComplexPublication FetchComplexByPublicationId(int pubId)
+    {
+        var complexPublication = _mapper.Map<DbComplexPublication>(_publicationRepository.FetchById(pubId));
+
+        complexPublication.Elements = _elementRepository.FetchElementsByPublicationId(pubId);
+
+        return complexPublication;
     }
 }

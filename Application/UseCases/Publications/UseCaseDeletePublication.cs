@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 

@@ -9,36 +9,22 @@ public class User
     
     public string Name { get; set; }
     public string Title { get; set; }
-    
-    public bool isDeleted { get; set; }
     public bool IsPublic { get; set; }
     public bool IsFriendPublic { get; set; }
     public bool IsPublicationPublic { get; set; }
     
     
     private int _friendCount;
-    public int FriendCount { get => _friendCount; set { if (_friendCount == 0 && value > 0) _friendCount = value; } }
+    public int FriendCount { get => _friendCount == 0 ? _friends.Count : _friendCount; set { if (_friendCount == 0 && value > 0) _friendCount = value; } }
 
     private int _publicationCount;
-    public int PublicationCount { get => _publicationCount; set { if (_publicationCount == 0 && value > 0) _publicationCount = value; } }
+    public int PublicationCount { get => _publicationCount == 0 ?_publications.Count : _publicationCount; set { if (_publicationCount == 0 && value > 0) _publicationCount = value; } }
     
     
     public Account Account { get; set; }
     
     private readonly List<User> _friends = new();
     private readonly List<Publication> _publications = new();
-
-
-
-    public int TotalFriends()
-    {
-        return _friendCount == 0 ? _friends.Count : _friendCount;
-    }
-    
-    public int TotalPublications()
-    {
-        return _publicationCount == 0 ?_publications.Count : _publicationCount;
-    }
     
     public IEnumerable<User> Friends()
     {
@@ -81,6 +67,6 @@ public class User
     public override string ToString()
     {
         var friendsString = string.Join("\n\t\t", _friends.Select(f => f.ToString()));
-        return $"User: \n\tId={Id}, \n\tRole={Role}, \n\tLogin={Login}, \n\tMail={Mail}, \n\tName={Name}, \n\tTitle={Title}, \n\tTotalFriends={TotalFriends()}, \n\tTotalPublications={TotalPublications()}, \n\tAccount={Account?.ToString() ?? "No Account"}, \n\tFriends=[{friendsString}]";
+        return $"User: \n\tId={Id}, \n\tRole={Role}, \n\tLogin={Login}, \n\tMail={Mail}, \n\tName={Name}, \n\tTitle={Title}, \n\tTotalFriends={FriendCount}, \n\tTotalPublications={PublicationCount}, \n\tAccount={Account?.ToString() ?? "No Account"}, \n\tFriends=[{friendsString}]";
     }
 }

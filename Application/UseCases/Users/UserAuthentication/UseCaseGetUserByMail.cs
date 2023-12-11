@@ -1,6 +1,7 @@
 using Application.Dtos.User.UserAuthentication;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserAuthentication;
 

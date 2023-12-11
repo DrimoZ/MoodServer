@@ -2,6 +2,7 @@ using Application.Dtos.Friend;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Friends;
 

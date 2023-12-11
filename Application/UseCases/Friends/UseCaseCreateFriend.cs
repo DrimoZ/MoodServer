@@ -3,6 +3,7 @@ using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Friends;
 

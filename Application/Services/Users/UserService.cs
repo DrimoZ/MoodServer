@@ -2,6 +2,9 @@ using Application.Services.Users.Util;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
+using Infrastructure.EntityFramework.Repositories.Publications;
+using Infrastructure.EntityFramework.Repositories.Users;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Users;
@@ -24,6 +27,33 @@ public class UserService: IUserService
         _publicationRepository = publicationRepository;
     }
 
+    //A voir
+    public User FetchUserByUserId(string id, EUserRequestType attributeType)
+    {
+        var dbUser = _userRepository.FetchById(id);
+        var user = _mapper.Map<User>(dbUser);
+
+        switch (attributeType)
+        {
+            case EUserRequestType.Profile: {
+                user.FriendCount = _friendRepository.FetchFriendCount(user.Id);
+                user.PublicationCount = _publicationRepository.FetchPublicationCount(user.Id);
+                break;
+            }
+                
+            case EUserRequestType.Account:
+                break;
+            case EUserRequestType.Friends:
+                break;
+            case EUserRequestType.Publications:
+                break;
+            default:
+                throw new ArgumentException($"Unknown attribute: {attributeType}");
+        }
+
+        return user;
+    }
+    
     public User FetchById(string id, IEnumerable<EUserFetchAttribute> attributesToFetch)
     {
         var dbUser = _userRepository.FetchById(id);
@@ -44,10 +74,10 @@ public class UserService: IUserService
                     break;
                 case EUserFetchAttribute.Friends:
                         var dbFriends = _friendRepository.FetchFriends(user.Id);
-                        user.AddRange(dbFriends.Select(dbU => _mapper.Map<User>(dbU)).ToList());
+                        user.AddRange(dbFriends.Select(dbU => _mapper.Map<Domain.User>(dbU)).ToList());
                     break;
                 case EUserFetchAttribute.Publications:
-                        var dbPublications = _publicationRepository.FetchPublications(user.Id);
+                        var dbPublications = _publicationRepository.FetchUserPublications(user.Id);
                         user.AddRange(dbPublications.Select(dbP => _mapper.Map<Domain.Publication>(dbP)).ToList());
                     break;
                 case EUserFetchAttribute.Messages:
@@ -100,8 +130,8 @@ public class UserService: IUserService
                 case EUserFetchAttribute.Publications:
                     if(isFriend || user.IsPublicationPublic)
                     {
-                        var dbPublications = _publicationRepository.FetchPublications(user.Id);
-                        user.AddRange(dbPublications.Select(dbP => _mapper.Map<Domain.Publication>(dbP)).ToList());
+                        var dbPublications = _publicationRepository.FetchUserPublications(user.Id);
+                        user.AddRange(dbPublications.Select(dbP => _mapper.Map<User>(dbP)).ToList());
                     }
                     break;
                 default:
