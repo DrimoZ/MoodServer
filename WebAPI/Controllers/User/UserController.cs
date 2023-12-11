@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
+using Application.Services.Utils;
 using Application.UseCases.Publications;
 using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace WebAPI.Controllers.User;
 [Route("api/v1/user")]
 public class UserController: ControllerBase
 {
-    private readonly ILogger<AuthenticationController> _logger;
+    private readonly ILogger<UserController> _logger;
     private readonly IConfiguration _configuration;
     private readonly TokenService _tokenService;
 
@@ -27,18 +28,18 @@ public class UserController: ControllerBase
     private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
 
-    public UserController(ILogger<AuthenticationController> logger, TokenService tokenService, IConfiguration configuration, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
+    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
     {
         _logger = logger;
         _configuration = configuration;
+        _tokenService = tokenService;
         
         _useCaseFetchUserAccountByUserId = useCaseFetchUserAccountByUserId;
+        _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _useCaseFetchUserFriendsByUserId = useCaseFetchUserFriendsByUserId;
         _useCaseUpdateUserData = useCaseUpdateUserData;
-        _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
-        _tokenService = tokenService;
-        _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
+        _useCaseGetAllUsers = useCaseGetAllUsers;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
     }
     
