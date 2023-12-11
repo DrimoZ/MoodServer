@@ -78,6 +78,6 @@ public class Mapper: Profile
         //Image
         CreateMap<DtoInputImage, DbImage>()
             .ForMember(dest => dest.Date, opt => opt.Ignore());
-
+        CreateMap<DbImage, DtoOutputImage>();
     }
 }

@@ -106,7 +106,7 @@ public class MoodContext: DbContext
             builder.ToTable("images");
             builder.HasKey(img => img.Id);
             builder.Property(img => img.Id).HasColumnName(("img_id"));
-            builder.Property(img => img.Path).HasColumnName("img_path");
+            builder.Property(img => img.Data).HasColumnName("img_data");
             builder.Property(img => img.Date).HasColumnName("img_date");
         });
     }

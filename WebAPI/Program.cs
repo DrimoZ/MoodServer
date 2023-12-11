@@ -16,21 +16,23 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.Controllers.Images;
 using Mapper = Application.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
+IWebHostEnvironment environment = builder.Environment;
 
 // Read Config Files
 var configs = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.Development.json")
     .Build();
-
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 // Setup Automapper
 builder.Services.AddAutoMapper(typeof(Mapper));
@@ -88,6 +90,7 @@ builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
 
 builder.Services.AddScoped<UseCaseCreateImage>();
+builder.Services.AddScoped<UseCaseGetImageById>();
 
 
 // Initialize JWT Bearer
@@ -155,13 +158,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseFileServer();
 }
 
 //app.UseHttpsRedirection();
 
 app.UseCors("Dev");
 app.UseAuthentication();
+
+app.UseStaticFiles();
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 

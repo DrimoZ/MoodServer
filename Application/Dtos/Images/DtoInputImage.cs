@@ -2,5 +2,5 @@ namespace Application.Dtos.Images;
 
 public class DtoInputImage
 {
-    public string Path { get; set; }
+    public byte[] Data { get; set; }
 }

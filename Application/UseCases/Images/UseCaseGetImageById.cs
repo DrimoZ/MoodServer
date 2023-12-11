@@ -1,25 +1,24 @@
 using Application.Dtos.Images;
-using Application.Services.Utils;
 using Application.UseCases.Utils;
 using AutoMapper;
-using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 
 namespace Application.UseCases.Images;
 
-public class UseCaseCreateImage: IUseCaseWriter<DbImage, DtoInputImage>
+public class UseCaseGetImageById:IUseCaseParameterizedQuery<DtoOutputImage, int>
 {
     private readonly IImageRepository _imageRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseCreateImage(IImageRepository imageRepository, IMapper mapper)
+    public UseCaseGetImageById(IImageRepository imageRepository, IMapper mapper)
     {
         _imageRepository = imageRepository;
         _mapper = mapper;
     }
 
-    public DbImage Execute(DtoInputImage input)
+    public DtoOutputImage Execute(int id)
     {
-        return _imageRepository.Create(_mapper.Map<DbImage>(input));
+        var dbImage = _imageRepository.FetchById(id);
+        return _mapper.Map<DtoOutputImage>(dbImage);
     }
 }

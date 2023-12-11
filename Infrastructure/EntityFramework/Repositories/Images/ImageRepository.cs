@@ -24,8 +24,10 @@ public class ImageRepository:IImageRepository
         throw new NotImplementedException();
     }
 
-    public DbImage FetchByPath(string path)
+    public DbImage FetchById(int id)
     {
-        throw new NotImplementedException();
+        var entity = _context.Images.FirstOrDefault(i => i.Id == id);
+        if (entity == null) throw new  KeyNotFoundException($"Image not found");
+        return entity;
     }
 }

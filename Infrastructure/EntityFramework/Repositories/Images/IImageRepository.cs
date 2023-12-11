@@ -6,5 +6,5 @@ public interface IImageRepository
 {
     DbImage Create(DbImage image);
     bool Delete(DbImage image);
-    DbImage FetchByPath(string path);
+    DbImage FetchById(int id);
 }

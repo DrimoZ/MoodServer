@@ -4,5 +4,5 @@ public class DbImage
 {
     public int Id { get; set; }
     public DateTime Date { get; set; }
-    public string Path { get; set; }
+    public byte[] Data { get; set; }
 }
