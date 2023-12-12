@@ -14,6 +14,7 @@ namespace WebAPI.Controllers.User;
 
 [ApiController]
 [Route("api/v1/user")]
+[Authorize]
 public class UserController: ControllerBase
 {
     private readonly ILogger<UserController> _logger;
@@ -46,7 +47,6 @@ public class UserController: ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [Authorize]
     //Get the connected User Id and his Role 
     public IActionResult GetUserIdAndRole()
     {
@@ -65,7 +65,6 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize]
     //Get the public profile information of given userId
     public IActionResult GetUserProfileByUserId(string userId)
     {
@@ -85,7 +84,6 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize]
     //Get the public profile account information of given userId
     public IActionResult GetUserAccountByUserId(string userId)
     {
@@ -104,7 +102,6 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize]
     //Get the friends information of given userId
     public IActionResult GetUserFriendsByUserId(string userId)
     {
@@ -123,7 +120,6 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize]
     //Get the publications information of given userId
     public IActionResult GetUserPublicationsData(string userId)
     {
@@ -151,18 +147,35 @@ public class UserController: ControllerBase
         return NotFound();
     }
     
-    [HttpGet("getUsers")]
-    public ActionResult<List<DtoOutputUser>> GetAll()
+    [HttpGet("discover/users/{count:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    // Get A list of other Users for the Discover
+    public ActionResult<List<DtoOutputUser>> GetAll(int count)
     {
-        var data =  GetAuthCookieData();
-        return Ok(_useCaseGetAllUsers.Execute(data.UserId));
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(_useCaseGetAllUsers.Execute(data.UserId, count));
+        }
+        catch (Exception e)
+        {
+            return NotFound(e);
+        }
+        
     }
+    
+    
+    
+    
+    
+    
     
     [HttpPut]
     [HttpGet("otherUsers/{login}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [Authorize]
     public IActionResult GetOtherUserData(string login)
     {
         try

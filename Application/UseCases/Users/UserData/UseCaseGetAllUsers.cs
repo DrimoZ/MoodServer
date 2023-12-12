@@ -6,23 +6,34 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<List<DtoOutputProfileUser>, string>
+public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int>
 {
-    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IUserRepository _userRepository;
+    private readonly IFriendRepository _friendRepository;
 
-    public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository)
+    public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository)
     {
         _mapper = mapper;
+        
         _userRepository = userRepository;
+        _friendRepository = friendRepository;
     }
 
-    public List<DtoOutputProfileUser> Execute(String userId)
+    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int requestCount)
     {
-        return _userRepository
+        var users = _userRepository
             .GetAll()
-            .Where(user => user.Id != userId) 
-            .Select(user => _mapper.Map<DtoOutputProfileUser>(user))
+            .Where(user => user.Id != connectedUserId) 
+            .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
             .ToList();
+
+        foreach (var user in users)
+        {
+            user.IsFriendWithConnected = _friendRepository.IsFriend(connectedUserId, user.Id);
+            user.CommonFriendCount = _friendRepository.FetchCommonFriendsCount(connectedUserId, user.Id);
+        }
+        
+        return users;
     }
 }

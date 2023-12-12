@@ -72,8 +72,10 @@ public class Mapper: Profile
         CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>()
             .ForMember(dest => dest.CommonFriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsFriendWithConnected, opt => opt.Ignore());
-
-
+    
+        
+        //Discover Users
+        CreateMap<DbUser, DtoOutputUserDiscover>();
     }
 
     private void AccountMappings()
