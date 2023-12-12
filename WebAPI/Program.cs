@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.SignalR;
 using Mapper = Application.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -128,6 +129,10 @@ builder.Services.AddLogging(b =>
     b.AddDebug();
 });
 
+//SignalR
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<TimerManager>();
+
 // Initialize Dev Env
 builder.Services.AddCors(options =>
 {
@@ -142,6 +147,10 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+//signalR
+app.MapControllers();
+app.MapHub<ChartHub>("/chart");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
