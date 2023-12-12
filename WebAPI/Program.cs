@@ -96,6 +96,7 @@ builder.Services.AddScoped<UseCaseGetFriendByUserId>();
 builder.Services.AddScoped<UseCaseDeleteFriend>();
 builder.Services.AddScoped<UseCaseCreateFriendRequest>();
 builder.Services.AddScoped<UseCaseAcceptFriendRequest>();
+builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();

@@ -17,11 +17,12 @@ public class FriendController:ControllerBase
     private readonly UseCaseDeleteFriend _useCaseDeleteFriend;
     private readonly UseCaseCreateFriendRequest _useCaseCreateFriendRequest;
     private readonly UseCaseAcceptFriendRequest _useCaseAcceptFriendRequest;
+    private readonly UseCaseRejectFriendRequest _useCaseRejectFriendRequest;
     
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseCreateFriend useCaseCreateFriend, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest, UseCaseAcceptFriendRequest useCaseAcceptFriendRequest)
+    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseCreateFriend useCaseCreateFriend, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest, UseCaseAcceptFriendRequest useCaseAcceptFriendRequest, UseCaseRejectFriendRequest useCaseRejectFriendRequest)
     {
         _useCaseGetFriendByUserId = useCaseGetFriendByUserId;
         _useCaseCreateFriend = useCaseCreateFriend;
@@ -30,6 +31,7 @@ public class FriendController:ControllerBase
         _configuration = configuration;
         _useCaseCreateFriendRequest = useCaseCreateFriendRequest;
         _useCaseAcceptFriendRequest = useCaseAcceptFriendRequest;
+        _useCaseRejectFriendRequest = useCaseRejectFriendRequest;
     }
 
     private string GetConnectedUserId()
@@ -61,7 +63,7 @@ public class FriendController:ControllerBase
         try
         {
             var request = _useCaseCreateFriendRequest.Execute(connectedUserId, friendId);
-            return StatusCode(201, request);
+            return StatusCode(StatusCodes.Status201Created, request);
         }
         catch (Exception e)
         {
@@ -84,7 +86,7 @@ public class FriendController:ControllerBase
         try
         {
             var friend = _useCaseAcceptFriendRequest.Execute(connectedUserId, friendId);
-            return StatusCode(201, friend);
+            return StatusCode(StatusCodes.Status201Created, friend);
         }
         catch (Exception e)
         {
@@ -93,12 +95,26 @@ public class FriendController:ControllerBase
     }
     
     [HttpPost("/request/reject")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize]
     //When a User click on Reject Button from notifications ?
     public ActionResult RejectFriendRequest(string friendId)
     {
-        return Unauthorized();
+        var connectedUserId = GetConnectedUserId();
+        if (friendId == connectedUserId) return Unauthorized("Can't be friend with himself");
+        
+        try
+        {
+            if (_useCaseRejectFriendRequest.Execute(connectedUserId, friendId))
+                return NoContent();
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            return Conflict(e.Message);
+        }
     }
     
     
