@@ -24,4 +24,23 @@ public class FriendRequestRepository:IFriendRequestRepository
     {
         return _context.FriendRequests.Any(fr => fr.UserId == userId && fr.FriendId == friendId);
     }
+
+    public bool Delete(int id)
+    {
+        var entity = _context.FriendRequests.FirstOrDefault(e => e.Id == id);
+
+        if (entity == null)
+            return false;
+
+        _context.FriendRequests.Remove(entity);
+
+        return true;
+    }
+
+    public DbFriendRequest FetchRequestByIds(string userId, string friendId)
+    {
+        var entity = _context.FriendRequests.FirstOrDefault(fr => fr.UserId == userId && fr.FriendId == friendId);
+        if (entity == null) throw new KeyNotFoundException("FriendRequestNotFound");
+        return entity;
+    }
 }

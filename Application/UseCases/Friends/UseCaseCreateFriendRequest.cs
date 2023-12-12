@@ -8,7 +8,7 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Friends;
 
-public class UseCaseCreateFriendRequest:IUseCaseParameterizedWriter<DtoOutputFriendRequest, string, string>
+public class UseCaseCreateFriendRequest: IUseCaseParameterizedWriter<DtoOutputFriendRequest, string, string>
 {
     private readonly IMapper _mapper;
 

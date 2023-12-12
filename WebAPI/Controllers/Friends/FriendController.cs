@@ -16,11 +16,12 @@ public class FriendController:ControllerBase
     private readonly UseCaseCreateFriend _useCaseCreateFriend;
     private readonly UseCaseDeleteFriend _useCaseDeleteFriend;
     private readonly UseCaseCreateFriendRequest _useCaseCreateFriendRequest;
+    private readonly UseCaseAcceptFriendRequest _useCaseAcceptFriendRequest;
     
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseCreateFriend useCaseCreateFriend, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest)
+    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseCreateFriend useCaseCreateFriend, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest, UseCaseAcceptFriendRequest useCaseAcceptFriendRequest)
     {
         _useCaseGetFriendByUserId = useCaseGetFriendByUserId;
         _useCaseCreateFriend = useCaseCreateFriend;
@@ -28,6 +29,7 @@ public class FriendController:ControllerBase
         _tokenService = tokenService;
         _configuration = configuration;
         _useCaseCreateFriendRequest = useCaseCreateFriendRequest;
+        _useCaseAcceptFriendRequest = useCaseAcceptFriendRequest;
     }
 
     private string GetConnectedUserId()
@@ -69,12 +71,25 @@ public class FriendController:ControllerBase
     }
     
     [HttpPost("/request/accept")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [Authorize]
     //When a User click on Accept Button from notifications ?
     public ActionResult AcceptFriendRequest(string friendId)
     {
-        return Unauthorized();
+        var connectedUserId = GetConnectedUserId();
+        if (friendId == connectedUserId) return Unauthorized("Can't be friend with himself");
+        
+        try
+        {
+            var friend = _useCaseAcceptFriendRequest.Execute(connectedUserId, friendId);
+            return StatusCode(201, friend);
+        }
+        catch (Exception e)
+        {
+            return Conflict(e.Message);
+        }
     }
     
     [HttpPost("/request/reject")]
