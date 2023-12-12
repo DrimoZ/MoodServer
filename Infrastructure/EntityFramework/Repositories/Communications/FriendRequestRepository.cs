@@ -13,6 +13,15 @@ public class FriendRequestRepository:IFriendRequestRepository
 
     public DbFriendRequest Create(DbFriendRequest friendRequest)
     {
-        throw new NotImplementedException();
+        friendRequest.Date = DateTime.Now;
+        _context.FriendRequests.Add(friendRequest);
+        _context.SaveChanges();
+        
+        return friendRequest;
+    }
+
+    public bool IsRequestPresent(string userId, string friendId)
+    {
+        return _context.FriendRequests.Any(fr => fr.UserId == userId && fr.FriendId == friendId);
     }
 }

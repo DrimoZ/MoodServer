@@ -58,6 +58,7 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IPublicationElementRepository, PublicationElementRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -93,6 +94,7 @@ builder.Services.AddScoped<UseCaseGetAllUsers>();
 builder.Services.AddScoped<UseCaseCreateFriend>();
 builder.Services.AddScoped<UseCaseGetFriendByUserId>();
 builder.Services.AddScoped<UseCaseDeleteFriend>();
+builder.Services.AddScoped<UseCaseCreateFriendRequest>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();

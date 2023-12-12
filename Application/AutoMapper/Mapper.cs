@@ -76,6 +76,10 @@ public class Mapper: Profile
         
         //Discover Users
         CreateMap<DbUser, DtoOutputUserDiscover>();
+        
+        
+        // Create Friend Request
+        CreateMap<DbFriendRequest, DtoOutputFriendRequest>();
     }
 
     private void AccountMappings()

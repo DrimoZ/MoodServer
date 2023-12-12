@@ -62,6 +62,7 @@ CREATE TABLE messages (
 CREATE TABLE friend_requests (
     req_id INT PRIMARY KEY IDENTITY,
     req_date DATETIME DEFAULT (GETDATE()),
+    req_isDone BIT NOT NULL DEFAULT 0,
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id),
     friend_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );

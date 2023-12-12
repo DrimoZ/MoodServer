@@ -7,6 +7,7 @@ namespace Infrastructure.EntityFramework;
 public class MoodContext: DbContext
 {
     public MoodContext(DbContextOptions options) : base(options) { }
+    
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
@@ -146,6 +147,7 @@ public class MoodContext: DbContext
             builder.HasKey(fr => fr.Id);
             builder.Property(fr => fr.Id).HasColumnName("req_id");
             builder.Property(fr => fr.Date).HasColumnName("req_date");
+            builder.Property(fr => fr.IsDone).HasColumnName("req_isDone");
             builder.Property(fr => fr.UserId).HasColumnName("user_id");
             builder.Property(fr => fr.FriendId).HasColumnName("friend_id");
         });
