@@ -10,18 +10,13 @@ namespace Application.UseCases.Friends;
 
 public class UseCaseRejectFriendRequest: IUseCaseParameterizedQuery<bool, string, string>
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
 
-    public UseCaseRejectFriendRequest(IMapper mapper, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository, IUnitOfWork unitOfWork)
+    public UseCaseRejectFriendRequest(IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
     {
-        _mapper = mapper;
         _friendRepository = friendRepository;
         _friendRequestRepository = friendRequestRepository;
-        _unitOfWork = unitOfWork;
     }
 
     public bool Execute(string connectedUserId, string friendId)
@@ -29,13 +24,11 @@ public class UseCaseRejectFriendRequest: IUseCaseParameterizedQuery<bool, string
         if (_friendRepository.IsFriend(connectedUserId, friendId) || _friendRepository.IsFriend(friendId, connectedUserId))
             throw new Exception("Users are Already Friends");
 
-        if (!_friendRequestRepository.IsRequestPresent(friendId, connectedUserId))
+        if (!_friendRequestRepository.IsRequestPresent(connectedUserId, friendId))
             throw new Exception("Request doesn't exists");
-        
-        _unitOfWork.BeginTransaction();
-        var request = _friendRequestRepository.FetchRequestByIds(friendId, connectedUserId);
+
+        var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, friendId);
         var isDeleted = _friendRequestRepository.Delete(request.Id);
-        _unitOfWork.Commit();
         return isDeleted;
     }
 }

@@ -9,7 +9,7 @@ namespace WebAPI.Controllers.Friends;
 
 [ApiController]
 [Route("api/v1/friend")]
-public class FriendController:ControllerBase
+public class FriendController: ControllerBase
 {
 
     private readonly UseCaseGetFriendByUserId _useCaseGetFriendByUserId;
@@ -49,7 +49,7 @@ public class FriendController:ControllerBase
     
     
     
-    [HttpPost("/request")]
+    [HttpPost("request")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -72,7 +72,7 @@ public class FriendController:ControllerBase
         
     }
     
-    [HttpPost("/request/accept")]
+    [HttpPost("request/accept")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -94,7 +94,7 @@ public class FriendController:ControllerBase
         }
     }
     
-    [HttpPost("/request/reject")]
+    [HttpPost("request/reject")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

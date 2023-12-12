@@ -148,6 +148,7 @@ public class MoodContext: DbContext
             builder.Property(fr => fr.Id).HasColumnName("req_id");
             builder.Property(fr => fr.Date).HasColumnName("req_date");
             builder.Property(fr => fr.IsDone).HasColumnName("req_isDone");
+            builder.Property(fr => fr.IsAccepted).HasColumnName("req_isAccepted");
             builder.Property(fr => fr.UserId).HasColumnName("user_id");
             builder.Property(fr => fr.FriendId).HasColumnName("friend_id");
         });
