@@ -28,7 +28,7 @@ public class FriendController:ControllerBase
         _configuration = configuration;
     }
 
-    private string GetAuthCookieData()
+    private string GetConnectedUserId()
     {
         return _tokenService.GetAuthCookieData(HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!).UserId;
     }
@@ -38,26 +38,27 @@ public class FriendController:ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputFriend> GetFriendByUserId( string loginFriend)
     {
-        return _useCaseGetFriendByUserId.Execute(GetAuthCookieData(), loginFriend);
+        return _useCaseGetFriendByUserId.Execute(GetConnectedUserId(), loginFriend);
     }
 
+    
     [HttpPost]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [Authorize]
     public ActionResult<DtoOutputAccount> Create(string friendLogin)
     {
         
-        var accountCreated = _useCaseCreateFriend.Execute(GetAuthCookieData(), friendLogin);
+        var accountCreated = _useCaseCreateFriend.Execute(GetConnectedUserId(), friendLogin);
         return StatusCode(201, accountCreated);
     }
     
     [HttpDelete]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize]
     public ActionResult Delete(string friendId)
     {
-        if (_useCaseDeleteFriend.Execute(GetAuthCookieData(), friendId))
+        if (_useCaseDeleteFriend.Execute(GetConnectedUserId(), friendId))
             return NoContent();
         return NotFound();
     }

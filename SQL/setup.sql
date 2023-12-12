@@ -28,9 +28,9 @@ CREATE TABLE users (
     user_role INT NOT NULL,
     user_title NVARCHAR(255),
     user_isDeleted BIT NOT NULL DEFAULT 0,
-    user_isPublic BIT NOT NULL DEFAULT 0,
-    user_isFriendPublic BIT NOT NULL DEFAULT 0,
-    user_isPublicationPublic BIT NOT NULL DEFAULT 0,
+    user_isPublic BIT NOT NULL DEFAULT 1,
+    user_isFriendPublic BIT NOT NULL DEFAULT 1,
+    user_isPublicationPublic BIT NOT NULL DEFAULT 1,
     acc_id CHAR(32) FOREIGN KEY REFERENCES accounts(acc_id)
 );
 
@@ -51,22 +51,17 @@ CREATE TABLE user_groups (
     group_id INT FOREIGN KEY REFERENCES groups(group_id)
 );
 
-CREATE TABLE communications (
-    comm_id INT PRIMARY KEY IDENTITY,
-    comm_date DATETIME DEFAULT (GETDATE()),
-    comm_isDeleted BIT NOT NULL DEFAULT 0
-);
-
 CREATE TABLE messages (
     msg_id INT PRIMARY KEY IDENTITY,
     msg_content NVARCHAR(255) NOT NULL,
     user_group_id INT FOREIGN KEY REFERENCES user_groups(user_group_id),
-    comm_id INT FOREIGN KEY REFERENCES communications(comm_id)
+    msg_date DATETIME DEFAULT (GETDATE()),
+    msg_isDeleted BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE friend_requests (
     req_id INT PRIMARY KEY IDENTITY,
-    comm_id INT FOREIGN KEY REFERENCES communications(comm_id),
+    req_date DATETIME DEFAULT (GETDATE()),
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id),
     friend_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );

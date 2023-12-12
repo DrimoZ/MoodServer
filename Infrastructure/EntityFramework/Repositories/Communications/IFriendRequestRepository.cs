@@ -2,7 +2,7 @@ using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories.Communications;
 
-public interface ICommunicationRepository
+public interface IFriendRequestRepository
 {
-    public DbCommunication Create(DbCommunication com);
+    public DbFriendRequest Create(DbFriendRequest friendRequest);
 }

@@ -54,7 +54,6 @@ builder.Services.AddScoped<IFriendRepository, FriendRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
-builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IPublicationElementRepository, PublicationElementRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();

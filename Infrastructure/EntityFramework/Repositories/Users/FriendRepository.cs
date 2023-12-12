@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories.Users;
@@ -26,6 +27,7 @@ public class FriendRepository: IFriendRepository
         var otherFriend = _context.Friends.FirstOrDefault(f =>f.UserId == otherId && f.FriendId == userId);
         if (otherFriend == null)
             return false;
+        
         _context.Friends.Remove(friend);
         _context.Friends.Remove(otherFriend);
         _context.SaveChanges();
