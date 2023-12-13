@@ -49,7 +49,7 @@ public class FriendController: ControllerBase
     
     
     
-    [HttpPost("request")]
+    [HttpPost("request/{friendId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -72,7 +72,7 @@ public class FriendController: ControllerBase
         
     }
     
-    [HttpPost("request/accept")]
+    [HttpPost("request/accept/{friendId}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -94,7 +94,7 @@ public class FriendController: ControllerBase
         }
     }
     
-    [HttpPost("request/reject")]
+    [HttpPost("request/reject/{friendId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
