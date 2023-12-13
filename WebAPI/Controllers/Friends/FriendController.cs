@@ -81,7 +81,7 @@ public class FriendController: ControllerBase
     public ActionResult AcceptFriendRequest(string friendId)
     {
         var connectedUserId = GetConnectedUserId();
-        if (friendId == connectedUserId) return Unauthorized("Can't be friend with himself");
+        if (friendId == connectedUserId) return Unauthorized("Can't accept a friend request from himself");
         
         try
         {
@@ -103,7 +103,7 @@ public class FriendController: ControllerBase
     public ActionResult RejectFriendRequest(string friendId)
     {
         var connectedUserId = GetConnectedUserId();
-        if (friendId == connectedUserId) return Unauthorized("Can't be friend with himself");
+        if (friendId == connectedUserId) return Unauthorized("Can't reject a friend request from himself");
         
         try
         {
@@ -117,6 +117,27 @@ public class FriendController: ControllerBase
         }
     }
     
+    [HttpDelete("{friendId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize]
+    public ActionResult Delete(string friendId)
+    {
+        var connectedUserId = GetConnectedUserId();
+        if (friendId == connectedUserId) return Unauthorized("Can't remove friend with himself");
+        
+        try
+        {
+            if (_useCaseDeleteFriend.Execute(connectedUserId, friendId))
+                return NoContent();
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            return Conflict(e.Message);
+        }
+        
+    }
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -129,14 +150,5 @@ public class FriendController: ControllerBase
         return StatusCode(201, accountCreated);
     }
     
-    [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [Authorize]
-    public ActionResult Delete(string friendId)
-    {
-        if (_useCaseDeleteFriend.Execute(GetConnectedUserId(), friendId))
-            return NoContent();
-        return NotFound();
-    }
+    
 }
