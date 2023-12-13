@@ -147,29 +147,25 @@ public class UserController: ControllerBase
         return NotFound();
     }
     
-    [HttpGet("discover/users/{count:int}")]
+    [HttpGet("discover/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     // Get A list of other Users for the Discover
-    public ActionResult<List<DtoOutputUser>> GetAll(int count)
+    public ActionResult<List<DtoOutputUser>> GetAll([FromQuery] int userCount, [FromQuery] string? searchValue)
     {
+        searchValue ??= "";
+        
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseGetAllUsers.Execute(data.UserId, count));
+            return Ok(_useCaseGetAllUsers.Execute(data.UserId, userCount, searchValue));
         }
         catch (Exception e)
         {
             return NotFound(e);
         }
-        
     }
-    
-    
-    
-    
-    
     
     
     [HttpPut]

@@ -7,13 +7,15 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int>
+public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
 {
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
 
+    private static Random rng = new Random();
+    
     public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
     {
         _mapper = mapper;
@@ -23,11 +25,11 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
         _friendRequestRepository = friendRequestRepository;
     }
 
-    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int profileRequestUserId)
+    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
             .GetAll()
-            .Where(user => user.Id != connectedUserId) 
+            .Where(user => user.Id != connectedUserId && user.Name.ToLower().Contains(searchValue)) 
             .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
             .ToList();
 
@@ -54,6 +56,6 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
             user.CommonFriendCount = _friendRepository.FetchCommonFriendsCount(connectedUserId, user.Id);
         }
         
-        return users;
+        return users.OrderBy(a => rng.Next()).Take(userCount).ToList();
     }
 }
