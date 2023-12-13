@@ -28,7 +28,7 @@ public class UseCaseRejectFriendRequest: IUseCaseParameterizedQuery<bool, string
             throw new Exception("Request doesn't exists");
 
         var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, friendId);
-        var isDeleted = _friendRequestRepository.Delete(request.Id);
+        var isDeleted = _friendRequestRepository.SetIsDone(request.Id, true);
         return isDeleted;
     }
 }

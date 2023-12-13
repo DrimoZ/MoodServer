@@ -23,7 +23,7 @@ public class FriendRequestRepository:IFriendRequestRepository
     public bool IsRequestPresent(string userId, string friendId)
     {
         return _context.FriendRequests
-            .Any(fr => (fr.UserId == userId && fr.FriendId == friendId) || (fr.UserId == friendId && fr.FriendId == userId) && !fr.IsDone);
+            .Any(fr => fr.UserId == userId && fr.FriendId == friendId && !fr.IsDone);
     }
 
     public bool Delete(int id)
@@ -47,7 +47,7 @@ public class FriendRequestRepository:IFriendRequestRepository
             return false;
 
         entity.IsDone = value;
-        
+        _context.SaveChanges();
 
         return true;
     }
@@ -68,7 +68,7 @@ public class FriendRequestRepository:IFriendRequestRepository
     public DbFriendRequest FetchRequestByIds(string userId, string friendId)
     {
         var entity = _context.FriendRequests
-            .FirstOrDefault(fr => (fr.UserId == userId && fr.FriendId == friendId) || (fr.UserId == friendId && fr.FriendId == userId) && !fr.IsDone);
+            .FirstOrDefault(fr => ((fr.UserId == userId && fr.FriendId == friendId) || (fr.UserId == friendId && fr.FriendId == userId)) && !fr.IsDone);
         if (entity == null) throw new KeyNotFoundException("FriendRequestNotFound");
         return entity;
     }

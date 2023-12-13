@@ -28,7 +28,7 @@ public class UseCaseCreateFriendRequest: IUseCaseParameterizedWriter<DtoOutputFr
         if (_friendRepository.IsFriend(connectedUserId, friendId))
             throw new Exception("Users are Already Friends");
 
-        if (_friendRequestRepository.IsRequestPresent(connectedUserId, friendId))
+        if (_friendRequestRepository.IsRequestPresent(connectedUserId, friendId) || _friendRequestRepository.IsRequestPresent(friendId, connectedUserId))
             throw new Exception("Request already exists");
         
         var request = new DbFriendRequest
