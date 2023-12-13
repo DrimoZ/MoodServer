@@ -19,12 +19,12 @@ public class UseCaseGetFriendByUserId:IUseCaseParameterizedQuery<DtoOutputFriend
     }
 
 
-    public DtoOutputFriend Execute(string userId, string otherId)
+    public DtoOutputFriend Execute(string connectedUserId, string profileRequestUserId)
     {
         DbFriend friend = new DbFriend
         {
-            UserId = userId,
-            FriendId = otherId
+            UserId = connectedUserId,
+            FriendId = profileRequestUserId
         };
         var entity = _friendRepository.Create(friend);
 

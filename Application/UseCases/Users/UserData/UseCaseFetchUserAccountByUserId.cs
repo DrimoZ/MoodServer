@@ -24,9 +24,9 @@ public class UseCaseFetchUserAccountByUserId: IUseCaseParameterizedQuery<DtoOutp
         _accountRepository = accountRepository;
     }
 
-    public DtoOutputUserAccount Execute(string connectedUser, string profileRequestUser)
+    public DtoOutputUserAccount Execute(string connectedUserId, string profileRequestUserId)
     {
-        var dbUser = _userRepository.FetchById(profileRequestUser);
+        var dbUser = _userRepository.FetchById(profileRequestUserId);
         var user = _mapper.Map<DtoOutputUserAccount>(dbUser);
         
         var dbAccount = _accountRepository.FetchById(dbUser.AccountId);

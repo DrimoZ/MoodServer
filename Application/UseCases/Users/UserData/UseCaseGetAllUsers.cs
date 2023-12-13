@@ -23,7 +23,7 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
         _friendRequestRepository = friendRequestRepository;
     }
 
-    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int requestCount)
+    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int profileRequestUserId)
     {
         var users = _userRepository
             .GetAll()

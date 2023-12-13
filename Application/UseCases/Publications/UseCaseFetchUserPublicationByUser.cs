@@ -22,21 +22,21 @@ public class UseCaseFetchUserPublicationByUser:IUseCaseParameterizedQuery<DtoOut
         _friendRepository = friendRepository;
     }
 
-    public DtoOutputUserPublications Execute(string connectedUser, string profileRequestUser)
+    public DtoOutputUserPublications Execute(string connectedUserId, string profileRequestUserId)
     {
-        var dbUser = _userRepository.FetchById(profileRequestUser);
-        var isSameUser = connectedUser == profileRequestUser;
+        var dbUser = _userRepository.FetchById(profileRequestUserId);
+        var isSameUser = connectedUserId == profileRequestUserId;
         
         var dto = new DtoOutputUserPublications
         {
             IsConnectedUser = isSameUser,
-            IsPublicationsPublic = isSameUser || _friendRepository.IsFriend(connectedUser, profileRequestUser) || dbUser is { IsPublic: true, IsPublicationPublic: true }
+            IsPublicationsPublic = isSameUser || _friendRepository.IsFriend(connectedUserId, profileRequestUserId) || dbUser is { IsPublic: true, IsPublicationPublic: true }
         };
         
         if (!dto.IsPublicationsPublic) return dto;
 
         var publications = _publicationService
-                .FetchPublicationsByUserId(profileRequestUser)
+                .FetchPublicationsByUserId(profileRequestUserId)
                 .Select(p => _mapper.Map<DtoOutputUserPublications.DtoPublication>(p))
                 .ToList();
 

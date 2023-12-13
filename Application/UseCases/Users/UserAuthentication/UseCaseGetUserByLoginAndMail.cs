@@ -17,9 +17,9 @@ public class UseCaseGetUserByLoginAndMail : IUseCaseParameterizedQuery<DtoOutput
         _mapper = mapper;
     }
     
-    public DtoOutputUser Execute(string login, string mail)
+    public DtoOutputUser Execute(string connectedUserId, string profileRequestUserId)
     {
-        var dbUser = _userRepository.FetchByLoginAndMail(login, mail);
+        var dbUser = _userRepository.FetchByLoginAndMail(connectedUserId, profileRequestUserId);
         return _mapper.Map<DtoOutputUser>(dbUser);
     }
 }

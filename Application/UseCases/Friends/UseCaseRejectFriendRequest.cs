@@ -19,15 +19,15 @@ public class UseCaseRejectFriendRequest: IUseCaseParameterizedQuery<bool, string
         _friendRequestRepository = friendRequestRepository;
     }
 
-    public bool Execute(string connectedUserId, string friendId)
+    public bool Execute(string connectedUserId, string profileRequestUserId)
     {
-        if (_friendRepository.IsFriend(connectedUserId, friendId) || _friendRepository.IsFriend(friendId, connectedUserId))
+        if (_friendRepository.IsFriend(connectedUserId, profileRequestUserId) || _friendRepository.IsFriend(profileRequestUserId, connectedUserId))
             throw new Exception("Users are Already Friends");
 
-        if (!_friendRequestRepository.IsRequestPresent(connectedUserId, friendId))
+        if (!_friendRequestRepository.IsRequestPresent(connectedUserId, profileRequestUserId))
             throw new Exception("Request doesn't exists");
 
-        var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, friendId);
+        var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, profileRequestUserId);
         var isDeleted = _friendRequestRepository.SetIsDone(request.Id, true);
         return isDeleted;
     }
