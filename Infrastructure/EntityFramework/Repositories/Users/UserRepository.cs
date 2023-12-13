@@ -97,4 +97,10 @@ public class UserRepository: IUserRepository
 
         return user;
     }
+
+    public IEnumerable<DbUser> FetchUsersByFilter(string userIdToIgnore, string nameFilter)
+    {
+        return _context.Users
+            .Where(user => user.Id != userIdToIgnore && user.Name.Contains(nameFilter));
+    }
 }

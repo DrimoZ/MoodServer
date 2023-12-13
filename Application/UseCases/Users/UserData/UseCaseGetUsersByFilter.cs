@@ -7,7 +7,7 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
+public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
 {
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
@@ -16,7 +16,7 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
 
     private static Random rng = new Random();
     
-    public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
+    public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
     {
         _mapper = mapper;
         
@@ -28,8 +28,7 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
     public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
-            .GetAll()
-            .Where(user => user.Id != connectedUserId && user.Name.ToLower().Contains(searchValue)) 
+            .FetchUsersByFilter(connectedUserId, searchValue) 
             .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
             .ToList();
 
