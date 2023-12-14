@@ -15,5 +15,5 @@ public interface IUserRepository
     DbUser FetchByName(string name);
     DbUser FetchByLogin(string login);
     DbUser FetchByMail(string mail);
-    IEnumerable<DbUser> FetchUsersByFilter(string userIdToIgnore, string nameFilter);
+    IEnumerable<DbUser> FetchUsersByFilter(string userIdToIgnore, string nameFilter, int userCount);
 }

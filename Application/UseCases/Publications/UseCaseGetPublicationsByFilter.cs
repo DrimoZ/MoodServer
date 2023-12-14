@@ -13,8 +13,6 @@ public class UseCaseGetPublicationsByFilter: IUseCaseParameterizedQuery<IEnumera
     private readonly IMapper _mapper;
     private readonly IPublicationRepository _publicationRepository;
     private readonly IUserRepository _userRepository;
-
-    private static Random rng = new Random();
     
     public UseCaseGetPublicationsByFilter(IMapper mapper, IUserRepository userRepository, IPublicationRepository publicationRepository)
     {
@@ -29,8 +27,10 @@ public class UseCaseGetPublicationsByFilter: IUseCaseParameterizedQuery<IEnumera
             .FetchPublicationsByFilter(connectedUserId)
             .Where(publication => _userRepository.FetchById(publication.UserId).Name.ToLower().Contains(searchValue)) 
             .Select(publication => _mapper.Map<DtoOutputDiscoverPublication>(publication))
+            .Reverse()
+            .Take(publicationCount)
             .ToList();
         
-        return publications.OrderBy(a => rng.Next()).Take(publicationCount).ToList();
+        return publications;
     }
 }

@@ -13,8 +13,6 @@ public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<Dto
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
-
-    private static Random rng = new Random();
     
     public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
     {
@@ -28,7 +26,7 @@ public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<Dto
     public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
-            .FetchUsersByFilter(connectedUserId, searchValue) 
+            .FetchUsersByFilter(connectedUserId, searchValue, userCount) 
             .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
             .ToList();
 
@@ -55,6 +53,6 @@ public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<Dto
             user.CommonFriendCount = _friendRepository.FetchCommonFriendsCount(connectedUserId, user.Id);
         }
         
-        return users.OrderBy(a => rng.Next()).Take(userCount).ToList();
+        return users;
     }
 }
