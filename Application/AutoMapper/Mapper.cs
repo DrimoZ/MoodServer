@@ -75,8 +75,9 @@ public class Mapper: Profile
     
         
         //Discover Users
-        CreateMap<DbUser, DtoOutputUserDiscover>();
-        
+        CreateMap<DbUser, DtoOutputUserDiscover>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore());
+
         
         // Create Friend Request
         CreateMap<DbFriendRequest, DtoOutputFriendRequest>();
