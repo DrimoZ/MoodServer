@@ -22,7 +22,7 @@ public class PublicationService: IPublicationService
         _commentRepository = commentRepository;
         _likeRepository = likeRepository;
     }
-
+    
     public IEnumerable<Domain.Publication> FetchPublicationsByUserId(string userId)
     {
         return _publicationRepository
@@ -56,12 +56,11 @@ public class PublicationService: IPublicationService
         return publication;
     }
 
-    protected DbComplexPublication FetchComplexByPublicationId(int pubId)
+    private DbComplexPublication FetchComplexByPublicationId(int pubId)
     {
         var complexPublication = _mapper.Map<DbComplexPublication>(_publicationRepository.FetchById(pubId));
-
         complexPublication.Elements = _elementRepository.FetchElementsByPublicationId(pubId);
-
+        
         return complexPublication;
     }
 }

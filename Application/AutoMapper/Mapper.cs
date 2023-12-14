@@ -111,16 +111,19 @@ public class Mapper: Profile
 
         CreateMap<DbPublication, DbComplexPublication>();
 
-        CreateMap<DbComplexPublication, Publication>();
+        
 
 
-        CreateMap<DbPublicationElement, PublicationElement>();
+        
 
 
         CreateMap<DbPublication, DtoOutputPublication>();
         CreateMap<Publication, DtoOutputPublication>();
         CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
         
+        //Publication Service
+        CreateMap<DbComplexPublication, Publication>();
+        CreateMap<DbPublicationElement, PublicationElement>();
         
         //User Profile Publications
         CreateMap<Publication, DtoOutputUserPublications.DtoPublication>();
