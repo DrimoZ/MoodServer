@@ -1,5 +1,6 @@
 using Application.Dtos.Publication;
 using Application.Dtos.User.UserData;
+using Application.Services.Publication;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Communications;
@@ -13,20 +14,21 @@ public class UseCaseGetPublicationsByFilter: IUseCaseParameterizedQuery<IEnumera
     private readonly IMapper _mapper;
     private readonly IPublicationRepository _publicationRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IPublicationService _publicationService;
     
-    public UseCaseGetPublicationsByFilter(IMapper mapper, IUserRepository userRepository, IPublicationRepository publicationRepository)
+    public UseCaseGetPublicationsByFilter(IMapper mapper, IUserRepository userRepository, IPublicationRepository publicationRepository, IPublicationService publicationService)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _publicationRepository = publicationRepository;
+        _publicationService = publicationService;
     }
 
     public IEnumerable<DtoOutputDiscoverPublication> Execute(string connectedUserId, int publicationCount, string searchValue)
     {
-        var publications = _publicationRepository
-            .FetchPublicationsByFilter(connectedUserId)
-            .Where(publication => _userRepository.FetchById(publication.UserId).Name.ToLower().Contains(searchValue)) 
-            .Select(publication => _mapper.Map<DtoOutputDiscoverPublication>(publication))
+        var publications = _publicationService
+            .FetchPublicationsWithoutUserId(connectedUserId, searchValue)
+            .Select(p => _mapper.Map<DtoOutputDiscoverPublication>(p))
             .Reverse()
             .Take(publicationCount)
             .ToList();

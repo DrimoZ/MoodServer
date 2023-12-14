@@ -130,7 +130,7 @@ public class Mapper: Profile
         CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoElement>();
         
         // Discover Publications
-        CreateMap<DbPublication, DtoOutputDiscoverPublication>();
+        CreateMap<Publication, DtoOutputDiscoverPublication>();
         CreateMap<PublicationElement, DtoOutputDiscoverPublication.DtoElement>();
 
 
