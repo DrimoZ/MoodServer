@@ -7,14 +7,14 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int>
+public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
 {
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
-
-    public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
+    
+    public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
     {
         _mapper = mapper;
         
@@ -23,11 +23,10 @@ public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutpu
         _friendRequestRepository = friendRequestRepository;
     }
 
-    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int profileRequestUserId)
+    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
-            .GetAll()
-            .Where(user => user.Id != connectedUserId) 
+            .FetchUsersByFilter(connectedUserId, searchValue, userCount) 
             .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
             .ToList();
 
