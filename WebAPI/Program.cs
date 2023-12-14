@@ -21,7 +21,6 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Controllers.Hubs;
 using Mapper = Application.AutoMapper.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);

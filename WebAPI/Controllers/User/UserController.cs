@@ -1,6 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.Services.Utils;
@@ -8,7 +5,6 @@ using Application.UseCases.Publications;
 using Application.UseCases.Users.UserData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace WebAPI.Controllers.User;
 
@@ -26,10 +22,11 @@ public class UserController: ControllerBase
     private readonly UseCaseFetchUserFriendsByUserId _useCaseFetchUserFriendsByUserId;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
     private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
-    private readonly UseCaseGetAllUsers _useCaseGetAllUsers;
+    private readonly UseCaseGetUsersByFilter _useCaseGetUsersByFilter;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
+    private readonly UseCaseGetPublicationsByFilter _useCaseGetPublicationsByFilter;
 
-    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetAllUsers useCaseGetAllUsers, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId)
+    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter)
     {
         _logger = logger;
         _configuration = configuration;
@@ -40,8 +37,9 @@ public class UserController: ControllerBase
         _useCaseFetchUserFriendsByUserId = useCaseFetchUserFriendsByUserId;
         _useCaseUpdateUserData = useCaseUpdateUserData;
         _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
-        _useCaseGetAllUsers = useCaseGetAllUsers;
+        _useCaseGetUsersByFilter = useCaseGetUsersByFilter;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
+        _useCaseGetPublicationsByFilter = useCaseGetPublicationsByFilter;
     }
     
     [HttpGet]
@@ -147,29 +145,46 @@ public class UserController: ControllerBase
         return NotFound();
     }
     
-    [HttpGet("discover/users/{count:int}")]
+    [HttpGet("discover/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     // Get A list of other Users for the Discover
-    public ActionResult<List<DtoOutputUser>> GetAll(int count)
+    public ActionResult<List<DtoOutputUser>> GetUsersByFilter([FromQuery] int userCount, [FromQuery] string? searchValue)
     {
+        Console.WriteLine(searchValue);
+        searchValue ??= "";
+        
         try
         {
             var data =  GetAuthCookieData();
-            return Ok(_useCaseGetAllUsers.Execute(data.UserId, count));
+            return Ok(_useCaseGetUsersByFilter.Execute(data.UserId, userCount, searchValue));
         }
         catch (Exception e)
         {
-            return NotFound(e);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
-        
     }
     
-    
-    
-    
-    
+    [HttpGet("discover/publications")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    // Get A list of other Users for the Discover
+    public ActionResult<List<DtoOutputUser>> GetPublicationsByFilter([FromQuery] int publicationCount, [FromQuery] string? searchValue)
+    {
+        searchValue ??= "";
+        
+        try
+        {
+            var data =  GetAuthCookieData();
+            return Ok(_useCaseGetPublicationsByFilter.Execute(data.UserId, publicationCount, searchValue));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+    }
     
     
     [HttpPut]

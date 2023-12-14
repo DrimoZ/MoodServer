@@ -125,6 +125,11 @@ public class Mapper: Profile
         //User Profile Publications
         CreateMap<Publication, DtoOutputUserPublications.DtoPublication>();
         CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoElement>();
+        
+        // Discover Publications
+        CreateMap<DbPublication, DtoOutputDiscoverPublication>();
+        CreateMap<PublicationElement, DtoOutputDiscoverPublication.DtoElement>();
+
 
     }
 

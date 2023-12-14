@@ -62,7 +62,7 @@ public class PublicationRepository:IPublicationRepository
         
         return count;
     }
-
+    
     public DbPublication FetchById(int id)
     {
         var entity = _context.Publications
@@ -72,4 +72,11 @@ public class PublicationRepository:IPublicationRepository
 
         return entity;
     }
+    
+    public IEnumerable<DbPublication> FetchPublicationsByFilter(string userIdToIgnore)
+    {
+        return _context.Publications
+            .Where(pub => pub.UserId != userIdToIgnore);
+    }
+
 }

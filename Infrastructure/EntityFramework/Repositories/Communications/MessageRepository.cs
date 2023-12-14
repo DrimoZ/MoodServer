@@ -17,4 +17,9 @@ public class MessageRepository:IMessageRepository
         _context.Messages.Add(message);
         return message;
     }
+
+    public IEnumerable<DbMessage> FetchAllMessageFromUserGroup(int userGroupId)
+    {
+        return _context.Messages.Where(msg => msg.UserGroupId == userGroupId);
+    }
 }
