@@ -16,4 +16,11 @@ public class CommunicationRepository:ICommunicationRepository
         _context.Communications.Add(com);
         return com;
     }
+
+    public DbCommunication GetById(int id)
+    {
+       var entity =  _context.Communications.FirstOrDefault(communication => communication.Id == id);
+       if (entity == null) throw new KeyNotFoundException("Com not found");
+       return entity;
+    }
 }
