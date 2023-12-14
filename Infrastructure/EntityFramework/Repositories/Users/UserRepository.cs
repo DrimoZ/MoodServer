@@ -102,6 +102,7 @@ public class UserRepository: IUserRepository
     {
         return _context.Users
             .Where(user => user.Id != userIdToIgnore && user.Name.Contains(nameFilter))
+            .AsEnumerable()
             .Reverse()
             .Take(userCount);
     }

@@ -148,10 +148,11 @@ public class UserController: ControllerBase
     [HttpGet("discover/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     // Get A list of other Users for the Discover
     public ActionResult<List<DtoOutputUser>> GetUsersByFilter([FromQuery] int userCount, [FromQuery] string? searchValue)
     {
+        Console.WriteLine(searchValue);
         searchValue ??= "";
         
         try
@@ -161,14 +162,14 @@ public class UserController: ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound(e);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }
     
     [HttpGet("discover/publications")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     // Get A list of other Users for the Discover
     public ActionResult<List<DtoOutputUser>> GetPublicationsByFilter([FromQuery] int publicationCount, [FromQuery] string? searchValue)
     {
@@ -181,7 +182,7 @@ public class UserController: ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound(e);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }
     
