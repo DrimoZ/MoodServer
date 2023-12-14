@@ -56,6 +56,7 @@ public class Mapper: Profile
 
         //User Profile
         CreateMap<DbUser, DtoOutputUserProfile>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
             .ForMember(dest => dest.FriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.PublicationCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsConnectedUser, opt => opt.Ignore())

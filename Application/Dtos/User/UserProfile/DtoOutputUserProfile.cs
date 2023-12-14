@@ -9,4 +9,6 @@ public class DtoOutputUserProfile
     public string Name { get; set; }
     public int PublicationCount { get; set; }
     public string Title { get; set; }
+    
+    public int? IdImage { get; set; }
 }
