@@ -23,10 +23,10 @@ public class UseCaseGetUserInfoByLogin:IUseCaseParameterizedQuery<DtoOutputProfi
         _friendRepository = friendRepository;
     }
 
-    public DtoOutputProfileUser Execute(string userId, string otherLogin)
+    public DtoOutputProfileUser Execute(string connectedUserId, string profileRequestUserId)
     {
-        var user = _userRepository.FetchById(userId);
-        var otherUser = _userRepository.FetchByLogin(otherLogin);
+        var user = _userRepository.FetchById(connectedUserId);
+        var otherUser = _userRepository.FetchByLogin(profileRequestUserId);
         try
         {
             var outputUser = _userService

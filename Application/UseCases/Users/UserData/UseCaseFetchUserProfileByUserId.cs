@@ -30,15 +30,15 @@ public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutp
         _accountRepository = accountRepository;
     }
 
-    public DtoOutputUserProfile Execute(string connectedUser, string profileRequestUser)
+    public DtoOutputUserProfile Execute(string connectedUserId, string profileRequestUserId)
     {
-        var dbUser = _userRepository.FetchById(profileRequestUser);
+        var dbUser = _userRepository.FetchById(profileRequestUserId);
         
         var user = _mapper.Map<DtoOutputUserProfile>(dbUser);
 
-        user.IsConnectedUser = connectedUser == profileRequestUser;
-        user.FriendCount = _friendRepository.FetchFriendCount(profileRequestUser);
-        user.PublicationCount = _publicationRepository.FetchPublicationCount(profileRequestUser);
+        user.IsConnectedUser = connectedUserId == profileRequestUserId;
+        user.FriendCount = _friendRepository.FetchFriendCount(profileRequestUserId);
+        user.PublicationCount = _publicationRepository.FetchPublicationCount(profileRequestUserId);
         user.Description = _accountRepository.FetchById(dbUser.AccountId).Description!;
 
         return user;

@@ -1,11 +1,13 @@
 using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.EntityFrameworkCore;
+using DbFriendRequest = Infrastructure.EntityFramework.DbEntities.DbFriendRequest;
 
 namespace Infrastructure.EntityFramework;
 
 public class MoodContext: DbContext
 {
     public MoodContext(DbContextOptions options) : base(options) { }
+    
     public DbSet<DbUser> Users { get; set; }
     public DbSet<DbAccount> Accounts { get; set; }
     public DbSet<DbPublication> Publications { get; set; }
@@ -13,11 +15,11 @@ public class MoodContext: DbContext
     public DbSet<DbFriend> Friends { get; set; }
     public DbSet<DbGroup> Groups { get; set; }
     public DbSet<DbUserGroup> UserGroups { get; set; }
-    public DbSet<DbCommunication> Communications { get; set; }
     public DbSet<DbMessage> Messages { get; set; }
     public DbSet<DbImage> Images { get; set; }
     public DbSet<DbLike> Likes { get; set; }
     public DbSet<DbComment> Comments { get; set; }
+    public DbSet<DbFriendRequest> FriendRequests { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -95,14 +97,6 @@ public class MoodContext: DbContext
             builder.Property(usrgrp => usrgrp.UserId).HasColumnName("user_id");
             builder.Property(usrgrp => usrgrp.GroupId).HasColumnName("group_id");
         });
-        modelBuilder.Entity<DbCommunication>(builder =>
-        {
-            builder.ToTable("communications");
-            builder.HasKey(com => com.Id);
-            builder.Property(com => com.Id).HasColumnName("comm_id");
-            builder.Property(com => com.Date).HasColumnName("comm_date");
-            builder.Property(com => com.IsDeleted).HasColumnName("comm_isDeleted");
-        });
         
         modelBuilder.Entity<DbMessage>(builder =>
         {
@@ -111,7 +105,8 @@ public class MoodContext: DbContext
             builder.Property(msg => msg.Id).HasColumnName("msg_id");
             builder.Property(msg => msg.Content).HasColumnName("msg_content");
             builder.Property(msg => msg.UserGroupId).HasColumnName("user_group_id");
-            builder.Property(msg => msg.CommId).HasColumnName("comm_id");
+            builder.Property(msg => msg.Date).HasColumnName("msg_date");
+            builder.Property(msg => msg.IsDeleted).HasColumnName("msg_isDeleted");
         });
 
         modelBuilder.Entity<DbImage>(builder =>
@@ -134,7 +129,7 @@ public class MoodContext: DbContext
             builder.Property(like => like.PublicationId).HasColumnName("pub_id");
             builder.Property(like => like.UserId).HasColumnName("user_id");
         });
-        
+
         modelBuilder.Entity<DbComment>(builder =>
         {
             builder.ToTable("comments");
@@ -145,6 +140,18 @@ public class MoodContext: DbContext
             builder.Property(cmt => cmt.IsDeleted).HasColumnName("cmt_isDeleted");
             builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
             builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
+        });
+        
+        modelBuilder.Entity<DbFriendRequest>(builder =>
+        {
+            builder.ToTable("friend_requests");
+            builder.HasKey(fr => fr.Id);
+            builder.Property(fr => fr.Id).HasColumnName("req_id");
+            builder.Property(fr => fr.Date).HasColumnName("req_date");
+            builder.Property(fr => fr.IsDone).HasColumnName("req_isDone");
+            builder.Property(fr => fr.IsAccepted).HasColumnName("req_isAccepted");
+            builder.Property(fr => fr.UserId).HasColumnName("user_id");
+            builder.Property(fr => fr.FriendId).HasColumnName("friend_id");
         });
     }
 }

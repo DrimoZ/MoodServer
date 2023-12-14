@@ -20,8 +20,8 @@ public class UseCaseDeleteFriend: IUseCaseParameterizedQuery<bool, string, strin
     }
 
 
-    public bool Execute(string userId, string friendId)
+    public bool Execute(string connectedUserId, string profileRequestUserId)
     {
-        return _friendRepository.Delete(userId, friendId);
+        return _friendRepository.Delete(connectedUserId, profileRequestUserId);
     }
 }

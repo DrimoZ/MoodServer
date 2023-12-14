@@ -13,17 +13,15 @@ public class UseCaseCreateMessage:IUseCaseParameterizedWriter<DbMessage, DtoInpu
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IUserGroupRepository _userGroupRepository;
-    private readonly ICommunicationRepository _communicationRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public UseCaseCreateMessage(IMessageRepository messageRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserGroupRepository userGroupRepository, ICommunicationRepository communicationRepository)
+    public UseCaseCreateMessage(IMessageRepository messageRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserGroupRepository userGroupRepository)
     {
         _messageRepository = messageRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _userGroupRepository = userGroupRepository;
-        _communicationRepository = communicationRepository;
     }
 
     public DbMessage Execute(DtoInputMessage input, int idUserGroup)
@@ -39,13 +37,8 @@ public class UseCaseCreateMessage:IUseCaseParameterizedWriter<DbMessage, DtoInpu
             Console.WriteLine(e);
             throw;
         }
-
-        var comm = _communicationRepository.Create(new DbCommunication
-        {
-            Date = DateTime.Now
-        });
-        _unitOfWork.Save();
-        var message = _messageRepository.Create(_mapper.Map<DbMessage>(input), idUserGroup, comm.Id);
+        
+        var message = _messageRepository.Create(_mapper.Map<DbMessage>(input), idUserGroup);
         _unitOfWork.Save();
         _unitOfWork.Commit();
         return message;

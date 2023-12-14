@@ -11,7 +11,7 @@ public class DtoOutputUserFriends
     {
         public int CommonFriendCount { get; set; }
         public string Id { get; set; }
-        public bool IsFriendWithConnected { get; set; }
+        public int IsFriendWithConnected { get; set; }
         public string Login { get; set; }
         public string Name { get; set; }
     }

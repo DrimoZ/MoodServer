@@ -2,7 +2,6 @@ using Application.Dtos.Friend;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Friends;
@@ -21,11 +20,12 @@ public class UseCaseCreateFriend:IUseCaseParameterizedWriter<DtoOutputFriend, st
     public DtoOutputFriend Execute(string userId, string loginFriend)
     {
         var user = _userRepository.FetchByLogin(loginFriend);
-        DbFriend friend = new DbFriend
+        var friend = new DbFriend
         {
             UserId = userId,
             FriendId = user.Id
         };
+        
         var entity = _friendRepository.Create(friend);
         friend.UserId = user.Id;
         friend.FriendId = userId;

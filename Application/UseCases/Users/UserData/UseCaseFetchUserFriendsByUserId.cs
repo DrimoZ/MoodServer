@@ -4,6 +4,7 @@ using Application.Services.Users;
 using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 using Microsoft.Extensions.Logging;
 
@@ -15,39 +16,56 @@ public class UseCaseFetchUserFriendsByUserId: IUseCaseParameterizedQuery<DtoOutp
     private readonly IUserService _userService;
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
+    private readonly IFriendRequestRepository _friendRequestRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseFetchUserFriendsByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, ILogger<UseCaseFetchUserFriendsByUserId> logger)
+    public UseCaseFetchUserFriendsByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, ILogger<UseCaseFetchUserFriendsByUserId> logger, IFriendRequestRepository friendRequestRepository)
     {
         _userService = userService;
         _mapper = mapper;
         _userRepository = userRepository;
         _friendRepository = friendRepository;
         _logger = logger;
+        _friendRequestRepository = friendRequestRepository;
     }
 
-    public DtoOutputUserFriends Execute(string connectedUser, string profileRequestUser)
+    public DtoOutputUserFriends Execute(string connectedUserId, string profileRequestUserId)
     {
-        var dbUser = _userRepository.FetchById(profileRequestUser);
-        var isSameUser = connectedUser == profileRequestUser;
+        var dbUser = _userRepository.FetchById(profileRequestUserId);
+        var isSameUser = connectedUserId == profileRequestUserId;
         
         var dto = new DtoOutputUserFriends
         {
             IsConnectedUser = isSameUser,
-            IsFriendPublic = isSameUser || _friendRepository.IsFriend(connectedUser, profileRequestUser) || dbUser is { IsPublic: true, IsFriendPublic: true }
+            IsFriendPublic = isSameUser || _friendRepository.IsFriend(connectedUserId, profileRequestUserId) || dbUser is { IsPublic: true, IsFriendPublic: true }
         };
 
         if (!dto.IsFriendPublic) return dto;
 
         var friends = _friendRepository
-            .FetchFriends(profileRequestUser)
+            .FetchFriends(profileRequestUserId)
             .Select(dbU => _mapper.Map<DtoOutputUserFriends.DtoFriend>(dbU))
             .ToList();
 
         foreach (var friend in friends)
         {
-            friend.IsFriendWithConnected = _friendRepository.IsFriend(connectedUser, friend.Id);
-            friend.CommonFriendCount = friend.Id == connectedUser ? -1 : _friendRepository.FetchCommonFriendsCount(connectedUser, friend.Id);
+            if (_friendRepository.IsFriend(connectedUserId, friend.Id))
+            {
+                friend.IsFriendWithConnected = 2;
+            }
+            else if (_friendRequestRepository.IsRequestPresent(friend.Id, connectedUserId))
+            {
+                friend.IsFriendWithConnected = 1;
+            }
+            else if (_friendRequestRepository.IsRequestPresent(connectedUserId, friend.Id))
+            {
+                friend.IsFriendWithConnected = 0;
+            }
+            else
+            {
+                friend.IsFriendWithConnected = -1;
+            }
+            friend.CommonFriendCount = friend.Id == connectedUserId ? -1 : _friendRepository.FetchCommonFriendsCount(connectedUserId, friend.Id);
         }
 
         dto.Friends = friends;

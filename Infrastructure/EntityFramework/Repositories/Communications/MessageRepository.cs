@@ -11,10 +11,9 @@ public class MessageRepository:IMessageRepository
         _context = context;
     }
 
-    public DbMessage Create(DbMessage message, int userGroupId, int commId)
+    public DbMessage Create(DbMessage message, int userGroupId)
     {
         message.UserGroupId = userGroupId;
-        message.CommId = commId;
         _context.Messages.Add(message);
         return message;
     }
