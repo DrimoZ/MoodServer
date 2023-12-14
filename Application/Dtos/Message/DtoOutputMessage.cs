@@ -11,4 +11,5 @@ public class DtoOutputMessage
     public int CommId { get; set; }
     public DateTime Date { get; set; }
     public int? ImageId { get; set; }
+    
 }

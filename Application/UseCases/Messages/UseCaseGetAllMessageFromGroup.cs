@@ -13,20 +13,16 @@ public class UseCaseGetAllMessageFromGroup:IUseCaseParameterizedQuery<IEnumerabl
     private readonly IMapper _mapper;
     private readonly IMessageRepository _messageRepository;
     private readonly IUserGroupRepository _userGroupRepository;
-    private readonly ICommunicationRepository _communicationRepository;
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly IImageRepository _imageRepository;
 
-    public UseCaseGetAllMessageFromGroup(IMapper mapper, IMessageRepository messageRepository, IUserGroupRepository userGroupRepository, ICommunicationRepository communicationRepository, IUserRepository userRepository, IAccountRepository accountRepository, IImageRepository imageRepository)
+    public UseCaseGetAllMessageFromGroup(IMapper mapper, IMessageRepository messageRepository, IUserGroupRepository userGroupRepository, IUserRepository userRepository, IAccountRepository accountRepository)
     {
         _mapper = mapper;
         _messageRepository = messageRepository;
         _userGroupRepository = userGroupRepository;
-        _communicationRepository = communicationRepository;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _imageRepository = imageRepository;
     }
 
     public IEnumerable<DtoOutputMessage> Execute(int groupId)
@@ -39,7 +35,6 @@ public class UseCaseGetAllMessageFromGroup:IUseCaseParameterizedQuery<IEnumerabl
             var entity = _messageRepository.FetchAllMessageFromUserGroup(userGroup.Id);
             foreach (var message in entity)
             {
-                var comm = _communicationRepository.GetById(message.CommId);
                 var user = _userRepository.FetchById(userGroup.UserId);
                 var account = _accountRepository.FetchById(user.AccountId);
                 var msgToAdd = new DtoOutputMessage
@@ -48,15 +43,15 @@ public class UseCaseGetAllMessageFromGroup:IUseCaseParameterizedQuery<IEnumerabl
                     UserLogin = user.Login,
                     UserId = user.Id,
                     UserName = user.Name,
-                    Date = comm.Date,
-                    CommId = message.CommId,
+                    Date = message.Date,
                     Id = message.Id,
                     Content = message.Content,
                     ImageId = account.ImageId
                 };
-               
                 messages.Add(_mapper.Map<DtoOutputMessage>(msgToAdd));
             }
+            messages = messages.OrderBy(msg => msg.Date).ToList();
+            Console.WriteLine("oui");
         }
         return messages;
     }
