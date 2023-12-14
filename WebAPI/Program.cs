@@ -21,6 +21,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.Controllers.Hubs;
 using Mapper = Application.AutoMapper.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,12 +85,13 @@ builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
+builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
 builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
-builder.Services.AddScoped<UseCaseGetAllUsers>();
+builder.Services.AddScoped<UseCaseGetUsersByFilter>();
 
 builder.Services.AddScoped<UseCaseCreateFriend>();
 builder.Services.AddScoped<UseCaseGetFriendByUserId>();
@@ -98,6 +100,8 @@ builder.Services.AddScoped<UseCaseCreateFriendRequest>();
 builder.Services.AddScoped<UseCaseAcceptFriendRequest>();
 builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 
+builder.Services.AddScoped<UseCaseCreateGroup>();
+builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
 
