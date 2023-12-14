@@ -47,6 +47,7 @@ public class MoodContext: DbContext
             builder.Property(account => account.PhoneNumber).HasColumnName("acc_phone_number");
             builder.Property(account => account.BirthDate).HasColumnName("acc_birth_date");
             builder.Property(account => account.Description).HasColumnName("acc_description");
+            builder.Property(account => account.ImageId).HasColumnName("img_id");
         });
         
         modelBuilder.Entity<DbFriend>(builder =>

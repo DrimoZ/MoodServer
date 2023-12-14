@@ -9,16 +9,26 @@ namespace WebAPI.Controllers;
 public class MessageController: ControllerBase
 {
     private readonly UseCaseCreateMessage _useCaseCreateMessage;
+    private readonly UseCaseGetAllMessageFromGroup _useCaseGetAllMessageFromGroup;
 
-    public MessageController(UseCaseCreateMessage useCaseCreateMessage)
+    public MessageController(UseCaseCreateMessage useCaseCreateMessage, UseCaseGetAllMessageFromGroup useCaseGetAllMessageFromGroup)
     {
         _useCaseCreateMessage = useCaseCreateMessage;
+        _useCaseGetAllMessageFromGroup = useCaseGetAllMessageFromGroup;
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputMessage> Create(DtoInputMessage message)
+    public ActionResult<DtoOutputMessage> Create([FromBody]DtoInputMessage message)
     {
+        Console.WriteLine("oui");
         return Ok(_useCaseCreateMessage.Execute(message, message.UserGroupId));
+    }
+    
+    [HttpGet("{groupId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputMessage> FetchByUserGroupId(int  groupId)
+    {
+        return Ok(_useCaseGetAllMessageFromGroup.Execute(groupId));
     }
 }

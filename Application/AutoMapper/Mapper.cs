@@ -1,4 +1,5 @@
 using Application.Dtos.Account;
+using Application.Dtos.Communication;
 using Application.Dtos.Friend;
 using Application.Dtos.Group;
 using Application.Dtos.Images;
@@ -141,6 +142,11 @@ public class Mapper: Profile
         CreateMap<DtoInputImage, DbImage>()
             .ForMember(dest => dest.Date, opt => opt.Ignore());
         CreateMap<DbImage, DtoOutputImage>();
+    }
+
+    private void ComMapping()
+    {
+        CreateMap<DbCommunication, DtoOutputCommunication>();
     }
     
     

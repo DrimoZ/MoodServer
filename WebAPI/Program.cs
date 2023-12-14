@@ -98,6 +98,8 @@ builder.Services.AddScoped<UseCaseDeleteFriend>();
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
+builder.Services.AddScoped<UseCaseGetAllMessageFromGroup>();
+
 
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
