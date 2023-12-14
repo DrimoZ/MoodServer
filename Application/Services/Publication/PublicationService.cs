@@ -29,14 +29,14 @@ public class PublicationService: IPublicationService
     public IEnumerable<Domain.Publication> FetchPublicationsByUserId(string userId)
     {
         return _publicationRepository
-            .FetchPublicationsByFilter(userId)
+            .FetchUserPublications(userId)
             .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
     }
     
     public IEnumerable<Domain.Publication> FetchPublicationsWithoutUserId(string userId, string searchValue)
     {
         return _publicationRepository
-            .FetchUserPublications(userId)
+            .FetchPublicationsByFilter(userId)
             .Where(publication => _userRepository.FetchById(publication.UserId).Name.ToLower().Contains(searchValue))
             .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
     }

@@ -70,6 +70,7 @@ public class Mapper: Profile
         
         //User Profile Friends
         CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
             .ForMember(dest => dest.CommonFriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsFriendWithConnected, opt => opt.Ignore());
     
