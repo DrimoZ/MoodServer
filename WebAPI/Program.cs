@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Mapper = Application.AutoMapper.Mapper;
+using WebAPI.Controllers.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,6 +157,10 @@ builder.Services.AddLogging(b =>
     b.AddDebug();
 });
 
+//SignalR
+builder.Services.AddSignalR();
+
+
 // Initialize Dev Env
 builder.Services.AddCors(options =>
 {
@@ -182,10 +187,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("Dev");
 app.UseAuthentication();
+app.UseRouting();
 
 app.UseAuthorization();
+    
+app.UseEndpoints(endpoint =>
+{
+    endpoint.MapHub<ChatHub>("/api/v1/message");
+});
+
 
 app.MapControllers();
-
 
 app.Run();
