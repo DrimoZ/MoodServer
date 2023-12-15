@@ -2,7 +2,6 @@ using Application.Dtos.Message;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
@@ -24,12 +23,15 @@ public class UseCaseCreateMessage:IUseCaseParameterizedWriter<DbMessage, DtoInpu
         _userGroupRepository = userGroupRepository;
     }
 
-    public DbMessage Execute(DtoInputMessage input, int idUserGroup)
+    public DbMessage Execute(DtoInputMessage input, int userGroupId)
     {
         _unitOfWork.BeginTransaction();
         try
         {
-            _userGroupRepository.FetchById(idUserGroup);
+            var userGroup = _userGroupRepository.FetchById(userGroupId);
+            var message = _messageRepository.Create(_mapper.Map<DbMessage>(input), userGroup.Id);
+            _unitOfWork.Commit();
+            return message;
         }
         catch (Exception e)
         {
@@ -37,10 +39,5 @@ public class UseCaseCreateMessage:IUseCaseParameterizedWriter<DbMessage, DtoInpu
             Console.WriteLine(e);
             throw;
         }
-        
-        var message = _messageRepository.Create(_mapper.Map<DbMessage>(input), idUserGroup);
-        _unitOfWork.Save();
-        _unitOfWork.Commit();
-        return message;
     }
 }

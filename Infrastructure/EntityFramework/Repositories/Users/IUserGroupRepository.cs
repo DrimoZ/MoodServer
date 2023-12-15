@@ -10,4 +10,5 @@ public interface IUserGroupRepository
     public IEnumerable<DbUserGroup> FetchAllByUserId(string userId);
     
     public IEnumerable<DbUserGroup> FetchAllByGroupId(int groupId);
+    public DbUserGroup FetchByGroupIdUserId(int groupId, string id);
 }
