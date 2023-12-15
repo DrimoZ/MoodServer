@@ -104,6 +104,7 @@ builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
+builder.Services.AddScoped<UseCaseGetAllMessageFromGroup>();
 
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
@@ -192,7 +193,6 @@ app.UseEndpoints(endpoint =>
 {
     endpoint.MapHub<ChatHub>("/api/v1/message");
 });
-
 
 app.MapControllers();
 

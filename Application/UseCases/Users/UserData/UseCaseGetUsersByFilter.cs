@@ -2,6 +2,7 @@ using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 
@@ -13,21 +14,28 @@ public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<Dto
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
+    private readonly IAccountRepository _accountRepository;
     
-    public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
+    public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository, IAccountRepository accountRepository)
     {
         _mapper = mapper;
         
         _userRepository = userRepository;
         _friendRepository = friendRepository;
         _friendRequestRepository = friendRequestRepository;
+        _accountRepository = accountRepository;
     }
 
     public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
-            .FetchUsersByFilter(connectedUserId, searchValue, userCount) 
-            .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
+            .FetchUsersByFilter(connectedUserId, searchValue, userCount)
+            .Select(user => {
+                var acc = _accountRepository.FetchById(user.AccountId);
+                var dtoUser = _mapper.Map<DtoOutputUserDiscover>(user);
+                dtoUser.IdImage = acc.ImageId;
+                return dtoUser;
+            })
             .ToList();
 
         foreach (var user in users)

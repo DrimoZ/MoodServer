@@ -34,4 +34,12 @@ public class UserGroupRepository:IUserGroupRepository
     {
         return _context.UserGroups.Where(userGroup => userGroup.GroupId == groupId);
     }
+    
+    public DbUserGroup FetchByGroupIdUserId(int groupId, string userId)
+    { Console.WriteLine(userId + " " + groupId);
+       var entity = _context.UserGroups.FirstOrDefault(userGroup =>
+            userGroup.GroupId == groupId && userGroup.UserId == userId);
+       if (entity == null) throw new KeyNotFoundException("UserGroup cannot be found");
+       return entity;
+    }
 }

@@ -14,6 +14,7 @@ public class MessageRepository:IMessageRepository
     public DbMessage Create(DbMessage message, int userGroupId)
     {
         message.UserGroupId = userGroupId;
+        message.Date= DateTime.Now;
         _context.Messages.Add(message);
         return message;
     }

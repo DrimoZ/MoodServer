@@ -40,10 +40,6 @@ public class UseCaseFetchUserPublicationByUser:IUseCaseParameterizedQuery<DtoOut
                 .Select(p => _mapper.Map<DtoOutputUserPublications.DtoPublication>(p))
                 .ToList();
 
-        foreach (var publication in publications)
-        {
-        }
-
         dto.Publications = publications;
         return dto;
     }

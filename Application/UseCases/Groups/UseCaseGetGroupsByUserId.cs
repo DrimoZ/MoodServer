@@ -14,13 +14,11 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
     private readonly IGroupRepository _groupRepository;
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUnitOfWork unitOfWork, IUserGroupRepository userGroupRepository)
+    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUserGroupRepository userGroupRepository)
     {
         _groupRepository = groupRepository;
         _mapper = mapper;
-        _unitOfWork = unitOfWork;
         _userGroupRepository = userGroupRepository;
     }
 

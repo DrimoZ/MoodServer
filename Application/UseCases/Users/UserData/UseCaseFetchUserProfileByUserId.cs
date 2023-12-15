@@ -33,13 +33,15 @@ public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutp
     public DtoOutputUserProfile Execute(string connectedUserId, string profileRequestUserId)
     {
         var dbUser = _userRepository.FetchById(profileRequestUserId);
+        var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
         
         var user = _mapper.Map<DtoOutputUserProfile>(dbUser);
 
+        user.IdImage = dbAccount.ImageId;
         user.IsConnectedUser = connectedUserId == profileRequestUserId;
         user.FriendCount = _friendRepository.FetchFriendCount(profileRequestUserId);
         user.PublicationCount = _publicationRepository.FetchPublicationCount(profileRequestUserId);
-        user.Description = _accountRepository.FetchById(dbUser.AccountId).Description!;
+        user.Description = dbAccount.Description!;
 
         return user;
     }
