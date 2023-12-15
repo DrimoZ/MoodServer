@@ -57,6 +57,7 @@ public class Mapper: Profile
 
         //User Profile
         CreateMap<DbUser, DtoOutputUserProfile>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
             .ForMember(dest => dest.FriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.PublicationCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsConnectedUser, opt => opt.Ignore())
@@ -71,13 +72,15 @@ public class Mapper: Profile
         
         //User Profile Friends
         CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
             .ForMember(dest => dest.CommonFriendCount, opt => opt.Ignore())
             .ForMember(dest => dest.IsFriendWithConnected, opt => opt.Ignore());
     
         
         //Discover Users
-        CreateMap<DbUser, DtoOutputUserDiscover>();
-        
+        CreateMap<DbUser, DtoOutputUserDiscover>()
+            .ForMember(dest => dest.IdImage, opt => opt.Ignore());
+
         
         // Create Friend Request
         CreateMap<DbFriendRequest, DtoOutputFriendRequest>();
@@ -112,20 +115,28 @@ public class Mapper: Profile
 
         CreateMap<DbPublication, DbComplexPublication>();
 
-        CreateMap<DbComplexPublication, Publication>();
+        
 
 
-        CreateMap<DbPublicationElement, PublicationElement>();
+        
 
 
         CreateMap<DbPublication, DtoOutputPublication>();
         CreateMap<Publication, DtoOutputPublication>();
         CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
         
+        //Publication Service
+        CreateMap<DbComplexPublication, Publication>();
+        CreateMap<DbPublicationElement, PublicationElement>();
         
         //User Profile Publications
         CreateMap<Publication, DtoOutputUserPublications.DtoPublication>();
         CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoElement>();
+        
+        // Discover Publications
+        CreateMap<Publication, DtoOutputDiscoverPublication>();
+        CreateMap<PublicationElement, DtoOutputDiscoverPublication.DtoElement>();
+
 
     }
 

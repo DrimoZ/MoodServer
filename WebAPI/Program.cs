@@ -84,12 +84,13 @@ builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
+builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
 builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
-builder.Services.AddScoped<UseCaseGetAllUsers>();
+builder.Services.AddScoped<UseCaseGetUsersByFilter>();
 
 builder.Services.AddScoped<UseCaseCreateFriend>();
 builder.Services.AddScoped<UseCaseGetFriendByUserId>();

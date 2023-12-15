@@ -4,6 +4,7 @@ using Application.Services.Users;
 using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 using Microsoft.Extensions.Logging;
@@ -17,9 +18,10 @@ public class UseCaseFetchUserFriendsByUserId: IUseCaseParameterizedQuery<DtoOutp
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
+    private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseFetchUserFriendsByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, ILogger<UseCaseFetchUserFriendsByUserId> logger, IFriendRequestRepository friendRequestRepository)
+    public UseCaseFetchUserFriendsByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, ILogger<UseCaseFetchUserFriendsByUserId> logger, IFriendRequestRepository friendRequestRepository, IAccountRepository accountRepository)
     {
         _userService = userService;
         _mapper = mapper;
@@ -27,6 +29,7 @@ public class UseCaseFetchUserFriendsByUserId: IUseCaseParameterizedQuery<DtoOutp
         _friendRepository = friendRepository;
         _logger = logger;
         _friendRequestRepository = friendRequestRepository;
+        _accountRepository = accountRepository;
     }
 
     public DtoOutputUserFriends Execute(string connectedUserId, string profileRequestUserId)
@@ -44,7 +47,12 @@ public class UseCaseFetchUserFriendsByUserId: IUseCaseParameterizedQuery<DtoOutp
 
         var friends = _friendRepository
             .FetchFriends(profileRequestUserId)
-            .Select(dbU => _mapper.Map<DtoOutputUserFriends.DtoFriend>(dbU))
+            .Select(dbU => {
+                var acc = _accountRepository.FetchById(dbU.AccountId);
+                var dtoUser =  _mapper.Map<DtoOutputUserFriends.DtoFriend>(dbU);
+                dtoUser.IdImage = acc.ImageId;
+                return dtoUser;
+            })
             .ToList();
 
         foreach (var friend in friends)

@@ -2,33 +2,40 @@ using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
+using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.UserData;
 
-public class UseCaseGetAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int>
+public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
 {
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
-
-    public UseCaseGetAllUsers(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository)
+    private readonly IAccountRepository _accountRepository;
+    
+    public UseCaseGetUsersByFilter(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IFriendRequestRepository friendRequestRepository, IAccountRepository accountRepository)
     {
         _mapper = mapper;
         
         _userRepository = userRepository;
         _friendRepository = friendRepository;
         _friendRequestRepository = friendRequestRepository;
+        _accountRepository = accountRepository;
     }
 
-    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int profileRequestUserId)
+    public IEnumerable<DtoOutputUserDiscover> Execute(string connectedUserId, int userCount, string searchValue)
     {
         var users = _userRepository
-            .GetAll()
-            .Where(user => user.Id != connectedUserId) 
-            .Select(user => _mapper.Map<DtoOutputUserDiscover>(user))
+            .FetchUsersByFilter(connectedUserId, searchValue, userCount)
+            .Select(user => {
+                var acc = _accountRepository.FetchById(user.AccountId);
+                var dtoUser = _mapper.Map<DtoOutputUserDiscover>(user);
+                dtoUser.IdImage = acc.ImageId;
+                return dtoUser;
+            })
             .ToList();
 
         foreach (var user in users)

@@ -12,4 +12,6 @@ public interface IPublicationRepository
     IEnumerable<DbPublication> FetchUserPublications(string userId);
     DbPublication FetchById(int id);
     int FetchPublicationCount(string userId);
+    IEnumerable<DbPublication> FetchPublicationsByFilter(string userIdToIgnore);
+    
 }
