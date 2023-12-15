@@ -7,6 +7,7 @@ using Application.Dtos.Publication;
 using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.Dtos.User.UserProfile;
+using Application.Dtos.UserGroup;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
@@ -135,6 +136,7 @@ public class Mapper: Profile
         CreateMap<DtoInputCreateGroup, DbGroup>()
             .ForMember(dest => dest.Id, opt =>opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore());
+        CreateMap<DbUserGroup, DtoOutputUserGroup>();
     }
 
     private void MessageMappings()

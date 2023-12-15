@@ -7,5 +7,5 @@ public interface IUseCaseParameterizedQuery<out TOutput, in TParam>
 
 public interface IUseCaseParameterizedQuery<out TOutput, in TParam1, in TParam2>
 {
-    TOutput Execute(TParam1 connectedUserId, TParam2 profileRequestUserId);
+    TOutput Execute(TParam1 param1, TParam2 param2);
 }
