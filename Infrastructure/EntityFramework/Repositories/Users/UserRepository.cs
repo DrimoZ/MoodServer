@@ -33,6 +33,10 @@ public class UserRepository: IUserRepository
         entity.Mail = user.Mail;
         entity.Name = user.Name;
         entity.Title = user.Title;
+
+        entity.IsPublic = user.IsPublic;
+        entity.IsFriendPublic = user.IsFriendPublic;
+        entity.IsPublicationPublic = user.IsPublicationPublic;
         
         _context.SaveChanges();
 

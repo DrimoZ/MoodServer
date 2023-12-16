@@ -25,8 +25,10 @@ public class UserController: ControllerBase
     private readonly UseCaseGetUsersByFilter _useCaseGetUsersByFilter;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
     private readonly UseCaseGetPublicationsByFilter _useCaseGetPublicationsByFilter;
+    private readonly UseCasePatchUser _useCasePatchUser;
+    private readonly UseCaseGetUserPrivacySettings _useCaseGetUserPrivacySettings;
 
-    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter)
+    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings)
     {
         _logger = logger;
         _configuration = configuration;
@@ -40,6 +42,8 @@ public class UserController: ControllerBase
         _useCaseGetUsersByFilter = useCaseGetUsersByFilter;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
         _useCaseGetPublicationsByFilter = useCaseGetPublicationsByFilter;
+        _useCasePatchUser = useCasePatchUser;
+        _useCaseGetUserPrivacySettings = useCaseGetUserPrivacySettings;
     }
     
     [HttpGet]
@@ -132,7 +136,7 @@ public class UserController: ControllerBase
         }
     }
     
-    [HttpPut("profile/account")]
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public ActionResult Update(DtoInputUpdateUser dto)
@@ -145,6 +149,43 @@ public class UserController: ControllerBase
         return NotFound();
     }
     
+    
+    [HttpPatch]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult PatchUser([FromBody] DtoInputPatchUserPrivacy patch)
+    {
+        try
+        {
+            
+            var user = _useCasePatchUser.Execute(GetAuthCookieData().UserId, patch);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(error: e.Message);
+        }
+    }
+
+
+    [HttpGet("privacy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public ActionResult GetUserPrivacy()
+    {
+        try
+        {
+            return Ok(_useCaseGetUserPrivacySettings.Execute(GetAuthCookieData().UserId));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+    }
+    
+    
     [HttpGet("discover/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -152,7 +193,6 @@ public class UserController: ControllerBase
     // Get A list of other Users for the Discover
     public ActionResult<List<DtoOutputUser>> GetUsersByFilter([FromQuery] int userCount, [FromQuery] string? searchValue)
     {
-        Console.WriteLine(searchValue);
         searchValue ??= "";
         
         try
@@ -183,25 +223,6 @@ public class UserController: ControllerBase
         catch (Exception e)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
-        }
-    }
-    
-    
-    [HttpPut]
-    [HttpGet("otherUsers/{login}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult GetOtherUserData(string login)
-    {
-        try
-        {
-            var data = GetAuthCookieData();
-            return Ok(_useCaseGetUserInfoByLogin.Execute(data.UserId, login));
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return Unauthorized();
         }
     }
     

@@ -21,6 +21,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI.Controllers;
 using Mapper = Application.AutoMapper.Mapper;
 using WebAPI.Controllers.Hubs;
 
@@ -36,7 +37,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // Setup Automapper
 builder.Services.AddAutoMapper(typeof(Mapper));
@@ -76,6 +76,8 @@ builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
+builder.Services.AddScoped<UseCasePatchUser>();
+builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
