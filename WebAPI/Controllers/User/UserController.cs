@@ -218,10 +218,15 @@ public class UserController: ControllerBase
     {
         try
         {
-            if (_useCaseUpdateUserPassword.Execute(GetAuthCookieData().UserId, dtoInputUpdateUserPassword))
-                return Ok();
-
-            return Forbid();
+            if (!_useCaseUpdateUserPassword.Execute(GetAuthCookieData().UserId, dtoInputUpdateUserPassword))
+                return Forbid();
+            
+            if (Request.Cookies.ContainsKey("MoodSession"))
+            {
+                Response.Cookies.Delete("MoodSession");
+            }
+                
+            return Ok();
         }
         catch (Exception e)
         {
