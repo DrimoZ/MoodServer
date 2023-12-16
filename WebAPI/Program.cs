@@ -78,6 +78,8 @@ builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCasePatchUser>();
 builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
+builder.Services.AddScoped<UseCaseSetDeletedUser>();
+builder.Services.AddScoped<UseCaseUpdateUserPassword>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();

@@ -27,8 +27,10 @@ public class UserController: ControllerBase
     private readonly UseCaseGetPublicationsByFilter _useCaseGetPublicationsByFilter;
     private readonly UseCasePatchUser _useCasePatchUser;
     private readonly UseCaseGetUserPrivacySettings _useCaseGetUserPrivacySettings;
+    private readonly UseCaseSetDeletedUser _useCaseSetDeletedUser;
+    private readonly UseCaseUpdateUserPassword _useCaseUpdateUserPassword;
 
-    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings)
+    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings, UseCaseSetDeletedUser useCaseSetDeletedUser, UseCaseUpdateUserPassword useCaseUpdateUserPassword)
     {
         _logger = logger;
         _configuration = configuration;
@@ -44,6 +46,8 @@ public class UserController: ControllerBase
         _useCaseGetPublicationsByFilter = useCaseGetPublicationsByFilter;
         _useCasePatchUser = useCasePatchUser;
         _useCaseGetUserPrivacySettings = useCaseGetUserPrivacySettings;
+        _useCaseSetDeletedUser = useCaseSetDeletedUser;
+        _useCaseUpdateUserPassword = useCaseUpdateUserPassword;
     }
     
     [HttpGet]
@@ -167,8 +171,7 @@ public class UserController: ControllerBase
             return BadRequest(error: e.Message);
         }
     }
-
-
+    
     [HttpGet("privacy")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -181,6 +184,48 @@ public class UserController: ControllerBase
         }
         catch (Exception e)
         {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+    }
+
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public ActionResult DeleteUserAccount()
+    {
+        try
+        {
+            if (_useCaseSetDeletedUser.Execute(GetAuthCookieData().UserId))
+                return NoContent();
+
+            return NotFound();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+    }
+    
+    
+    
+    [HttpPost("userPassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public ActionResult UpdateUserPassword([FromBody] DtoInputUpdateUserPassword dtoInputUpdateUserPassword)
+    {
+        try
+        {
+            if (_useCaseUpdateUserPassword.Execute(GetAuthCookieData().UserId, dtoInputUpdateUserPassword))
+                return Ok();
+
+            return Forbid();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }

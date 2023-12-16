@@ -37,6 +37,8 @@ public class UserRepository: IUserRepository
         entity.IsPublic = user.IsPublic;
         entity.IsFriendPublic = user.IsFriendPublic;
         entity.IsPublicationPublic = user.IsPublicationPublic;
+
+        entity.Password = user.Password;
         
         _context.SaveChanges();
 
@@ -45,7 +47,16 @@ public class UserRepository: IUserRepository
 
     public bool Delete(string id)
     {
-        throw new NotImplementedException();
+        var entity = _context.Users.FirstOrDefault(e => e.Id == id);
+
+        if (entity == null)
+            return false;
+
+        entity.IsDeleted = true;
+
+        _context.SaveChanges();
+
+        return true;
     }
 
     public DbUser FetchById(string id)
