@@ -75,6 +75,7 @@ builder.Services.AddScoped<UseCaseGetUserByLogin>();
 builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
+builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
