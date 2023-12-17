@@ -1,6 +1,4 @@
 ﻿using Application.Services.Publication.Util;
-using Application.Services.Users.Util;
-using Infrastructure.EntityFramework.DbComplexEntities;
 
 namespace Application.Services.Publication;
 

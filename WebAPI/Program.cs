@@ -1,6 +1,5 @@
 using System.Text;
 using Application.Services.Publication;
-using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
@@ -65,8 +64,10 @@ builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Application Services
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPublicationService, PublicationService>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddSingleton<IdService>();
+builder.Services.AddSingleton<BCryptService>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseCreateUser>();
@@ -81,7 +82,6 @@ builder.Services.AddScoped<UseCaseSetDeletedUser>();
 builder.Services.AddScoped<UseCaseUpdateUserPassword>();
 
 builder.Services.AddScoped<UseCaseFetchUserPublicationByUser>();
-builder.Services.AddScoped<UseCaseGetPublicationByFriend>();
 builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
@@ -143,11 +143,6 @@ builder.Services.AddAuthentication(options =>
             },
         };
     });
-
-// Load Services Class
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddSingleton<IdService>();
-builder.Services.AddSingleton<BCryptService>();
 
 // Initialize Loggers
 builder.Services.AddLogging(b =>

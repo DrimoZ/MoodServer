@@ -12,7 +12,6 @@ namespace WebAPI.Controllers;
 public class PublicationController: ControllerBase
 {
     private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
-    private readonly UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
     private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
@@ -21,10 +20,9 @@ public class PublicationController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend, TokenService tokenService, IConfiguration configuration)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration)
     {
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
-        _useCaseGetPublicationByFriend = useCaseGetPublicationByFriend;
         _tokenService = tokenService;
         _configuration = configuration;
         _useCaseCreatePublication = useCaseCreatePublication;
