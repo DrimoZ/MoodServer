@@ -72,8 +72,6 @@ builder.Services.AddScoped<IPublicationService, PublicationService>();
 builder.Services.AddScoped<UseCaseCreateUser>();
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
-builder.Services.AddScoped<UseCaseGetUserByLogin>();
-builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
