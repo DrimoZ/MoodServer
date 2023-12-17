@@ -84,6 +84,9 @@ public class Mapper: Profile
         
         // Create Friend Request
         CreateMap<DbFriendRequest, DtoOutputFriendRequest>();
+        
+        //User Privacy Settings
+        CreateMap<DbUser, DtoOutputUserPrivacy>();
     }
 
     private void AccountMappings()

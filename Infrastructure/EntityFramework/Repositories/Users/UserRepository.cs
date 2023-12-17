@@ -13,7 +13,9 @@ public class UserRepository: IUserRepository
 
     public List<DbUser> GetAll()
     {
-        return _context.Users.ToList();
+        return _context.Users
+            .Where(u => !u.IsDeleted)
+            .ToList();
     }
 
     public DbUser Create(DbUser user)
@@ -25,7 +27,7 @@ public class UserRepository: IUserRepository
 
     public bool Update(DbUser user)
     {
-        var entity = _context.Users.FirstOrDefault(e => e.Id == user.Id);
+        var entity = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(e => e.Id == user.Id);
 
         if (entity == null)
             return false;
@@ -33,6 +35,12 @@ public class UserRepository: IUserRepository
         entity.Mail = user.Mail;
         entity.Name = user.Name;
         entity.Title = user.Title;
+
+        entity.IsPublic = user.IsPublic;
+        entity.IsFriendPublic = user.IsFriendPublic;
+        entity.IsPublicationPublic = user.IsPublicationPublic;
+
+        entity.Password = user.Password;
         
         _context.SaveChanges();
 
@@ -41,12 +49,21 @@ public class UserRepository: IUserRepository
 
     public bool Delete(string id)
     {
-        throw new NotImplementedException();
+        var entity = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(e => e.Id == id);
+
+        if (entity == null)
+            return false;
+
+        entity.IsDeleted = true;
+
+        _context.SaveChanges();
+
+        return true;
     }
 
     public DbUser FetchById(string id)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Id == id);
 
         if (user == null || user.IsDeleted) throw new KeyNotFoundException("userIdNotFound");
 
@@ -55,7 +72,7 @@ public class UserRepository: IUserRepository
 
     public DbUser FetchByLoginOrMail(string login)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Login == login || u.Mail == login);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Login == login || u.Mail == login);
 
         if (user == null) throw new KeyNotFoundException($"userLoginOrMailNotFound");
 
@@ -64,7 +81,7 @@ public class UserRepository: IUserRepository
     
     public DbUser FetchByLoginAndMail(string login, string mail)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Login == login || u.Mail == mail);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Login == login || u.Mail == mail);
 
         if (user == null) throw new KeyNotFoundException($"userLoginAndMailNotFound");
 
@@ -73,7 +90,7 @@ public class UserRepository: IUserRepository
 
     public DbUser FetchByName(string name)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Name == name);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Name == name);
 
         if (user == null) throw new KeyNotFoundException($"userNameNotFound");
 
@@ -82,7 +99,7 @@ public class UserRepository: IUserRepository
     
     public DbUser FetchByLogin(string login)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Login == login);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Login == login);
 
         if (user == null) throw new KeyNotFoundException($"userLoginNotFound");
 
@@ -91,7 +108,7 @@ public class UserRepository: IUserRepository
     
     public DbUser FetchByMail(string mail)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Mail == mail);
+        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Mail == mail);
 
         if (user == null) throw new KeyNotFoundException($"userMailNotFound");
 
@@ -101,7 +118,7 @@ public class UserRepository: IUserRepository
     public IEnumerable<DbUser> FetchUsersByFilter(string userIdToIgnore, string nameFilter, int userCount)
     {
         return _context.Users
-            .Where(user => user.Id != userIdToIgnore && user.Name.Contains(nameFilter))
+            .Where(user => !user.IsDeleted && user.Id != userIdToIgnore && user.Name.Contains(nameFilter))
             .AsEnumerable()
             .Reverse()
             .Take(userCount);

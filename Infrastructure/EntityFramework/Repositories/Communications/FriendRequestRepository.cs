@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories.Communications;
@@ -20,6 +21,7 @@ public class FriendRequestRepository:IFriendRequestRepository
         return friendRequest;
     }
 
+    [SuppressMessage("ReSharper.DPA", "DPA0000: DPA issues")]
     public bool IsRequestPresent(string userId, string friendId)
     {
         return _context.FriendRequests

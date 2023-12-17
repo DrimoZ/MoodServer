@@ -21,8 +21,9 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Controllers.Hubs;
+using WebAPI.Controllers;
 using Mapper = Application.AutoMapper.Mapper;
+using WebAPI.Controllers.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // Setup Automapper
 builder.Services.AddAutoMapper(typeof(Mapper));
@@ -75,6 +75,11 @@ builder.Services.AddScoped<UseCaseGetUserByLogin>();
 builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
+builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
+builder.Services.AddScoped<UseCasePatchUser>();
+builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
+builder.Services.AddScoped<UseCaseSetDeletedUser>();
+builder.Services.AddScoped<UseCaseUpdateUserPassword>();
 
 builder.Services.AddScoped<UseCaseGetAccountById>();
 builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
@@ -102,9 +107,10 @@ builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
-builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
 builder.Services.AddScoped<UseCaseGetAllMessageFromGroup>();
+builder.Services.AddScoped<UseCaseGetUserGroupByGroupIdUserId>();
+builder.Services.AddScoped<UseCaseGetUsersFromGroup>();
 
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
@@ -187,6 +193,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Dev");
 app.UseAuthentication();
 app.UseRouting();
+
 app.UseAuthorization();
     
 app.UseEndpoints(endpoint =>
@@ -194,7 +201,7 @@ app.UseEndpoints(endpoint =>
     endpoint.MapHub<ChatHub>("/api/v1/message");
 });
 
-app.MapControllers();
 
+app.MapControllers();
 
 app.Run();

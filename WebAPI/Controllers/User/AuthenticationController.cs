@@ -14,18 +14,20 @@ namespace WebAPI.Controllers.User;
 public class AuthenticationController: ControllerBase
 {
     private readonly TokenService _tokenService;
+    private readonly IConfiguration _configuration;
     
     private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
     private readonly UseCaseGetUserByLoginAndMail _useCaseGetUserByLoginAndMail;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public AuthenticationController(TokenService tokenService, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail)
+    public AuthenticationController(TokenService tokenService, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, IConfiguration configuration)
     {
         _tokenService = tokenService;
         
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
         _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
+        _configuration = configuration;
     }
     
     
@@ -116,9 +118,9 @@ public class AuthenticationController: ControllerBase
         try
         {
             // Delete the cookie
-            if (Request.Cookies.ContainsKey("MoodSession"))
+            if (Request.Cookies.ContainsKey(_configuration["JwtSettings:CookieName"]!))
             {
-                Response.Cookies.Delete("MoodSession");
+                Response.Cookies.Delete(_configuration["JwtSettings:CookieName"]!);
             }
 
             return Ok();
