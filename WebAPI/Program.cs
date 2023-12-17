@@ -2,7 +2,6 @@ using System.Text;
 using Application.Services.Publication;
 using Application.Services.Users;
 using Application.Services.Utils;
-using Application.UseCases.Accounts;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
 using Application.UseCases.Images;
@@ -21,7 +20,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Controllers;
+
 using Mapper = Application.AutoMapper.Mapper;
 using WebAPI.Controllers.Hubs;
 
@@ -32,8 +31,10 @@ var configs = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.Development.json")
     .Build();
+
 // Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -80,9 +81,6 @@ builder.Services.AddScoped<UseCasePatchUser>();
 builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
 builder.Services.AddScoped<UseCaseSetDeletedUser>();
 builder.Services.AddScoped<UseCaseUpdateUserPassword>();
-
-builder.Services.AddScoped<UseCaseGetAccountById>();
-builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
 
 builder.Services.AddScoped<UseCaseFetchUserPublicationByUser>();
 builder.Services.AddScoped<UseCaseGetPublicationByFriend>();
