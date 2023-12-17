@@ -113,20 +113,9 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
-
-        CreateMap<DbComplexPublication, DbPublication>();
-
+        
+        //DB Complex Publications
         CreateMap<DbPublication, DbComplexPublication>();
-
-        
-
-
-        
-
-
-        CreateMap<DbPublication, DtoOutputPublication>();
-        CreateMap<Publication, DtoOutputPublication>();
-        CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
         
         //Publication Service
         CreateMap<DbComplexPublication, Publication>();
@@ -140,7 +129,10 @@ public class Mapper: Profile
         CreateMap<Publication, DtoOutputDiscoverPublication>();
         CreateMap<PublicationElement, DtoOutputDiscoverPublication.DtoElement>();
 
-
+        // Publications Detail
+        CreateMap<Publication, DtoOutputPublication>();
+        CreateMap<PublicationElement, DtoOutputPublication.DtoOutputElement>();
+        CreateMap<Comment, DtoOutputPublication.DtoOutputComment>();
     }
 
     private void GroupMappings()
