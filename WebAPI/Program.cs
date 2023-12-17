@@ -7,8 +7,8 @@ using Application.UseCases.Groups;
 using Application.UseCases.Images;
 using Application.UseCases.Messages;
 using Application.UseCases.Publications;
+using Application.UseCases.Users.User;
 using Application.UseCases.Users.UserAuthentication;
-using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
@@ -89,9 +89,7 @@ builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
-builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
-builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
 builder.Services.AddScoped<UseCaseGetUsersByFilter>();
 
 builder.Services.AddScoped<UseCaseCreateFriend>();

@@ -1,12 +1,10 @@
-using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseUpdateUserData:IUseCaseWriter<bool, DtoInputUpdateUser>
 {
@@ -28,7 +26,7 @@ public class UseCaseUpdateUserData:IUseCaseWriter<bool, DtoInputUpdateUser>
         entity.Mail = input.Mail;
         entity.Title = input.Title;
         entity.Name = input.Name;
-        Console.WriteLine("oui");
+        
         try
         {
             var account = _accountRepository.FetchById(entity.AccountId);

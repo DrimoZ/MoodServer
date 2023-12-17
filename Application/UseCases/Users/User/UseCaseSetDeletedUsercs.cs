@@ -1,9 +1,7 @@
-using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
-using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseSetDeletedUser: IUseCaseParameterizedQuery<bool, string>
 {

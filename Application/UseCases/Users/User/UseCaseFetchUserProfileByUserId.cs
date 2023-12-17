@@ -1,8 +1,4 @@
-using System.Diagnostics;
-using Application.Dtos.User.UserData;
 using Application.Dtos.User.UserProfile;
-using Application.Services.Users;
-using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Accounts;
@@ -10,22 +6,22 @@ using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Publications;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutputUserProfile, string, string>
 {
-    private readonly IUserService _userService;
+    private readonly IMapper _mapper;
+    
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IPublicationRepository _publicationRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;
-    private readonly IMapper _mapper;
 
-    public UseCaseFetchUserProfileByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IPublicationRepository publicationRepository, IAccountRepository accountRepository, IFriendRequestRepository friendRequestRepository)
+    public UseCaseFetchUserProfileByUserId(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IPublicationRepository publicationRepository, IAccountRepository accountRepository, IFriendRequestRepository friendRequestRepository)
     {
-        _userService = userService;
         _mapper = mapper;
+        
         _userRepository = userRepository;
         _friendRepository = friendRepository;
         _publicationRepository = publicationRepository;

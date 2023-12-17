@@ -22,6 +22,7 @@ public class Publication
     public void Add(Comment comment) { if (_comments.All(f => f.Id != comment.Id)) { _comments.Add(comment); } }
     public void AddRange(IEnumerable<Comment> comments) { foreach (var comment in comments) Add(comment); }
     
+    
     private readonly List<Like> _likes = new();
     public IEnumerable<Like> Likes() { return _likes; }
     public void Add(Like like) { if (_likes.All(p => p.Id != like.Id)) { _likes.Add(like); } }

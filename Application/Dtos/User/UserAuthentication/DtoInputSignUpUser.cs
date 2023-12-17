@@ -88,7 +88,7 @@ public class DtoInputSignUpUser
         return true;
     }
     
-    private bool IsValidEmail(string email)
+    private static bool IsValidEmail(string email)
     {
         try
         {

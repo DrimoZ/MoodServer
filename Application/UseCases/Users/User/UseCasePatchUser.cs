@@ -3,7 +3,7 @@ using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCasePatchUser: IUseCaseWriter<DbUser, string, DtoInputPatchUserPrivacy>
 {
@@ -13,8 +13,7 @@ public class UseCasePatchUser: IUseCaseWriter<DbUser, string, DtoInputPatchUserP
     {
         _userRepository = userRepository;
     }
-
-
+    
     public DbUser Execute(string connectedUserId, DtoInputPatchUserPrivacy patch)
     {
         var user = _userRepository.FetchById(connectedUserId);

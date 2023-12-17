@@ -2,7 +2,7 @@ using System.Drawing;
 using Application.Dtos.Images;
 using Application.Services.Utils;
 using Application.UseCases.Images;
-using Application.UseCases.Users.UserData;
+using Application.UseCases.Users.User;
 using AutoMapper;
 using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.AspNetCore.Authorization;

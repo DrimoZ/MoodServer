@@ -1,16 +1,16 @@
 using Application.Dtos.User.UserData;
 using Application.UseCases.Utils;
 using AutoMapper;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseGetUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUserDiscover>, string, int, string>
 {
     private readonly IMapper _mapper;
+    
     private readonly IUserRepository _userRepository;
     private readonly IFriendRepository _friendRepository;
     private readonly IFriendRequestRepository _friendRequestRepository;

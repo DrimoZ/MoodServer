@@ -28,15 +28,7 @@ public class Mapper: Profile
 
     private void UserMappings()
     {
-        CreateMap<DtoInputSignUpUser, DbAccount>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
-        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-
-        CreateMap<DtoInputCreateUser, DbUser>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.Ignore());
-
         CreateMap<User, DtoOutputProfileUser>();
         
         CreateMap<DbUser, DtoOutputProfileUser>();
@@ -53,7 +45,15 @@ public class Mapper: Profile
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForMember(dest => dest.AccountId, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
-
+        
+        
+        //Account Creation
+        CreateMap<DtoInputSignUpUser, DbAccount>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        CreateMap<DtoInputCreateUser, DbUser>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Role, opt => opt.Ignore());
 
         //User Profile
         CreateMap<DbUser, DtoOutputUserProfile>()
@@ -97,7 +97,6 @@ public class Mapper: Profile
         
         CreateMap<DbAccount, Account>();
         
-        CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
         
     }
 
