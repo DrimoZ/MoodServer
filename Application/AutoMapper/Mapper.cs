@@ -28,11 +28,6 @@ public class Mapper: Profile
 
     private void UserMappings()
     {
-        
-        CreateMap<User, DtoOutputProfileUser>();
-        
-        CreateMap<DbUser, DtoOutputProfileUser>();
-
         CreateMap<DbUser, DtoOutputUser>();
         
         CreateMap<DbUser, User>();
@@ -91,20 +86,13 @@ public class Mapper: Profile
 
     private void AccountMappings()
     {
-        CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
-        
         CreateMap<DbAccount, DtoOutputAccount>();
         
         CreateMap<DbAccount, Account>();
-        
-        
     }
 
     private void PublicationMappings()
     {
-        CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
-
-
         CreateMap<DtoInputCreatePublication, DbComplexPublication>();
         CreateMap<DbPublication, Publication>();
 
@@ -155,6 +143,4 @@ public class Mapper: Profile
             .ForMember(dest => dest.Date, opt => opt.Ignore());
         CreateMap<DbImage, DtoOutputImage>();
     }
-    
-    
 }

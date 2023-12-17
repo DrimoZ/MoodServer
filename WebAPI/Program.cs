@@ -127,14 +127,14 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = configs["JwtSettings:Issuer"],
             ValidAudience = configs["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configs["JwtSettings:SecretKey"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configs["JwtSettings:SecretKey"]!))
         };
 
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                var token = context.Request.Cookies[configs["JwtSettings:CookieName"]];
+                var token = context.Request.Cookies[configs["JwtSettings:CookieName"]!];
 
                 if (string.IsNullOrEmpty(token)) return Task.CompletedTask;
                 context.Token = token;
