@@ -198,7 +198,7 @@ public class UserController: ControllerBase
         {
             if (_useCaseSetDeletedUser.Execute(GetAuthCookieData().UserId))
                 return NoContent();
-
+            
             return NotFound();
         }
         catch (Exception e)
@@ -221,11 +221,6 @@ public class UserController: ControllerBase
             if (!_useCaseUpdateUserPassword.Execute(GetAuthCookieData().UserId, dtoInputUpdateUserPassword))
                 return Forbid();
             
-            if (Request.Cookies.ContainsKey("MoodSession"))
-            {
-                Response.Cookies.Delete("MoodSession");
-            }
-                
             return Ok();
         }
         catch (Exception e)
