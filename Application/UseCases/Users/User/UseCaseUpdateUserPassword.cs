@@ -5,7 +5,7 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.User;
 
-public class UseCaseUpdateUserPassword: IUseCaseWriter<bool, string, DtoInputUpdateUserPassword>
+public class UseCaseUpdateUserPassword: IUseCaseParameterizedWriter<bool, string, DtoInputUpdateUserPassword>
 {
     private readonly IUserRepository _userRepository;
 

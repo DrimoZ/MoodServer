@@ -1,7 +1,7 @@
 using Application.Dtos.Publication;
 using Application.Dtos.User;
 using Application.Services.Publication;
-using Application.Services.Publication.Util;
+using Application.Services.Publications.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories;
@@ -17,15 +17,17 @@ public class UseCaseGetPublicationById:IUseCaseParameterizedQuery<DtoOutputPubli
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IPublicationService _publicationService;
+    private readonly ILikeRepository _likeRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseGetPublicationById(IPublicationRepository publicationRepository, IMapper mapper, IPublicationService publicationService, IUserRepository userRepository, IAccountRepository accountRepository)
+    public UseCaseGetPublicationById(IPublicationRepository publicationRepository, IMapper mapper, IPublicationService publicationService, IUserRepository userRepository, IAccountRepository accountRepository, ILikeRepository likeRepository)
     {
         _publicationRepository = publicationRepository;
         _mapper = mapper;
         _publicationService = publicationService;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
+        _likeRepository = likeRepository;
     }
 
     public DtoOutputPublication Execute(string connectedUserId, int pubId)
@@ -42,6 +44,8 @@ public class UseCaseGetPublicationById:IUseCaseParameterizedQuery<DtoOutputPubli
         dtoPublication.NameAuthor = dbUser.Name;
         dtoPublication.IsFromConnected = connectedUserId == dtoPublication.IdAuthor;
         dtoPublication.IdAuthorImage = _accountRepository.FetchById(dbUser.AccountId).ImageId;
+
+        dtoPublication.HasConnectedLiked = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, pubId) != null;
         
         return dtoPublication;
     }

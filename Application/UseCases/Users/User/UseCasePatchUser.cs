@@ -5,7 +5,7 @@ using Infrastructure.EntityFramework.Repositories.Users;
 
 namespace Application.UseCases.Users.User;
 
-public class UseCasePatchUser: IUseCaseWriter<DbUser, string, DtoInputPatchUserPrivacy>
+public class UseCasePatchUser: IUseCaseParameterizedWriter<DbUser, string, DtoInputPatchUserPrivacy>
 {
     private readonly IUserRepository _userRepository;
 

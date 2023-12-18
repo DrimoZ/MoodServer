@@ -1,4 +1,4 @@
-﻿using Application.Services.Publication.Util;
+﻿using Application.Services.Publications.Util;
 
 namespace Application.Services.Publication;
 

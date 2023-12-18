@@ -6,27 +6,40 @@ using Domain;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
+using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Users.UserAuthentication;
 
-public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignUpUser>
+public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser?, DtoInputSignUpUser>
 {
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
 
 
-    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository)
+    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public DbUser Execute(DtoInputSignUpUser input)
+    public DbUser? Execute(DtoInputSignUpUser input)
     {
         var id = "";
-        
+        try
+        {
+            _userRepository.FetchByLoginAndMail(input.Login, input.Mail);
+            throw new Exception("Mail or Login already used");
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
         //Create a dbAccount 
         var dbAccount = _mapper.Map<DbAccount>(input);
         
@@ -65,7 +78,21 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
         dbUser.Role = (int)EUserRole.User;
         
         //Adding Account and User to DB
-        _accountRepository.Create(dbAccount);
-        return _userRepository.Create(dbUser);
+        _unitOfWork.BeginTransaction();
+        
+        try
+        {
+            _accountRepository.Create(dbAccount);
+            dbUser = _userRepository.Create(dbUser);
+        }
+        catch (Exception e)
+        {
+            _unitOfWork.Rollback();
+            return null;
+        }
+
+        
+        _unitOfWork.Commit();
+        return dbUser;
     }
 }

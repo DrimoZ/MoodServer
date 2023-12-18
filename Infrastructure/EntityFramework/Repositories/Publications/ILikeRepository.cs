@@ -9,4 +9,6 @@ public interface ILikeRepository
     DbLike FetchById(int likeId);
     IEnumerable<DbLike> FetchLikesByPublicationId(int pubId);
     int FetchLikeCountByPublicationId(int pubId);
+    DbLike? FetchLikeByUserAndPublication(string userId, int publicationId);
+    bool UpdateDate(int likeId);
 }

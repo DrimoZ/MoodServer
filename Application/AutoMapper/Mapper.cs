@@ -24,6 +24,8 @@ public class Mapper: Profile
         PublicationMappings();
         GroupMappings();
         MessageMappings();
+        CommentMappings();
+        LikeMappings();
     }
 
     private void UserMappings()
@@ -142,5 +144,25 @@ public class Mapper: Profile
         CreateMap<DtoInputImage, DbImage>()
             .ForMember(dest => dest.Date, opt => opt.Ignore());
         CreateMap<DbImage, DtoOutputImage>();
+    }
+
+    private void CommentMappings()
+    {
+        // Publication Service
+        CreateMap<DbComment, Comment>()
+            .BeforeMap((s, d) => d.IdAuthor = s.IdUser);
+        
+        // Comment Publication
+        CreateMap<DtoInputCommentPublication, DbComment>();
+        
+        // Get Comments From Publication
+        CreateMap<DbComment, DtoOutputPublicationComment>()
+            .BeforeMap((s, d) => d.IdAuthor = s.IdUser);
+    }
+    
+    private void LikeMappings()
+    {
+        // like Publication
+        CreateMap<DtoInputLikePublication, DbLike>();
     }
 }

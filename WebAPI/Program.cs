@@ -1,5 +1,6 @@
 using System.Text;
 using Application.Services.Publication;
+using Application.Services.Publications;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
@@ -87,6 +88,10 @@ builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
+builder.Services.AddScoped<UseCaseLikePublication>();
+builder.Services.AddScoped<UseCaseCommentPublication>();
+builder.Services.AddScoped<UseCaseDeleteCommentInPublicationById>();
+builder.Services.AddScoped<UseCaseGetCommentsByPublicationId>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();

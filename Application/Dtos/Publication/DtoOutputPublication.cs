@@ -30,7 +30,8 @@ public class DtoOutputPublication
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
-        public int IdUserImage { get; set; }
-        public string NameUser { get; set; }
+        public int IdAuthorImage { get; set; }
+        public string NameAuthor { get; set; }
+        public string IdAuthor { get; set; }
     }
 }

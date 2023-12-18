@@ -28,7 +28,6 @@ public class AccountRepository:IAccountRepository
     public DbAccount Create(DbAccount account)
     {
         _context.Accounts.Add(account);
-        _context.SaveChanges();
         return account;  
     }
 
