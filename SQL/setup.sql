@@ -21,8 +21,8 @@ CREATE TABLE accounts (
 
 CREATE TABLE users (
     user_id CHAR(32) PRIMARY KEY,
-    user_mail NVARCHAR(255) UNIQUE NOT NULL,
-    user_login NVARCHAR(255) UNIQUE NOT NULL,
+    user_mail NVARCHAR(255) NOT NULL,
+    user_login NVARCHAR(255) NOT NULL,
     user_name NVARCHAR(255) NOT NULL,
     user_password NVARCHAR(255) NOT NULL,
     user_role INT NOT NULL,
