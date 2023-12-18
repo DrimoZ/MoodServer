@@ -13,6 +13,8 @@ public class CommentRepository: ICommentRepository
 
     public DbComment Create(DbComment comment)
     {
+        comment.Date = DateTime.Now;
+        
         _context.Comments.Add(comment);
         _context.SaveChanges();
         return comment;
@@ -44,14 +46,14 @@ public class CommentRepository: ICommentRepository
     public IEnumerable<DbComment> FetchCommentsByPublicationId(int pubId)
     { 
         return _context.Comments
-            .Where(e => e.PublicationId == pubId)
+            .Where(e => e.IdPublication == pubId)
             .ToList();
     }
     
     public int FetchCommentCountByPublicationId(int pubId)
     {
         var count = _context.Comments
-            .Count(l => l.PublicationId == pubId);
+            .Count(l => l.IdPublication == pubId);
         
         return count;
     }

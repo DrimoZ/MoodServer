@@ -1,10 +1,13 @@
-﻿using Application.Services.Publication.Util;
+﻿using Application.Services.Publication;
+using Application.Services.Publications.Util;
 using AutoMapper;
+using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
+using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Publications;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.Services.Publication;
+namespace Application.Services.Publications;
 
 public class PublicationService: IPublicationService
 {
@@ -15,8 +18,9 @@ public class PublicationService: IPublicationService
     private readonly ILikeRepository _likeRepository;
     private readonly ICommentRepository _commentRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IAccountRepository _accountRepository;
 
-    public PublicationService(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository elementRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IUserRepository userRepository)
+    public PublicationService(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository elementRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IUserRepository userRepository, IAccountRepository accountRepository)
     {
         _mapper = mapper;
         _publicationRepository = publicationRepository;
@@ -24,6 +28,7 @@ public class PublicationService: IPublicationService
         _commentRepository = commentRepository;
         _likeRepository = likeRepository;
         _userRepository = userRepository;
+        _accountRepository = accountRepository;
     }
     
     public IEnumerable<Domain.Publication> FetchPublicationsByUserId(string userId)
@@ -54,10 +59,19 @@ public class PublicationService: IPublicationService
             switch (attribute)
             {
                 case EPublicationFetchAttribute.Comments:
+                    var dbComments = _commentRepository.FetchCommentsByPublicationId(id);
+                    var comments = dbComments.Select(dbComment => _mapper.Map<Comment>(dbComment)).ToList();
+
+                    foreach (var comment in comments)
+                    {
+                        var dbUser = _userRepository.FetchById(comment.IdAuthor);
+                        var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
+
+                        comment.NameAuthor = dbUser.Name;
+                        comment.IdAuthorImage = dbAccount.ImageId;
+                    }
                     
-                    break;
-                case EPublicationFetchAttribute.Likes:
-                    
+                    publication.AddRange(comments);
                     break;
                 
                 default:

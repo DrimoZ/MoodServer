@@ -9,7 +9,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Users.User;
 
-public class UseCaseUpdateUserProfilePicture:IUseCaseWriter<bool, string, DtoInputImage>
+public class UseCaseUpdateUserProfilePicture:IUseCaseParameterizedWriter<bool, string, DtoInputImage>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;

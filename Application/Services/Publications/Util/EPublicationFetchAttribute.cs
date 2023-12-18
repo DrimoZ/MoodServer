@@ -1,6 +1,6 @@
-﻿namespace Application.Services.Publication.Util;
+﻿namespace Application.Services.Publications.Util;
 
 public enum EPublicationFetchAttribute
 {
-    Comments, Likes
+    Comments
 }

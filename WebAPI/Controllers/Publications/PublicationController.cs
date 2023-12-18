@@ -4,7 +4,7 @@ using Application.UseCases.Publications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers;
+namespace WebAPI.Controllers.Publications;
 
 [ApiController]
 [Route("api/v1/publication")]
@@ -13,6 +13,10 @@ public class PublicationController: ControllerBase
 {
     private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
     private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
+    private readonly UseCaseLikePublication _useCaseLikePublication;
+    private readonly UseCaseCommentPublication _useCaseCommentPublication;
+    private readonly UseCaseDeleteCommentInPublicationById _useCaseDeleteCommentInPublicationById;
+    private readonly UseCaseGetCommentsByPublicationId _useCaseGetCommentsByPublicationId;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
@@ -20,11 +24,15 @@ public class PublicationController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId)
     {
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _tokenService = tokenService;
         _configuration = configuration;
+        _useCaseLikePublication = useCaseLikePublication;
+        _useCaseCommentPublication = useCaseCommentPublication;
+        _useCaseDeleteCommentInPublicationById = useCaseDeleteCommentInPublicationById;
+        _useCaseGetCommentsByPublicationId = useCaseGetCommentsByPublicationId;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
@@ -35,27 +43,84 @@ public class PublicationController: ControllerBase
     {
         return _tokenService.GetAuthCookieData(HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!).UserId;
     }
-
-    /*[HttpGet("{userId}")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputPublication> GetPublicationByUserId(string userId)
-    {
-        return Ok(_useCaseFetchUserPublicationByUser.Execute(userId, userId));
-    }
-    
-    [HttpGet("/newsfeed/{userId}")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputPublication> GetPublicationByFriend(string userId)
-    {
-        return Ok(_useCaseGetPublicationByFriend.Execute(userId));
-    }*/
     
     [HttpGet("{publicationId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputPublication> GetPublicationById(int publicationId)
     {
-        return Ok(_useCaseGetPublicationById.Execute(GetConnectedUserId(), publicationId));
+        try
+        {
+            return Ok(_useCaseGetPublicationById.Execute(GetConnectedUserId(), publicationId));
+        }
+        catch (Exception e)
+        {
+            return NotFound();
+        }
     }
+    
+    [HttpPost("like")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult LikePublicationById(DtoInputLikePublication dto)
+    {
+        try
+        {
+            _useCaseLikePublication.Execute(GetConnectedUserId(), dto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
+    [HttpPost("comment")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult CommentPublicationById([FromBody] DtoInputCommentPublication dto)
+    {
+        try
+        {
+            return Ok(_useCaseCommentPublication.Execute(GetConnectedUserId(), dto));
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
+    [HttpGet("{idPublication:int}/comments")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult GetCommentPublicationById(int idPublication)
+    {
+        try
+        {
+            return Ok(_useCaseGetCommentsByPublicationId.Execute(idPublication));
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
+    [HttpDelete("comment/{idComment:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult DeleteCommentPublicationById(int idComment)
+    {
+        try
+        {
+            _useCaseDeleteCommentInPublicationById.Execute(GetConnectedUserId(), idComment);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+    
     
     /*[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]

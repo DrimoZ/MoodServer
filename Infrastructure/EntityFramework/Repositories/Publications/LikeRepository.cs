@@ -13,6 +13,8 @@ public class LikeRepository: ILikeRepository
 
     public DbLike Create(DbLike like)
     {
+        like.Date = DateTime.Now;
+        
         _context.Likes.Add(like);
         _context.SaveChanges();
         return like;
@@ -44,15 +46,34 @@ public class LikeRepository: ILikeRepository
     public IEnumerable<DbLike> FetchLikesByPublicationId(int pubId)
     { 
         return _context.Likes
-            .Where(e => e.PublicationId == pubId)
+            .Where(e => e.IdPublication == pubId)
             .ToList();
     }
     
     public int FetchLikeCountByPublicationId(int pubId)
     {
         var count = _context.Likes
-            .Count(l => l.PublicationId == pubId);
+            .Count(l => l.IdPublication == pubId);
         
         return count;
+    }
+
+    public DbLike? FetchLikeByUserAndPublication(string userId, int publicationId)
+    {
+        return _context.Likes.FirstOrDefault(l => l.IdPublication == publicationId && l.IdUser == userId);
+    }
+
+    public bool UpdateDate(int likeId)
+    {
+        var entity = _context.Likes.FirstOrDefault(e => e.Id == likeId);
+
+        if (entity == null)
+            return false;
+
+        entity.Date = DateTime.Now;
+        
+        _context.SaveChanges();
+
+        return true;
     }
 }

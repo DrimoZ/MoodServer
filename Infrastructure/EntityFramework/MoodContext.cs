@@ -125,9 +125,8 @@ public class MoodContext: DbContext
             builder.HasKey(like => like.Id);
             builder.Property(like => like.Id).HasColumnName("like_id");
             builder.Property(like => like.Date).HasColumnName("like_date");
-            builder.Property(like => like.Type).HasColumnName("like_type");
-            builder.Property(like => like.PublicationId).HasColumnName("pub_id");
-            builder.Property(like => like.UserId).HasColumnName("user_id");
+            builder.Property(like => like.IdPublication).HasColumnName("pub_id");
+            builder.Property(like => like.IdUser).HasColumnName("user_id");
         });
 
         modelBuilder.Entity<DbComment>(builder =>
@@ -137,9 +136,8 @@ public class MoodContext: DbContext
             builder.Property(cmt => cmt.Id).HasColumnName("cmt_id");
             builder.Property(cmt => cmt.Date).HasColumnName("cmt_date");
             builder.Property(cmt => cmt.Content).HasColumnName("cmt_content");
-            builder.Property(cmt => cmt.IsDeleted).HasColumnName("cmt_isDeleted");
-            builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
-            builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
+            builder.Property(cmt => cmt.IdPublication).HasColumnName("pub_id");
+            builder.Property(cmt => cmt.IdUser).HasColumnName("user_id");
         });
         
         modelBuilder.Entity<DbFriendRequest>(builder =>

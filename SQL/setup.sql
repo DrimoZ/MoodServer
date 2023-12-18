@@ -86,7 +86,6 @@ CREATE TABLE comments (
     cmt_id INT PRIMARY KEY IDENTITY,
     cmt_date DATETIME DEFAULT (GETDATE()),
     cmt_content NVARCHAR(255) NOT NULL,
-    cmt_isDeleted BIT NOT NULL DEFAULT 0,
     pub_id INT FOREIGN KEY REFERENCES publications(pub_id),
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id),
 );
@@ -94,7 +93,6 @@ CREATE TABLE comments (
 CREATE TABLE likes (
     like_id INT PRIMARY KEY IDENTITY,
     like_date DATETIME DEFAULT (GETDATE()),
-    like_type INT NOT NULL,
     pub_id INT FOREIGN KEY REFERENCES publications(pub_id),
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id)
 );
