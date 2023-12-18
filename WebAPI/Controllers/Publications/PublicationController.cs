@@ -1,31 +1,42 @@
 using Application.Dtos.Publication;
+using Application.Services.Utils;
 using Application.UseCases.Publications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/publication")]
+[Authorize]
 public class PublicationController: ControllerBase
 {
     private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
-    private readonly UseCaseGetPublicationByFriend _useCaseGetPublicationByFriend;
     private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
+    
+    private readonly TokenService _tokenService;
+    private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, UseCaseGetPublicationByFriend useCaseGetPublicationByFriend)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration)
     {
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
-        _useCaseGetPublicationByFriend = useCaseGetPublicationByFriend;
+        _tokenService = tokenService;
+        _configuration = configuration;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
         _useCaseGetPublicationById = useCaseGetPublicationById;
     }
+    
+    private string GetConnectedUserId()
+    {
+        return _tokenService.GetAuthCookieData(HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!).UserId;
+    }
 
-    [HttpGet("{userId}")]
+    /*[HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<DtoOutputPublication> GetPublicationByUserId(string userId)
     {
@@ -37,16 +48,16 @@ public class PublicationController: ControllerBase
     public ActionResult<DtoOutputPublication> GetPublicationByFriend(string userId)
     {
         return Ok(_useCaseGetPublicationByFriend.Execute(userId));
-    }
+    }*/
     
-    [HttpGet("{id:int}")]
+    [HttpGet("{publicationId:int}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputPublication> GetPublicationById(int id)
+    public ActionResult<DtoOutputPublication> GetPublicationById(int publicationId)
     {
-        return Ok(_useCaseGetPublicationById.Execute(id));
+        return Ok(_useCaseGetPublicationById.Execute(GetConnectedUserId(), publicationId));
     }
     
-    [HttpPost]
+    /*[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public ActionResult<DtoOutputPublication> Create(DtoInputCreatePublication dto)
     {
@@ -76,6 +87,6 @@ public class PublicationController: ControllerBase
         }
 
         return NotFound();
-    }
+    }*/
 
 }

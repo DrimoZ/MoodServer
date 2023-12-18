@@ -11,13 +11,6 @@ public class UserRepository: IUserRepository
         _context = context;
     }
 
-    public List<DbUser> GetAll()
-    {
-        return _context.Users
-            .Where(u => !u.IsDeleted)
-            .ToList();
-    }
-
     public DbUser Create(DbUser user)
     {
         _context.Users.Add(user);
@@ -87,30 +80,12 @@ public class UserRepository: IUserRepository
 
         return user;
     }
-
-    public DbUser FetchByName(string name)
-    {
-        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Name == name);
-
-        if (user == null) throw new KeyNotFoundException($"userNameNotFound");
-
-        return user;
-    }
     
     public DbUser FetchByLogin(string login)
     {
         var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Login == login);
 
         if (user == null) throw new KeyNotFoundException($"userLoginNotFound");
-
-        return user;
-    }
-    
-    public DbUser FetchByMail(string mail)
-    {
-        var user = _context.Users.Where(u => !u.IsDeleted).FirstOrDefault(u => u.Mail == mail);
-
-        if (user == null) throw new KeyNotFoundException($"userMailNotFound");
 
         return user;
     }

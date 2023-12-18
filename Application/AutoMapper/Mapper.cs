@@ -28,19 +28,6 @@ public class Mapper: Profile
 
     private void UserMappings()
     {
-        CreateMap<DtoInputSignUpUser, DbAccount>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
-        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-
-        CreateMap<DtoInputCreateUser, DbUser>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.Ignore());
-
-        CreateMap<User, DtoOutputProfileUser>();
-        
-        CreateMap<DbUser, DtoOutputProfileUser>();
-
         CreateMap<DbUser, DtoOutputUser>();
         
         CreateMap<DbUser, User>();
@@ -53,7 +40,15 @@ public class Mapper: Profile
             .ForMember(dest => dest.Password, opt => opt.Ignore())
             .ForMember(dest => dest.AccountId, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
-
+        
+        
+        //Account Creation
+        CreateMap<DtoInputSignUpUser, DbAccount>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
+        CreateMap<DtoInputCreateUser, DbUser>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Role, opt => opt.Ignore());
 
         //User Profile
         CreateMap<DbUser, DtoOutputUserProfile>()
@@ -91,21 +86,13 @@ public class Mapper: Profile
 
     private void AccountMappings()
     {
-        CreateMap<Account, DtoOutputProfileUser.DtoOutputAccount>();
-        
         CreateMap<DbAccount, DtoOutputAccount>();
         
         CreateMap<DbAccount, Account>();
-        
-        CreateMap<DbAccount, DtoInputCreateUser.DtoAccount>();
-        
     }
 
     private void PublicationMappings()
     {
-        CreateMap<Publication, DtoOutputProfileUser.DtoOutputPublication>();
-
-
         CreateMap<DtoInputCreatePublication, DbComplexPublication>();
         CreateMap<DbPublication, Publication>();
 
@@ -113,20 +100,9 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
             .ForMember(dest => dest.Date, opt => opt.Ignore());
-
-        CreateMap<DbComplexPublication, DbPublication>();
-
+        
+        //DB Complex Publications
         CreateMap<DbPublication, DbComplexPublication>();
-
-        
-
-
-        
-
-
-        CreateMap<DbPublication, DtoOutputPublication>();
-        CreateMap<Publication, DtoOutputPublication>();
-        CreateMap<PublicationElement, DtoOutputPublication.DtoElements>();
         
         //Publication Service
         CreateMap<DbComplexPublication, Publication>();
@@ -140,7 +116,10 @@ public class Mapper: Profile
         CreateMap<Publication, DtoOutputDiscoverPublication>();
         CreateMap<PublicationElement, DtoOutputDiscoverPublication.DtoElement>();
 
-
+        // Publications Detail
+        CreateMap<Publication, DtoOutputPublication>();
+        CreateMap<PublicationElement, DtoOutputPublication.DtoOutputElement>();
+        CreateMap<Comment, DtoOutputPublication.DtoOutputComment>();
     }
 
     private void GroupMappings()
@@ -164,6 +143,4 @@ public class Mapper: Profile
             .ForMember(dest => dest.Date, opt => opt.Ignore());
         CreateMap<DbImage, DtoOutputImage>();
     }
-    
-    
 }

@@ -63,10 +63,4 @@ public class User
         foreach (var publication in publications)
             Add(publication);
     }
-    
-    public override string ToString()
-    {
-        var friendsString = string.Join("\n\t\t", _friends.Select(f => f.ToString()));
-        return $"User: \n\tId={Id}, \n\tRole={Role}, \n\tLogin={Login}, \n\tMail={Mail}, \n\tName={Name}, \n\tTitle={Title}, \n\tTotalFriends={FriendCount}, \n\tTotalPublications={PublicationCount}, \n\tAccount={Account?.ToString() ?? "No Account"}, \n\tFriends=[{friendsString}]";
-    }
 }

@@ -1,13 +1,10 @@
-using Application.Dtos.User;
 using Application.Dtos.User.UserAuthentication;
 using Application.Services.Utils;
-using Application.UseCases.Accounts;
-using Application.UseCases.Users;
 using Application.UseCases.Users.UserAuthentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers.User;
+namespace WebAPI.Controllers.Users;
 
 [ApiController]
 [Route("api/v1/auth")]
@@ -30,7 +27,6 @@ public class AuthenticationController: ControllerBase
         _configuration = configuration;
     }
     
-    
     [HttpGet("isConnected")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,13 +37,12 @@ public class AuthenticationController: ControllerBase
         return Ok(StatusCodes.Status200OK);
     }
     
-    
     [HttpPost("signIn")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public IActionResult SignIn([FromBody] DtoInputSignInUser model)
+    public IActionResult UserSignIn([FromBody] DtoInputSignInUser model)
     {
         try
         {
@@ -68,14 +63,13 @@ public class AuthenticationController: ControllerBase
         }
     }
     
-    
     [HttpPost("signUp")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public IActionResult SignUp([FromBody] DtoInputSignUpUser model)
+    public IActionResult UserSignUp([FromBody] DtoInputSignUpUser model)
     {
         try
         {
@@ -107,13 +101,12 @@ public class AuthenticationController: ControllerBase
         }
     }
     
-    
     [HttpPost("signOut")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize]
-    public IActionResult SignOut()
+    public IActionResult UserSignOut()
     {
         try
         {
@@ -132,6 +125,7 @@ public class AuthenticationController: ControllerBase
         }
     }
 
+    
     private bool GenerateToken(string login, string role, bool isSessionOnly)
     {
         try
@@ -149,7 +143,7 @@ public class AuthenticationController: ControllerBase
 
             return true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }

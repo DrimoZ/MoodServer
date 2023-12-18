@@ -1,25 +1,22 @@
-using Application.Dtos.User.UserData;
 using Application.Dtos.User.UserProfile;
-using Application.Services.Users;
-using Application.Services.Users.Util;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseFetchUserAccountByUserId: IUseCaseParameterizedQuery<DtoOutputUserAccount, string, string>
 {
-    private readonly IUserService _userService;
+    private readonly IMapper _mapper;
+    
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly IMapper _mapper;
 
-    public UseCaseFetchUserAccountByUserId(IUserService userService, IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository)
+    public UseCaseFetchUserAccountByUserId(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository)
     {
-        _userService = userService;
         _mapper = mapper;
+        
         _userRepository = userRepository;
         _accountRepository = accountRepository;
     }

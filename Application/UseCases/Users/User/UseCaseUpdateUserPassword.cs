@@ -3,7 +3,7 @@ using Application.Services.Utils;
 using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseUpdateUserPassword: IUseCaseWriter<bool, string, DtoInputUpdateUserPassword>
 {

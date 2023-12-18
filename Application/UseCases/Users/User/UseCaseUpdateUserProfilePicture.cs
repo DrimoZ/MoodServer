@@ -7,23 +7,25 @@ using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
 using Infrastructure.EntityFramework.UnitOfWork;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseUpdateUserProfilePicture:IUseCaseWriter<bool, string, DtoInputImage>
 {
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly IImageRepository _imageRepository;
-    private readonly IMapper _mapper;
 
-    public UseCaseUpdateUserProfilePicture(IUnitOfWork unitOfWork, IUserRepository userRepository, IAccountRepository accountRepository, IImageRepository imageRepository, IMapper mapper)
+    public UseCaseUpdateUserProfilePicture(IUnitOfWork unitOfWork, IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IImageRepository imageRepository)
     {
+        _mapper = mapper;
         _unitOfWork = unitOfWork;
+        
         _userRepository = userRepository;
         _accountRepository = accountRepository;
         _imageRepository = imageRepository;
-        _mapper = mapper;
     }
 
     public bool Execute(string connectedUserId, DtoInputImage input)
@@ -39,7 +41,7 @@ public class UseCaseUpdateUserProfilePicture:IUseCaseWriter<bool, string, DtoInp
             account.ImageId = image.Id;
             _accountRepository.Update(account);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             _unitOfWork.Rollback();
             return false;

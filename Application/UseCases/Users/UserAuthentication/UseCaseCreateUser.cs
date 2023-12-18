@@ -1,12 +1,9 @@
 using Application.Dtos.User.UserAuthentication;
-using Application.Services.Users;
-using Application.Services.Users.Util;
 using Application.Services.Utils;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
 
@@ -18,21 +15,17 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
 
-    private readonly IUserService _userService;
 
-    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IUserService userService)
+    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _userService = userService;
     }
 
     public DbUser Execute(DtoInputSignUpUser input)
     {
         var id = "";
-        
-                            //Unit of work => gestion de transactions sur db
         
         //Create a dbAccount 
         var dbAccount = _mapper.Map<DbAccount>(input);
@@ -51,17 +44,16 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
         
         //Create a dto For the user
         var dtoUser = _mapper.Map<DtoInputCreateUser>(input);
-        dtoUser.Account = _mapper.Map<DtoInputCreateUser.DtoAccount>(dbAccount);
+        dtoUser.AccountId = dbAccount.Id;
         dtoUser.Password = BCryptService.HashPassword(dtoUser.Password);
         
         //Create a dbUser
         var dbUser = _mapper.Map<DbUser>(dtoUser);
-        
         try
         {
             //Generate Custom Id
             do { id = IdService.Generate32CharId(EClassType.User); } 
-            while (_userService.FetchById(id, new List<EUserFetchAttribute>()) is { } user1);
+            while (_userRepository.FetchById(id) is { } user1);
         }
         catch (KeyNotFoundException)
         {

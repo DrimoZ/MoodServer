@@ -1,15 +1,13 @@
 using System.Text;
 using Application.Services.Publication;
-using Application.Services.Users;
 using Application.Services.Utils;
-using Application.UseCases.Accounts;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
 using Application.UseCases.Images;
 using Application.UseCases.Messages;
 using Application.UseCases.Publications;
+using Application.UseCases.Users.User;
 using Application.UseCases.Users.UserAuthentication;
-using Application.UseCases.Users.UserData;
 using Infrastructure.EntityFramework;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Communications;
@@ -21,7 +19,7 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using WebAPI.Controllers;
+
 using Mapper = Application.AutoMapper.Mapper;
 using WebAPI.Controllers.Hubs;
 
@@ -32,8 +30,10 @@ var configs = new ConfigurationBuilder()
     .SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("appsettings.Development.json")
     .Build();
+
 // Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -64,15 +64,15 @@ builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Application Services
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPublicationService, PublicationService>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddSingleton<IdService>();
+builder.Services.AddSingleton<BCryptService>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseCreateUser>();
 builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
 builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
-builder.Services.AddScoped<UseCaseGetUserByLogin>();
-builder.Services.AddScoped<UseCaseGetUserByMail>();
 builder.Services.AddScoped<UseCaseUpdateUserData>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
@@ -81,11 +81,7 @@ builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
 builder.Services.AddScoped<UseCaseSetDeletedUser>();
 builder.Services.AddScoped<UseCaseUpdateUserPassword>();
 
-builder.Services.AddScoped<UseCaseGetAccountById>();
-builder.Services.AddScoped<UseCaseCreateAnAccountTODEL>();
-
 builder.Services.AddScoped<UseCaseFetchUserPublicationByUser>();
-builder.Services.AddScoped<UseCaseGetPublicationByFriend>();
 builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
 builder.Services.AddScoped<UseCaseDeletePublication>();
@@ -93,9 +89,7 @@ builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
-builder.Services.AddScoped<UseCaseFetchUserPublications>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
-builder.Services.AddScoped<UseCaseGetUserInfoByLogin>();
 builder.Services.AddScoped<UseCaseGetUsersByFilter>();
 
 builder.Services.AddScoped<UseCaseCreateFriend>();
@@ -133,14 +127,14 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = configs["JwtSettings:Issuer"],
             ValidAudience = configs["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configs["JwtSettings:SecretKey"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configs["JwtSettings:SecretKey"]!))
         };
 
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                var token = context.Request.Cookies[configs["JwtSettings:CookieName"]];
+                var token = context.Request.Cookies[configs["JwtSettings:CookieName"]!];
 
                 if (string.IsNullOrEmpty(token)) return Task.CompletedTask;
                 context.Token = token;
@@ -149,11 +143,6 @@ builder.Services.AddAuthentication(options =>
             },
         };
     });
-
-// Load Services Class
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddSingleton<IdService>();
-builder.Services.AddSingleton<BCryptService>();
 
 // Initialize Loggers
 builder.Services.AddLogging(b =>

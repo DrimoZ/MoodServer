@@ -3,17 +3,19 @@ using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Users;
 
-namespace Application.UseCases.Users.UserData;
+namespace Application.UseCases.Users.User;
 
 public class UseCaseGetUserPrivacySettings: IUseCaseParameterizedQuery<DtoOutputUserPrivacy, string>
 {
-    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    
+    private readonly IUserRepository _userRepository;
 
     public UseCaseGetUserPrivacySettings(IUserRepository userRepository, IMapper mapper)
     {
-        _userRepository = userRepository;
         _mapper = mapper;
+        
+        _userRepository = userRepository;
     }
 
 

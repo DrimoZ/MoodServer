@@ -2,18 +2,17 @@ using Application.Dtos.User.UserAuthentication;
 using Application.Dtos.User.UserData;
 using Application.Services.Utils;
 using Application.UseCases.Publications;
-using Application.UseCases.Users.UserData;
+using Application.UseCases.Users.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers.User;
+namespace WebAPI.Controllers.Users;
 
 [ApiController]
 [Route("api/v1/user")]
 [Authorize]
 public class UserController: ControllerBase
 {
-    private readonly ILogger<UserController> _logger;
     private readonly IConfiguration _configuration;
     private readonly TokenService _tokenService;
 
@@ -21,7 +20,6 @@ public class UserController: ControllerBase
     private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
     private readonly UseCaseFetchUserFriendsByUserId _useCaseFetchUserFriendsByUserId;
     private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
-    private readonly UseCaseGetUserInfoByLogin _useCaseGetUserInfoByLogin;
     private readonly UseCaseGetUsersByFilter _useCaseGetUsersByFilter;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
     private readonly UseCaseGetPublicationsByFilter _useCaseGetPublicationsByFilter;
@@ -30,9 +28,8 @@ public class UserController: ControllerBase
     private readonly UseCaseSetDeletedUser _useCaseSetDeletedUser;
     private readonly UseCaseUpdateUserPassword _useCaseUpdateUserPassword;
 
-    public UserController(ILogger<UserController> logger, IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUserInfoByLogin useCaseGetUserInfoByLogin, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings, UseCaseSetDeletedUser useCaseSetDeletedUser, UseCaseUpdateUserPassword useCaseUpdateUserPassword)
+    public UserController(IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings, UseCaseSetDeletedUser useCaseSetDeletedUser, UseCaseUpdateUserPassword useCaseUpdateUserPassword)
     {
-        _logger = logger;
         _configuration = configuration;
         _tokenService = tokenService;
         
@@ -40,7 +37,6 @@ public class UserController: ControllerBase
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _useCaseFetchUserFriendsByUserId = useCaseFetchUserFriendsByUserId;
         _useCaseUpdateUserData = useCaseUpdateUserData;
-        _useCaseGetUserInfoByLogin = useCaseGetUserInfoByLogin;
         _useCaseGetUsersByFilter = useCaseGetUsersByFilter;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
         _useCaseGetPublicationsByFilter = useCaseGetPublicationsByFilter;
@@ -85,7 +81,6 @@ public class UserController: ControllerBase
         }
     }
    
-   
     [HttpGet("{userId}/account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -98,7 +93,7 @@ public class UserController: ControllerBase
             var data =  GetAuthCookieData();
             return Ok(_useCaseFetchUserAccountByUserId.Execute(data.UserId, userId));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }
@@ -116,7 +111,7 @@ public class UserController: ControllerBase
             var data =  GetAuthCookieData();
             return Ok(_useCaseFetchUserFriendsByUserId.Execute(data.UserId, userId));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return NotFound();
         }
@@ -153,7 +148,6 @@ public class UserController: ControllerBase
         return NotFound();
     }
     
-    
     [HttpPatch]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -163,7 +157,7 @@ public class UserController: ControllerBase
         try
         {
             
-            var user = _useCasePatchUser.Execute(GetAuthCookieData().UserId, patch);
+            _useCasePatchUser.Execute(GetAuthCookieData().UserId, patch);
             return NoContent();
         }
         catch (Exception e)
@@ -208,8 +202,6 @@ public class UserController: ControllerBase
         }
     }
     
-    
-    
     [HttpPost("userPassword")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -229,7 +221,6 @@ public class UserController: ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }
-    
     
     [HttpGet("discover/users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
