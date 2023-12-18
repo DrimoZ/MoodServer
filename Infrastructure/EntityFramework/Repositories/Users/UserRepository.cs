@@ -14,7 +14,6 @@ public class UserRepository: IUserRepository
     public DbUser Create(DbUser user)
     {
         _context.Users.Add(user);
-        _context.SaveChanges();
         return user;
     }
 

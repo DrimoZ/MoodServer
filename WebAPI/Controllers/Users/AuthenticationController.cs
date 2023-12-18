@@ -84,6 +84,10 @@ public class AuthenticationController: ControllerBase
                 //Create User
                 var dbCreatedUser = _useCaseCreateUser.Execute(model);
                 
+                //If User is not created
+                if (dbCreatedUser == null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the user account.");
+                
                 //Verify Password has not changed
                 if (!BCryptService.VerifyPassword(model.Password, dbCreatedUser.Password))
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the user account.");
