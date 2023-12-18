@@ -17,6 +17,7 @@ public class PublicationController: ControllerBase
     private readonly UseCaseCommentPublication _useCaseCommentPublication;
     private readonly UseCaseDeleteCommentInPublicationById _useCaseDeleteCommentInPublicationById;
     private readonly UseCaseGetCommentsByPublicationId _useCaseGetCommentsByPublicationId;
+    private readonly UseCaseGetFriendsPublications _useCaseGetFriendsPublications;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
@@ -24,7 +25,7 @@ public class PublicationController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId, UseCaseGetFriendsPublications useCaseGetFriendsPublications)
     {
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _tokenService = tokenService;
@@ -33,6 +34,7 @@ public class PublicationController: ControllerBase
         _useCaseCommentPublication = useCaseCommentPublication;
         _useCaseDeleteCommentInPublicationById = useCaseDeleteCommentInPublicationById;
         _useCaseGetCommentsByPublicationId = useCaseGetCommentsByPublicationId;
+        _useCaseGetFriendsPublications = useCaseGetFriendsPublications;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
@@ -52,6 +54,21 @@ public class PublicationController: ControllerBase
         try
         {
             return Ok(_useCaseGetPublicationById.Execute(GetConnectedUserId(), publicationId));
+        }
+        catch (Exception e)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpGet("friends")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputPublication> GetFriendsPublications([FromQuery] int publicationCount)
+    {
+        try
+        {
+            return Ok(_useCaseGetFriendsPublications.Execute(GetConnectedUserId(), publicationCount));
         }
         catch (Exception e)
         {

@@ -19,8 +19,9 @@ public class PublicationService: IPublicationService
     private readonly ICommentRepository _commentRepository;
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
+    private readonly IFriendRepository _friendRepository;
 
-    public PublicationService(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository elementRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IUserRepository userRepository, IAccountRepository accountRepository)
+    public PublicationService(IMapper mapper, IPublicationRepository publicationRepository, IPublicationElementRepository elementRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IUserRepository userRepository, IAccountRepository accountRepository, IFriendRepository friendRepository)
     {
         _mapper = mapper;
         _publicationRepository = publicationRepository;
@@ -29,6 +30,7 @@ public class PublicationService: IPublicationService
         _likeRepository = likeRepository;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
+        _friendRepository = friendRepository;
     }
     
     public IEnumerable<Domain.Publication> FetchPublicationsByUserId(string userId)
