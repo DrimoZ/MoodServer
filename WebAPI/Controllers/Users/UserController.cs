@@ -148,11 +148,11 @@ public class UserController: ControllerBase
                 return NoContent();
             }
 
-            return Conflict();
+            return NotFound();
         }
         catch (Exception e)
         {
-            return NotFound(e.Message);
+            return Conflict(e.Message);
         }
     }
     

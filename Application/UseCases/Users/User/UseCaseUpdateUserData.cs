@@ -22,38 +22,31 @@ public class UseCaseUpdateUserData:IUseCaseWriter<bool, DtoInputUpdateUser>
 
     public bool Execute(DtoInputUpdateUser input)
     {
+        _unitOfWork.BeginTransaction();
+        var entity = _userRepository.FetchById(input.Id);
+        
+        if (_userRepository.CheckDuplicatedMail(input.Id, input.Mail))
+            throw new DuplicateNameException("DuplicateMailInDB");
+        
+        entity.Mail = input.Mail;
+        entity.Title = input.Title;
+        entity.Name = input.Name;
+        
         try
         {
-            _userRepository.FetchByLoginOrMail(input.Mail);
-            throw new DuplicateNameException("DuplicateMailInDB");
+            var accountEntity = _accountRepository.FetchById(entity.AccountId);
+            accountEntity.Description = input.Description;
+            accountEntity.BirthDate = input.Birthdate;
+            _accountRepository.Update(accountEntity);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            if (e.Message != "userLoginOrMailNotFound") return false;
-            
-            _unitOfWork.BeginTransaction();
-            var entity = _userRepository.FetchById(input.Id);
-        
-            entity.Mail = input.Mail;
-            entity.Title = input.Title;
-            entity.Name = input.Name;
-        
-            try
-            {
-                var account = _accountRepository.FetchById(entity.AccountId);
-                account.Description = input.Description;
-                account.BirthDate = input.Birthdate;
-                _accountRepository.Update(account);
-            }
-            catch (Exception)
-            {
-                _unitOfWork.Rollback();
-                return false;
-            }
-
-            _userRepository.Update(entity);
-            _unitOfWork.Commit();
-            return true;
+            _unitOfWork.Rollback();
+            return false;
         }
+
+        _userRepository.Update(entity);
+        _unitOfWork.Commit();
+        return true;
     }
 }

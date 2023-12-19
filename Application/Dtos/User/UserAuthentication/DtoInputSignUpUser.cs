@@ -10,7 +10,7 @@ public class DtoInputSignUpUser
     public string Name { get; set; }
     
     [Required] 
-    [MinLength(8, ErrorMessage = "Login must be at least 8 characters long.")]
+    [MinLength(8, ErrorMessage = "The login must be at least 8 characters long.")]
     public string Login { get; set; }
     
 
@@ -20,10 +20,8 @@ public class DtoInputSignUpUser
         get => _mail;
         set
         {
-            if (IsValidEmail(value))
-            {
-                _mail = value;
-            }
+            if (!IsValidEmail(value)) throw new ArgumentException("Invalid Email Format");
+            _mail = value;
         } 
     }
     private string _mail;
@@ -34,10 +32,8 @@ public class DtoInputSignUpUser
         get => _password;
         set
         {
-            if (ValidatePassword(value))
-            {
-                _password = value;
-            }
+            if (!ValidatePassword(value)) throw new ArgumentException("Invalid Password Format");
+            _password = value;
         }
     }
     private string _password;
@@ -50,7 +46,7 @@ public class DtoInputSignUpUser
         { 
             if (value.Date > DateTime.Today.AddYears(-13))
             {
-                throw new ArgumentException("Birthdate must be at least 13 years ago.");
+                throw new ArgumentException("The birthdate must be at least 13 years ago.");
             }
             _birthdate = value; 
         } 
@@ -67,33 +63,35 @@ public class DtoInputSignUpUser
 
         if (!hasLowerChar.IsMatch(password))
         {
-            throw new ArgumentException("Password should contain at least one lower case letter.");
+            throw new ArgumentException("The password should contain at least one lower case letter.");
         }
         if (!hasUpperChar.IsMatch(password))
         {
-            throw new ArgumentException("Password should contain at least one upper case letter.");
+            throw new ArgumentException("The password should contain at least one upper case letter.");
         }
         if (!hasNumber.IsMatch(password))
         {
-            throw new ArgumentException("Password should contain at least one numeric value.");
+            throw new ArgumentException("The password should contain at least one numeric value.");
         }
         if (!hasSymbols.IsMatch(password))
         {
-            throw new ArgumentException("Password should contain at least one special case characters.");
+            throw new ArgumentException("The password should contain at least one special case characters.");
         }
         if (!hasMinimum8Chars.IsMatch(password))
         {
-            throw new ArgumentException("Password should not be less than 8 characters.");
+            throw new ArgumentException("The password should not be less than 8 characters.");
         }
         return true;
     }
     
     private static bool IsValidEmail(string email)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
+
         try
         {
-            var emailAddress = new MailAddress(email);
-            return true;
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase);
         }
         catch
         {

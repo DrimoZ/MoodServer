@@ -1,5 +1,4 @@
-﻿using Application.Services.Publication;
-using Application.Services.Publications.Util;
+﻿using Application.Services.Publications.Util;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbComplexEntities;
@@ -44,6 +43,9 @@ public class PublicationService: IPublicationService
     {
         return _publicationRepository
             .FetchPublicationsByFilter(userId)
+            .Where(publication => _friendRepository.IsFriend(userId, publication.UserId) || 
+                                   (_userRepository.FetchById(publication.UserId).IsPublic &&
+                                    _userRepository.FetchById(publication.UserId).IsPublicationPublic))
             .Where(publication => _userRepository.FetchById(publication.UserId).Name.ToLower().Contains(searchValue))
             .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
     }
