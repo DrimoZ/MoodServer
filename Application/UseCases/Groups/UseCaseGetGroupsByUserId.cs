@@ -13,13 +13,15 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
 {
     private readonly IGroupRepository _groupRepository;
     private readonly IUserGroupRepository _userGroupRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUserGroupRepository userGroupRepository)
+    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUserGroupRepository userGroupRepository, IUserRepository userRepository)
     {
         _groupRepository = groupRepository;
         _mapper = mapper;
         _userGroupRepository = userGroupRepository;
+        _userRepository = userRepository;
     }
 
     public IEnumerable<DtoOutputGroup> Execute(string userId)
@@ -31,6 +33,27 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
             foreach (var usergrp in userGroups)
             {
                 var grp = _mapper.Map<DtoOutputGroup>(_groupRepository.FetchById(usergrp.GroupId));
+                if (grp.Name == null)
+                {
+                    var usergroups = _userGroupRepository.FetchAllByGroupId(grp.Id).ToList();
+                    
+                    if (usergroups.Count() < 3)
+                    {
+                        foreach(var  userGroup in usergroups)
+                        {
+                            if (userGroup.UserId != userId)
+                            {
+                                grp.Name = _userRepository.FetchById(userGroup.UserId).Name;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        grp.Name = "Untitled";
+                    }
+                    
+                }
                 grps.Add(grp);
             }
         }

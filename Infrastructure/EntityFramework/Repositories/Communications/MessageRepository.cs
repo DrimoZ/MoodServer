@@ -23,4 +23,21 @@ public class MessageRepository:IMessageRepository
     {
         return _context.Messages.Where(msg => msg.UserGroupId == userGroupId);
     }
+
+    public IEnumerable<DbMessage> FetchMessageGroup(int groupId, int showCount)
+    {
+        var lastMessages = _context.Messages
+            .Join(
+                _context.UserGroups,
+                message => message.UserGroupId,
+                userGroup => userGroup.Id,
+                (message, userGroup) => new { Message = message, UserGroup = userGroup }
+            )
+            .Where(x => x.UserGroup.GroupId == groupId)
+            .OrderByDescending(x => x.Message.Date)
+            .Take(showCount)
+            .Select(x => x.Message)
+            .ToList();
+        return lastMessages;
+    }
 }

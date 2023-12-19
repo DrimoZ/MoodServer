@@ -17,10 +17,29 @@ public class GroupRepository:IGroupRepository
         return group;
     }
 
+    public bool Delete(DbGroup db)
+    {
+        var dbGroup = _context.Groups.FirstOrDefault(grp => grp.Id == db.Id);
+        if (dbGroup == null) return false;
+        _context.Groups.Remove(dbGroup);
+        _context.SaveChanges();
+        return true;
+    }
+
     public DbGroup FetchById(int id)
     {
         var entity = _context.Groups.FirstOrDefault(g => g.Id == id);
         if (entity == null) throw new KeyNotFoundException("Group cannot be found");
         return entity;
+    }
+
+    public bool UpdateGroup(DbGroup group)
+    {
+        var entity = _context.Groups.FirstOrDefault(g => g.Id == group.Id);
+        if (entity == null) return false;
+        entity.Name = group.Name;
+        entity.ProprioId = group.ProprioId;
+        _context.SaveChanges();
+        return true;
     }
 }

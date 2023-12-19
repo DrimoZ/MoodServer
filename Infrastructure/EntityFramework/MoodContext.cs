@@ -87,6 +87,8 @@ public class MoodContext: DbContext
             builder.Property(grp => grp.Id).HasColumnName("group_id");
             builder.Property(grp => grp.IsDeleted).HasColumnName("group_isDeleted");
             builder.Property(grp => grp.Name).HasColumnName("group_name");
+            builder.Property(grp => grp.IsPrivate).HasColumnName("group_isPrivate");
+            builder.Property(grp => grp.ProprioId).HasColumnName("group_proprio_id");
         });
 
         modelBuilder.Entity<DbUserGroup>(builder =>

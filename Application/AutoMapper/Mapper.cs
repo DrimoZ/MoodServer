@@ -129,6 +129,9 @@ public class Mapper: Profile
             .ForMember(dest => dest.Id, opt =>opt.Ignore())
             .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore());
         CreateMap<DbUserGroup, DtoOutputUserGroup>();
+        CreateMap<DtoInputUpdateGroup, DbGroup>()
+            .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore())
+            .ForMember(dest => dest.IsPrivate, opt =>opt.Ignore());
     }
 
     private void MessageMappings()
