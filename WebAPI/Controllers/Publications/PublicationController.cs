@@ -1,3 +1,4 @@
+using Application.Dtos.Images;
 using Application.Dtos.Publication;
 using Application.Services.Utils;
 using Application.UseCases.Publications;
@@ -138,6 +139,38 @@ public class PublicationController: ControllerBase
         }
     }
     
+    [HttpPost("post")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public  ActionResult ChangeUserProfilePicture([FromForm] List<IFormFile> images, [FromForm] string description)
+    {
+        try
+        {
+            var inputs = new List<DtoInputImage>();
+
+            foreach (var file in images)
+            {
+                var dtoInput = new DtoInputImage();
+                
+                using var memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                dtoInput.Data = memoryStream.ToArray();
+                
+                inputs.Add(dtoInput);
+            }
+
+            _useCaseCreatePublication.Execute(GetConnectedUserId(), inputs, description);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error : " + e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+        
+    }
     
     /*[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]

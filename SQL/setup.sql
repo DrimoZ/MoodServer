@@ -42,6 +42,7 @@ CREATE TABLE friends (
 CREATE TABLE groups (
     group_id INT PRIMARY KEY IDENTITY,
     group_isDeleted BIT NOT NULL DEFAULT 0,
+    group_isPrivate BIT NOT NULL,
     group_name NVARCHAR(255)
 );
 

@@ -95,13 +95,7 @@ public class Mapper: Profile
 
     private void PublicationMappings()
     {
-        CreateMap<DtoInputCreatePublication, DbComplexPublication>();
         CreateMap<DbPublication, Publication>();
-
-        CreateMap<DtoInputCreatePublication, DbPublication>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
-            .ForMember(dest => dest.Date, opt => opt.Ignore());
         
         //DB Complex Publications
         CreateMap<DbPublication, DbComplexPublication>();
@@ -122,6 +116,9 @@ public class Mapper: Profile
         CreateMap<Publication, DtoOutputPublication>();
         CreateMap<PublicationElement, DtoOutputPublication.DtoOutputElement>();
         CreateMap<Comment, DtoOutputPublication.DtoOutputComment>();
+        
+        // Create Publication
+        CreateMap<DbComplexPublication, DbPublication>();
     }
 
     private void GroupMappings()

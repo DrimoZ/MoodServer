@@ -136,16 +136,24 @@ public class UserController: ControllerBase
     }
     
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult Update(DtoInputUpdateUser dto)
     {
-        if (_useCaseUpdateUserData.Execute(dto))
+        try
         {
-            return NoContent();
-        }
+            if (_useCaseUpdateUserData.Execute(dto))
+            {
+                return NoContent();
+            }
 
-        return NotFound();
+            return Conflict();
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
     }
     
     [HttpPatch]
@@ -156,7 +164,6 @@ public class UserController: ControllerBase
     {
         try
         {
-            
             _useCasePatchUser.Execute(GetAuthCookieData().UserId, patch);
             return NoContent();
         }

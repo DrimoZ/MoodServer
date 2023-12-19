@@ -88,7 +88,7 @@ public class PublicationService: IPublicationService
         
         
         var complexPublication = _mapper.Map<DbComplexPublication>(_publicationRepository.FetchById(pubId));
-        complexPublication.Elements = _elementRepository.FetchElementsByPublicationId(pubId);
+        complexPublication.Elements = _elementRepository.FetchElementsByPublicationId(pubId).ToList();
         
         return complexPublication;
     }
