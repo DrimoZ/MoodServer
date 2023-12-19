@@ -6,8 +6,17 @@ namespace Application.Dtos.User.UserAuthentication;
 
 public class DtoInputSignUpUser
 {
-    [Required] 
-    public string Name { get; set; }
+    [Required]
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (value.Length > 128) throw new ArgumentException("The Name must contains less than 128 characters.");
+            _name = value;
+        }
+    }
+    private string _name;
     
     [Required] 
     [MinLength(8, ErrorMessage = "The login must be at least 8 characters long.")]
