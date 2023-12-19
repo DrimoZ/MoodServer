@@ -80,6 +80,10 @@ public class GroupController:ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<IEnumerable<DtoOutputGroup>> FetchGroupByGroupIdUserId(int groupId)
     {
-        return Ok(_useCaseGetUserGroupByGroupIdUserId.Execute(groupId,GetAuthCookieData()));
+        if (_useCaseUpdateGroup.Execute(dtoInputUpdateGroup))
+        {
+            return Ok();
+        }
+        return NotFound();
     }
 }
