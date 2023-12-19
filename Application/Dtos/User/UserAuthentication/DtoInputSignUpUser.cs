@@ -36,6 +36,9 @@ public class DtoInputSignUpUser
     private string _mail;
     
     [Required]
+    [MinLength(8, ErrorMessage = "The password should not be less than 8 characters.")]
+    [MaxLength(32, ErrorMessage = "The password should be less than 32 characters.")]
+
     public string Password
     {
         get => _password;
@@ -67,7 +70,6 @@ public class DtoInputSignUpUser
         var hasNumber = new Regex(@"[0-9]+");
         var hasUpperChar = new Regex(@"[A-Z]+");
         var hasLowerChar = new Regex(@"[a-z]+");
-        var hasMinimum8Chars = new Regex(@".{8,}");
         var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
 
         if (!hasLowerChar.IsMatch(password))
@@ -85,10 +87,6 @@ public class DtoInputSignUpUser
         if (!hasSymbols.IsMatch(password))
         {
             throw new ArgumentException("The password should contain at least one special case characters.");
-        }
-        if (!hasMinimum8Chars.IsMatch(password))
-        {
-            throw new ArgumentException("The password should not be less than 8 characters.");
         }
         return true;
     }
