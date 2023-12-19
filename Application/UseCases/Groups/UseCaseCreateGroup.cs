@@ -1,3 +1,4 @@
+using System.Data;
 using Application.Dtos.Group;
 using Application.UseCases.Utils;
 using AutoMapper;
@@ -28,16 +29,47 @@ public class UseCaseCreateGroup:IUseCaseParameterizedWriter<DbGroup, DtoInputCre
     public DbGroup Execute(DtoInputCreateGroup input, IEnumerable<string> userIds)
     {
         _unitOfWork.BeginTransaction();
-
         var group = _mapper.Map<DbGroup>(input);
+        var enumerable = userIds as string[] ?? userIds.ToArray();
+        if (enumerable.Count() == 2)
+        {
+            IEnumerable<DbUser> users = new DbUser[] { };
+            foreach (var userId in enumerable)
+            {
+                try
+                {
+                    users = users.Append(_userRepository.FetchById(userId)).ToList();
+                    var commonGroupId = _userGroupRepository.GetCommonGroups(userIds);
+                    foreach (int i in commonGroupId)
+                    {
+                        if (_groupRepository.FetchById(i).IsPrivate == true)
+                            throw new DuplicateNameException("Group already created");
+                    }
+                }
+                catch (Exception e)
+                {
+                    _unitOfWork.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            group.IsPrivate = true;
+        }
+        else
+        {
+            group.ProprioId = userIds.Last();
+            group.IsPrivate = false;
+        }
+        
         _groupRepository.Create(group);
         _unitOfWork.Save();
         
-        foreach (var userId in userIds)
+        foreach (var userId in enumerable)
         {
             try
             {
                 _userRepository.FetchById(userId);
+                
             }
             catch (Exception e)
             {
@@ -52,7 +84,7 @@ public class UseCaseCreateGroup:IUseCaseParameterizedWriter<DbGroup, DtoInputCre
                 GroupId = group.Id
             };
             _userGroupRepository.Create(usrgrp);
-
+            
         }
         _unitOfWork.Save();
         _unitOfWork.Commit();
