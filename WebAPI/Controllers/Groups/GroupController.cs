@@ -60,25 +60,48 @@ public class GroupController:ControllerBase
     }
     
     [HttpGet]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<IEnumerable<DtoOutputGroup>> FetchGroupByUserId()
+    public ActionResult<IEnumerable<DtoOutputGroup>> FetchGroupsByUserId()
     {
-        return Ok(_useCaseGetGroupsByUserId.Execute(GetAuthCookieData()));
+        return Ok(_useCaseGetGroupsByUserId.Execute(ConnectedUserId()));
     }
     
     [HttpGet("userFromGroup/{groupId:int}")]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<IEnumerable<DtoOutputGroup>> FetchUsersFromGroup(int groupId)
     {
         return Ok(_useCaseGetUsersFromGroup.Execute( groupId ));
     }
-    
     [HttpGet("{groupId:int}")]
-    [Authorize]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<IEnumerable<DtoOutputGroup>> FetchGroupByGroupIdUserId(int groupId)
+    public ActionResult<IEnumerable<DtoOutputUserGroup>> FetchById(int groupId)
+    {
+        return Ok(_useCaseGetGroupById.Execute(groupId));
+    }
+    
+    [HttpGet("userGroup/{groupId:int}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<IEnumerable<DtoOutputUserGroup>> FetchUserGroupByGroupIdUserId(int groupId)
+    {
+        return Ok(_useCaseGetUserGroupByGroupIdUserId.Execute(groupId,ConnectedUserId()));
+    }
+
+    [HttpDelete("{groupId:int}")]
+    public ActionResult RemoveUserFromGroup(int groupId)
+    {
+        return Ok(_useCaseQuitGroup.Execute(groupId, ConnectedUserId()));
+    }
+    [HttpDelete("{groupId:int}/{userId}")]
+    public ActionResult RemoveOtherUserFromGroup(int groupId, string userId)
+    {
+        return Ok(_useCaseQuitGroup.Execute(groupId, userId));
+    }
+    
+
+    [HttpPatch]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult UpdateIsDeleted(DtoInputUpdateGroup dtoInputUpdateGroup)
     {
         if (_useCaseUpdateGroup.Execute(dtoInputUpdateGroup))
         {
