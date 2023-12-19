@@ -25,6 +25,7 @@ public class DtoInputUpdateUser
                 get => _title;
                 set
                 {
+                        if (value == null) return;
                         if (value.Length > 32) throw new ArgumentException("The Title must contains less than 32 characters.");
                         _title = value;
                 }
@@ -55,11 +56,12 @@ public class DtoInputUpdateUser
         }
         private DateTime _birthdate;
         
-        public string Description
+        public string? Description
         {
                 get => _description;
                 set
                 {
+                        if (value == null ) return;
                         if (value.Length > 256) throw new ArgumentException("The description must contains less than 256 characters.");
                         _description = value;
                 }

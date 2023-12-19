@@ -76,6 +76,9 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser?, DtoInputSign
         
         //Apply Role to dbUser
         dbUser.Role = (int)EUserRole.User;
+        dbUser.IsPublic = true;
+        dbUser.IsFriendPublic = true;
+        dbUser.IsPublicationPublic = true;
         
         //Adding Account and User to DB
         _unitOfWork.BeginTransaction();
