@@ -1,6 +1,6 @@
 using Application.Dtos.Publication;
 using Application.Dtos.User.UserProfile;
-using Application.Services.Publication;
+using Application.Services.Publications;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Users;
