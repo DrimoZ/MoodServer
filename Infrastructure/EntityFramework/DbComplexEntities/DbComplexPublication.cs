@@ -13,5 +13,5 @@ public class DbComplexPublication
     
     public bool IsDeleted { get; set; }
     
-    public IEnumerable<DbPublicationElement> Elements { get; set; }
+    public List<DbPublicationElement> Elements { get; set; }
 }

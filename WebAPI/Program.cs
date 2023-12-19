@@ -92,6 +92,7 @@ builder.Services.AddScoped<UseCaseLikePublication>();
 builder.Services.AddScoped<UseCaseCommentPublication>();
 builder.Services.AddScoped<UseCaseDeleteCommentInPublicationById>();
 builder.Services.AddScoped<UseCaseGetCommentsByPublicationId>();
+builder.Services.AddScoped<UseCaseGetFriendsPublications>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();

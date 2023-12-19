@@ -14,8 +14,10 @@ public class ImageRepository:IImageRepository
     public DbImage Create(DbImage image)
     { 
         image.Date = DateTime.Now;
+        
         _context.Images.Add(image);
         _context.SaveChanges();
+        
         return image;
     }
 

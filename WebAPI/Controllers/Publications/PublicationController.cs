@@ -1,3 +1,4 @@
+using Application.Dtos.Images;
 using Application.Dtos.Publication;
 using Application.Services.Utils;
 using Application.UseCases.Publications;
@@ -17,6 +18,7 @@ public class PublicationController: ControllerBase
     private readonly UseCaseCommentPublication _useCaseCommentPublication;
     private readonly UseCaseDeleteCommentInPublicationById _useCaseDeleteCommentInPublicationById;
     private readonly UseCaseGetCommentsByPublicationId _useCaseGetCommentsByPublicationId;
+    private readonly UseCaseGetFriendsPublications _useCaseGetFriendsPublications;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
     private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
@@ -24,7 +26,7 @@ public class PublicationController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId)
+    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId, UseCaseGetFriendsPublications useCaseGetFriendsPublications)
     {
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _tokenService = tokenService;
@@ -33,6 +35,7 @@ public class PublicationController: ControllerBase
         _useCaseCommentPublication = useCaseCommentPublication;
         _useCaseDeleteCommentInPublicationById = useCaseDeleteCommentInPublicationById;
         _useCaseGetCommentsByPublicationId = useCaseGetCommentsByPublicationId;
+        _useCaseGetFriendsPublications = useCaseGetFriendsPublications;
         _useCaseCreatePublication = useCaseCreatePublication;
         _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
@@ -52,6 +55,21 @@ public class PublicationController: ControllerBase
         try
         {
             return Ok(_useCaseGetPublicationById.Execute(GetConnectedUserId(), publicationId));
+        }
+        catch (Exception e)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpGet("friends")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputPublication> GetFriendsPublications([FromQuery] int publicationCount)
+    {
+        try
+        {
+            return Ok(_useCaseGetFriendsPublications.Execute(GetConnectedUserId(), publicationCount));
         }
         catch (Exception e)
         {
@@ -121,6 +139,38 @@ public class PublicationController: ControllerBase
         }
     }
     
+    [HttpPost("post")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public  ActionResult ChangeUserProfilePicture([FromForm] List<IFormFile> images, [FromForm] string description)
+    {
+        try
+        {
+            var inputs = new List<DtoInputImage>();
+
+            foreach (var file in images)
+            {
+                var dtoInput = new DtoInputImage();
+                
+                using var memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                dtoInput.Data = memoryStream.ToArray();
+                
+                inputs.Add(dtoInput);
+            }
+
+            _useCaseCreatePublication.Execute(GetConnectedUserId(), inputs, description);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error : " + e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+        
+    }
     
     /*[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
