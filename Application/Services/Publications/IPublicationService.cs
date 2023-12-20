@@ -1,6 +1,6 @@
 ﻿using Application.Services.Publications.Util;
 
-namespace Application.Services.Publication;
+namespace Application.Services.Publications;
 
 public interface IPublicationService
 {

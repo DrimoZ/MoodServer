@@ -97,4 +97,10 @@ public class UserRepository: IUserRepository
             .Reverse()
             .Take(userCount);
     }
+
+    public bool CheckDuplicatedMail(string userId, string mail)
+    {
+        var user = _context.Users.FirstOrDefault(u => !u.IsDeleted && u.Mail == mail);
+        return user != null && userId != user.Id;
+    }
 }

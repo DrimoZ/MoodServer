@@ -1,5 +1,4 @@
 using System.Text;
-using Application.Services.Publication;
 using Application.Services.Publications;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
@@ -108,9 +107,12 @@ builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
-builder.Services.AddScoped<UseCaseGetAllMessageFromGroup>();
+builder.Services.AddScoped<UseCaseGetMessageFromGroup>();
 builder.Services.AddScoped<UseCaseGetUserGroupByGroupIdUserId>();
 builder.Services.AddScoped<UseCaseGetUsersFromGroup>();
+builder.Services.AddScoped<UseCaseQuitGroup>();
+builder.Services.AddScoped<UseCaseGetGroupById>();
+builder.Services.AddScoped<UseCaseUpdateGroup>();
 
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();

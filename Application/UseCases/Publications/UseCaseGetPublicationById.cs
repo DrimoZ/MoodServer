@@ -1,6 +1,6 @@
 using Application.Dtos.Publication;
 using Application.Dtos.User;
-using Application.Services.Publication;
+using Application.Services.Publications;
 using Application.Services.Publications.Util;
 using Application.UseCases.Utils;
 using AutoMapper;

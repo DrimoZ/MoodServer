@@ -1,5 +1,4 @@
 using Application.Dtos.Message;
-using Application.Dtos.UserGroup;
 using Application.Services.Utils;
 using Application.UseCases.Messages;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +10,14 @@ namespace WebAPI.Controllers;
 public class MessageController: ControllerBase
 {
     private readonly UseCaseCreateMessage _useCaseCreateMessage;
-    private readonly UseCaseGetAllMessageFromGroup _useCaseGetAllMessageFromGroup;
+    private readonly UseCaseGetMessageFromGroup _useCaseGetMessageFromGroup;
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public MessageController(UseCaseCreateMessage useCaseCreateMessage, UseCaseGetAllMessageFromGroup useCaseGetAllMessageFromGroup, TokenService tokenService, IConfiguration configuration)
+    public MessageController(UseCaseCreateMessage useCaseCreateMessage, UseCaseGetMessageFromGroup useCaseGetMessageFromGroup, TokenService tokenService, IConfiguration configuration)
     {
         _useCaseCreateMessage = useCaseCreateMessage;
-        _useCaseGetAllMessageFromGroup = useCaseGetAllMessageFromGroup;
+        _useCaseGetMessageFromGroup = useCaseGetMessageFromGroup;
         _tokenService = tokenService;
         _configuration = configuration;
     }
@@ -36,10 +35,10 @@ public class MessageController: ControllerBase
         return Ok(_useCaseCreateMessage.Execute(message, message.UserGroupId));
     }
     
-    [HttpGet("{groupId:int}")]
+    [HttpGet("{groupId:int}/{showCount:int}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<DtoOutputMessage> FetchByUserGroupId( int  groupId)
+    public ActionResult<DtoOutputMessage> FetchByUserGroupId( int  groupId, int showCount)
     {
-        return Ok(_useCaseGetAllMessageFromGroup.Execute(groupId));
+        return Ok(_useCaseGetMessageFromGroup.Execute(groupId, showCount));
     }
 }
