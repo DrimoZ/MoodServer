@@ -21,6 +21,7 @@ public class UserGroupRepository:IUserGroupRepository
     public DbUserGroup Create(DbUserGroup usrGrp)
     {
         _context.UserGroups.Add(usrGrp);
+        _context.SaveChanges();
         return usrGrp;
     }
 

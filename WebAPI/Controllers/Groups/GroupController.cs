@@ -23,8 +23,9 @@ public class GroupController:ControllerBase
     private readonly IConfiguration _configuration;
     private readonly UseCaseGetGroupById _useCaseGetGroupById;
     private readonly UseCaseUpdateGroup _useCaseUpdateGroup;
+    private readonly UseCaseUpdateGroupMembers _useCaseUpdateGroupMembers;
 
-    public GroupController(UseCaseCreateGroup useCaseCreateGroup, TokenService tokenService, IConfiguration configuration, UseCaseGetGroupsByUserId useCaseGetGroupsByUserId, UseCaseGetUserGroupByGroupIdUserId useCaseGetUserGroupByGroupIdUserId, UseCaseGetUsersFromGroup useCaseGetUsersFromGroup, UseCaseQuitGroup useCaseQuitGroup, UseCaseGetGroupById useCaseGetGroupById, UseCaseUpdateGroup useCaseUpdateGroup)
+    public GroupController(UseCaseCreateGroup useCaseCreateGroup, TokenService tokenService, IConfiguration configuration, UseCaseGetGroupsByUserId useCaseGetGroupsByUserId, UseCaseGetUserGroupByGroupIdUserId useCaseGetUserGroupByGroupIdUserId, UseCaseGetUsersFromGroup useCaseGetUsersFromGroup, UseCaseQuitGroup useCaseQuitGroup, UseCaseGetGroupById useCaseGetGroupById, UseCaseUpdateGroup useCaseUpdateGroup, UseCaseUpdateGroupMembers useCaseUpdateGroupMembers)
     {
         _useCaseCreateGroup = useCaseCreateGroup;
         _tokenService = tokenService;
@@ -35,6 +36,7 @@ public class GroupController:ControllerBase
         _useCaseQuitGroup = useCaseQuitGroup;
         _useCaseGetGroupById = useCaseGetGroupById;
         _useCaseUpdateGroup = useCaseUpdateGroup;
+        _useCaseUpdateGroupMembers = useCaseUpdateGroupMembers;
     }
     
     private string ConnectedUserId()
@@ -108,5 +110,13 @@ public class GroupController:ControllerBase
             return Ok();
         }
         return NotFound();
+    }
+    
+    [HttpPost("userGroup")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult UptadeGroupMember([FromBody] IEnumerable<DtoInputUserGroup> dtoInputUserGroup)
+    {
+        return Ok(_useCaseUpdateGroupMembers.Execute(dtoInputUserGroup));
     }
 }

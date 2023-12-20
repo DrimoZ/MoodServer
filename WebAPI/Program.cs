@@ -1,4 +1,5 @@
 using System.Text;
+using Application.Dtos.Message;
 using Application.Services.Publications;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
@@ -19,9 +20,8 @@ using Infrastructure.EntityFramework.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
+using WebAPI.Hubs;
 using Mapper = Application.AutoMapper.Mapper;
-using WebAPI.Controllers.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +103,7 @@ builder.Services.AddScoped<UseCaseDeleteFriend>();
 builder.Services.AddScoped<UseCaseCreateFriendRequest>();
 builder.Services.AddScoped<UseCaseAcceptFriendRequest>();
 builder.Services.AddScoped<UseCaseRejectFriendRequest>();
+builder.Services.AddScoped<UseCaseDeleteMessageById>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
@@ -113,6 +114,8 @@ builder.Services.AddScoped<UseCaseGetUsersFromGroup>();
 builder.Services.AddScoped<UseCaseQuitGroup>();
 builder.Services.AddScoped<UseCaseGetGroupById>();
 builder.Services.AddScoped<UseCaseUpdateGroup>();
+builder.Services.AddScoped<UseCaseUpdateGroupMembers>();
+
 
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
