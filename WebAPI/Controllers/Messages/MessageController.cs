@@ -15,14 +15,16 @@ public class MessageController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
     private readonly UseCaseDeleteMessageById _useCaseDeleteMessageById;
+    private readonly UseCaseSetMessageIsDeleted _useCaseSetMessageIsDeleted;
 
-    public MessageController(UseCaseCreateMessage useCaseCreateMessage, UseCaseGetMessageFromGroup useCaseGetMessageFromGroup, TokenService tokenService, IConfiguration configuration, UseCaseDeleteMessageById useCaseDeleteMessageById)
+    public MessageController(UseCaseCreateMessage useCaseCreateMessage, UseCaseGetMessageFromGroup useCaseGetMessageFromGroup, TokenService tokenService, IConfiguration configuration, UseCaseDeleteMessageById useCaseDeleteMessageById, UseCaseSetMessageIsDeleted useCaseSetMessageIsDeleted)
     {
         _useCaseCreateMessage = useCaseCreateMessage;
         _useCaseGetMessageFromGroup = useCaseGetMessageFromGroup;
         _tokenService = tokenService;
         _configuration = configuration;
         _useCaseDeleteMessageById = useCaseDeleteMessageById;
+        _useCaseSetMessageIsDeleted = useCaseSetMessageIsDeleted;
     }
     
     private string GetAuthCookieData()
@@ -50,5 +52,12 @@ public class MessageController: ControllerBase
     public ActionResult<DtoOutputMessage> DeleteByUd(int id)
     {
         return Ok(_useCaseDeleteMessageById.Execute(id));
+    }
+    
+    [HttpPatch("delete")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<DtoOutputMessage> SetMessageIsDeletedByUd([FromBody] int id)
+    {
+        return Ok(_useCaseSetMessageIsDeleted.Execute(id));
     }
 }

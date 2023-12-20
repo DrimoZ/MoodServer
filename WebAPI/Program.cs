@@ -104,6 +104,7 @@ builder.Services.AddScoped<UseCaseCreateFriendRequest>();
 builder.Services.AddScoped<UseCaseAcceptFriendRequest>();
 builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 builder.Services.AddScoped<UseCaseDeleteMessageById>();
+builder.Services.AddScoped<UseCaseSetMessageIsDeleted>();
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();

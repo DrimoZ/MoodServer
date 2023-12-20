@@ -49,4 +49,13 @@ public class MessageRepository:IMessageRepository
         _context.SaveChanges();
         return true;
     }
+
+    public bool SetMessageIsDeleted(int i)
+    {
+        var entity = _context.Messages.FirstOrDefault(msg => msg.Id == i);
+        if (entity == null) return false;
+        entity.IsDeleted = true;
+        _context.SaveChanges();
+        return false;
+    }
 }
