@@ -172,36 +172,18 @@ public class PublicationController: ControllerBase
         
     }
     
-    /*[HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    public ActionResult<DtoOutputPublication> Create(DtoInputCreatePublication dto)
-    {
-        var publicationCreated = _useCaseCreatePublication.Execute(dto);
-            
-        return StatusCode(201, publicationCreated);
-    }
-    
-    [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult Delete(int id)
-    {
-        if (_useCaseDeletePublication.Execute(id))
-            return NoContent();
-        return NotFound();
-    }
-    
     [HttpPatch]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult UpdateIsDeleted(int id, bool isDeleted)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult UpdateIsDeleted([FromBody] int publicationId)
     {
-        if (_useCaseSetPublicationDeleted.Execute(id, isDeleted))
+        Console.WriteLine(publicationId);
+        if (_useCaseSetPublicationDeleted.Execute(publicationId))
         {
             return Ok();
         }
 
         return NotFound();
-    }*/
+    }
 
 }

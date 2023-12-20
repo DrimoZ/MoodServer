@@ -4,7 +4,7 @@ using Infrastructure.EntityFramework.Repositories.Publications;
 
 namespace Application.UseCases.Publications;
 
-public class UseCaseSetPublicationDeleted:IUseCaseParameterizedWriter<bool, int, bool>
+public class UseCaseSetPublicationDeleted:IUseCaseWriter<bool, int>
 {
     private readonly IPublicationRepository _publicationRepository;
 
@@ -13,8 +13,8 @@ public class UseCaseSetPublicationDeleted:IUseCaseParameterizedWriter<bool, int,
         _publicationRepository = publicationRepository;
     }
 
-    public bool Execute(int id, bool isDeleted)
+    public bool Execute(int id)
     {
-        return _publicationRepository.UpdateDelete(id, isDeleted);
+        return _publicationRepository.UpdateDelete(id, true);
     }
 }
