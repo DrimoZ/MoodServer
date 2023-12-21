@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Infrastructure.EntityFramework.DbEntities;
 
 namespace Infrastructure.EntityFramework.Repositories.Publications;
@@ -28,7 +29,6 @@ public class PublicationRepository:IPublicationRepository
     public bool UpdateDelete(int id, bool isDeleted)
     {
         var entity = FetchById(id);
-        if (entity == null) throw new KeyNotFoundException("PublicationIdNotFound");
         entity.IsDeleted = true;
         _context.SaveChanges();
         return true;
@@ -37,7 +37,7 @@ public class PublicationRepository:IPublicationRepository
 
     public bool Delete(int id)
     {
-        var entity = _context.Publications.FirstOrDefault(e => e.Id == id);
+        var entity = _context.Publications.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
 
         if (entity == null)
             return false;
@@ -51,22 +51,21 @@ public class PublicationRepository:IPublicationRepository
     public IEnumerable<DbPublication> FetchUserPublications(string userId)
     {
         return _context.Publications
-            .Where(p => p.UserId == userId)
+            .Where(p => p.UserId == userId && !p.IsDeleted)
             .ToList();
     }
 
     public int FetchPublicationCount(string userId)
     {
         var count = _context.Publications
-            .Count(p => p.UserId == userId);
+            .Count(p => p.UserId == userId && !p.IsDeleted);
         
         return count;
     }
-    
     public DbPublication FetchById(int id)
     {
         var entity = _context.Publications
-            .FirstOrDefault(pub => pub.Id == id);
+            .FirstOrDefault(pub => pub.Id == id && !pub.IsDeleted);
         
         if (entity == null) throw new KeyNotFoundException("PublicationNotFound");
 
@@ -76,7 +75,7 @@ public class PublicationRepository:IPublicationRepository
     public IEnumerable<DbPublication> FetchPublicationsByFilter(string userIdToIgnore)
     {
         return _context.Publications
-            .Where(pub => pub.UserId != userIdToIgnore);
+            .Where(pub => pub.UserId != userIdToIgnore && !pub.IsDeleted);
     }
 
 }
