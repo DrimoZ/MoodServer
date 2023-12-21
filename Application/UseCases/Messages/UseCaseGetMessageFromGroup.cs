@@ -42,7 +42,8 @@ public class UseCaseGetMessageFromGroup:IUseCaseParameterizedQuery<IEnumerable<D
                 Date = dbMessage.Date,
                 Id = dbMessage.Id,
                 Content = dbMessage.Content,
-                ImageId = account.ImageId
+                ImageId = account.ImageId,
+                IsDeleted = dbMessage.IsDeleted
             };
             messages.Add(msgToAdd);
         }

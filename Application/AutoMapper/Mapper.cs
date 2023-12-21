@@ -132,6 +132,8 @@ public class Mapper: Profile
         CreateMap<DtoInputUpdateGroup, DbGroup>()
             .ForMember(dest => dest.IsDeleted, opt =>opt.Ignore())
             .ForMember(dest => dest.IsPrivate, opt =>opt.Ignore());
+        CreateMap<DtoInputUserGroup, DbUserGroup>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 
     private void MessageMappings()

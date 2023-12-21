@@ -40,4 +40,22 @@ public class MessageRepository:IMessageRepository
             .ToList();
         return lastMessages;
     }
+
+    public bool Delete(int id)
+    {
+        var entity = _context.Messages.FirstOrDefault(msg => msg.Id == id);
+        if (entity == null) return false;
+        _context.Messages.Remove(entity);
+        _context.SaveChanges();
+        return true;
+    }
+
+    public bool SetMessageIsDeleted(int i)
+    {
+        var entity = _context.Messages.FirstOrDefault(msg => msg.Id == i);
+        if (entity == null) return false;
+        entity.IsDeleted = true;
+        _context.SaveChanges();
+        return false;
+    }
 }
