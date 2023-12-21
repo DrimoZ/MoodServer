@@ -44,11 +44,11 @@ public class UserGroupRepository:IUserGroupRepository
         return entity;
     }
     
-    public bool DeleteUserFromGroup(DbUserGroup userGroup)
+    public bool ToggleUserQuitGroup(DbUserGroup userGroup)
     {
         var entity = _context.UserGroups.FirstOrDefault(userGroups => userGroups.Id == userGroup.Id); 
-        if (entity == null) return false; 
-        _context.UserGroups.Remove(userGroup);
+        if (entity == null) return false;
+        entity.HasLeft = !entity.HasLeft;
         _context.SaveChanges();
         return true;
     }

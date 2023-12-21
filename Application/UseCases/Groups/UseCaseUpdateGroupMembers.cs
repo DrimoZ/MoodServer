@@ -33,10 +33,20 @@ public class UseCaseUpdateGroupMembers: IUseCaseWriter<IEnumerable<DtoOutputUser
         {
             foreach (var dtoInputUserGroup in input)
             {
-                _groupRepository.FetchById(dtoInputUserGroup.GroupId);
-                _userRepository.FetchById(dtoInputUserGroup.UserId);
-                var entity = _userGroupRepository.Create(_mapper.Map<DbUserGroup>(dtoInputUserGroup));
-                output = output.Append(_mapper.Map<DtoOutputUserGroup>(entity));
+                try
+                {
+                    var userGroup = 
+                        _userGroupRepository.FetchByGroupIdUserId(dtoInputUserGroup.GroupId, dtoInputUserGroup.UserId);
+                    _userGroupRepository.ToggleUserQuitGroup(userGroup);
+                }
+                catch (Exception e)
+                {
+                    _groupRepository.FetchById(dtoInputUserGroup.GroupId);
+                    _userRepository.FetchById(dtoInputUserGroup.UserId);
+                    var entity = _userGroupRepository.Create(_mapper.Map<DbUserGroup>(dtoInputUserGroup));
+                    output = output.Append(_mapper.Map<DtoOutputUserGroup>(entity));
+                }
+                
             }
         }
         catch (Exception e)

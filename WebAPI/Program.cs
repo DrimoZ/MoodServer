@@ -117,7 +117,6 @@ builder.Services.AddScoped<UseCaseGetGroupById>();
 builder.Services.AddScoped<UseCaseUpdateGroup>();
 builder.Services.AddScoped<UseCaseUpdateGroupMembers>();
 
-
 builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
 

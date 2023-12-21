@@ -32,6 +32,7 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
             var userGroups = _userGroupRepository.FetchAllByUserId(userId);
             foreach (var usergrp in userGroups)
             {
+                if (usergrp.HasLeft) continue;
                 var grp = _mapper.Map<DtoOutputGroup>(_groupRepository.FetchById(usergrp.GroupId));
                 if (grp.Name == null)
                 {

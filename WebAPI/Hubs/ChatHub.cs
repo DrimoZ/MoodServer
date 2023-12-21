@@ -16,16 +16,28 @@ public class ChatHub : Hub
 
     public async Task RemoveMessageFromGroup(DtoOutputGroup group)
     {
-        await Clients.Group(group.Id.ToString()).SendAsync("ReceiveMessage", group);
+        await Clients.Group(group.Id.ToString()).SendAsync("DeletedMessage", group);
     }
     
-    public async Task AddToGroup(string groupName)
+    public async Task AddToGroup(DtoOutputGroup group)
+    {
+        await Clients.Group(group.Id.ToString()).SendAsync("UserHasJoin", group);
+        // await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
+    }
+    
+    public async Task RemoveFromGroup(DtoOutputGroup group)
+    {
+        await Clients.Group(group.Id.ToString()).SendAsync("UserHasLeft", group);
+        // await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left the group {groupName}.");
+    }
+    
+    public async Task AddToNotifGroup(string groupName)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         // await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
     }
     
-    public async Task RemoveFromGroup(string groupName)
+    public async Task RemoveFromNotifGroup(string groupName)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         // await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left the group {groupName}.");

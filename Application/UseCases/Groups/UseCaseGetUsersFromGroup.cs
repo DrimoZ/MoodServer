@@ -21,13 +21,11 @@ public class UseCaseGetUsersFromGroup:IUseCaseParameterizedQuery<IEnumerable<Dto
 
     public IEnumerable<DtoOutputUserFromGroup> Execute(int groupId)
     {
-        Console.WriteLine("ICI");
         var entities = _userGroupRepository.FetchAllByGroupId(groupId);
-        Console.WriteLine("ICI");
         var users = new List<DtoOutputUserFromGroup>();
-        Console.WriteLine("ICI");
         foreach (var dbUserGroup in entities)
         {
+            if (dbUserGroup.HasLeft == true) continue;
             var user = _userRepository.FetchById(dbUserGroup.UserId);
             var account = _accountRepository.FetchById(user.AccountId);
             var dtoOutputUserFromGroup = new DtoOutputUserFromGroup

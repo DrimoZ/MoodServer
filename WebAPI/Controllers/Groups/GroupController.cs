@@ -88,8 +88,8 @@ public class GroupController:ControllerBase
         return Ok(_useCaseGetUserGroupByGroupIdUserId.Execute(groupId,ConnectedUserId()));
     }
 
-    [HttpDelete("{groupId:int}")]
-    public ActionResult RemoveUserFromGroup(int groupId)
+    [HttpPatch("quitGroup")]
+    public ActionResult RemoveUserFromGroup([FromBody] int groupId)
     {
         return Ok(_useCaseQuitGroup.Execute(groupId, ConnectedUserId()));
     }

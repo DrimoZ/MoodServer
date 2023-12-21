@@ -24,9 +24,12 @@ public class UseCaseQuitGroup:IUseCaseParameterizedQuery<bool, int, string>
         {
             return false;
         }
-        _userGroupRepository.DeleteUserFromGroup(userGroup);
         var usergroups = _userGroupRepository.FetchAllByGroupId(group.Id);
-        if (!usergroups.Any()) _groupRepository.Delete(group);
+        
+        if(userGroup.HasLeft == false) _userGroupRepository.ToggleUserQuitGroup(userGroup);
+        
+        if (usergroups.All(grp => grp.HasLeft == true)) _groupRepository.Delete(group);
+        
         else if(userGroup.UserId == group.ProprioId)
         {
             var userGroups = _userGroupRepository.FetchAllByGroupId(group.Id);

@@ -43,11 +43,11 @@ public class UseCaseGetMessageFromGroup:IUseCaseParameterizedQuery<IEnumerable<D
                 Id = dbMessage.Id,
                 Content = dbMessage.Content,
                 ImageId = account.ImageId,
-                IsDeleted = dbMessage.IsDeleted
+                IsDeleted = dbMessage.IsDeleted,
+                HasLeft = userGroup.HasLeft
             };
             messages.Add(msgToAdd);
         }
-        Console.WriteLine("wtf" + messages.Count);
         return messages;
     }
 }

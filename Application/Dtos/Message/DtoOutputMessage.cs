@@ -12,5 +12,7 @@ public class DtoOutputMessage
     public DateTime Date { get; set; }
     public int? ImageId { get; set; }
     public bool IsDeleted { get; set; }
+    
+    public bool HasLeft { get; set; }
 
 }

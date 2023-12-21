@@ -98,6 +98,7 @@ public class MoodContext: DbContext
             builder.Property(usrgrp => usrgrp.Id).HasColumnName("user_group_id");
             builder.Property(usrgrp => usrgrp.UserId).HasColumnName("user_id");
             builder.Property(usrgrp => usrgrp.GroupId).HasColumnName("group_id");
+            builder.Property(usrgrp => usrgrp.HasLeft).HasColumnName("user_has_left");
         });
         
         modelBuilder.Entity<DbMessage>(builder =>
