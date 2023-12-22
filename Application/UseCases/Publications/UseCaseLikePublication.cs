@@ -27,7 +27,6 @@ public class UseCaseLikePublication: IUseCaseParameterizedWriter<bool, string, D
             {
                 var newDbLike = _mapper.Map<DbLike>(dto);
                 newDbLike.UserId = connectedUserId;
-                
                 _likeRepository.Create(newDbLike);
             }
             else
@@ -44,7 +43,6 @@ public class UseCaseLikePublication: IUseCaseParameterizedWriter<bool, string, D
                 _likeRepository.Delete(dbLike.LikeId);
             }
         }
-
 
         return true;
     }

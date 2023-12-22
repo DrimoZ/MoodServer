@@ -53,7 +53,7 @@ public class UseCaseFetchUserFriendsByUserId: IUseCaseParameterizedQuery<DtoOutp
         foreach (var friend in friends)
         {
             friend.IsFriendWithConnected = _friendService.GetFriendStatus(connectedUserId, friend.UserId);
-            friend.CommonFriendCount = friend.UserId == connectedUserId ? -1 : _friendRepository.FetchCommonFriendsCount(connectedUserId, friend.UserId);
+            friend.CommonFriendCount = friend.UserId == connectedUserId ? -1 : _friendRepository.FetchCommonFriendsCount(connectedUserId, friend.UserId) - 1;
         }
 
         dto.Friends = friends;
