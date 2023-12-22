@@ -1,3 +1,4 @@
+using System.Formats.Asn1;
 using Application.Dtos.Message;
 using Application.UseCases.Utils;
 using AutoMapper;
@@ -25,6 +26,7 @@ public class UseCaseCreateMessage:IUseCaseParameterizedWriter<DbMessage, DtoInpu
 
     public DbMessage Execute(DtoInputMessage input, int userGroupId)
     {
+        if (string.IsNullOrEmpty(input.Content)) throw new KeyNotFoundException("No Content");
         _unitOfWork.BeginTransaction();
         try
         {

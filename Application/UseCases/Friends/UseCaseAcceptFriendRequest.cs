@@ -29,7 +29,8 @@ public class UseCaseAcceptFriendRequest: IUseCaseParameterizedWriter<DtoOutputFr
         if (_friendRepository.IsFriend(connectedUserId, friendId) || _friendRepository.IsFriend(friendId, connectedUserId))
             throw new Exception("Users are Already Friends");
 
-        if (!_friendRequestRepository.IsRequestPresent(connectedUserId, friendId))
+        // The friend has emited the request => Swap Parameters
+        if (!_friendRequestRepository.IsRequestPresent(friendId, connectedUserId))
             throw new Exception("Request doesn't exists");
         
         _unitOfWork.BeginTransaction();
@@ -49,8 +50,8 @@ public class UseCaseAcceptFriendRequest: IUseCaseParameterizedWriter<DtoOutputFr
             _friendRepository.Create(dbFriend);
 
             var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, friendId);
-            _friendRequestRepository.SetIsAccepted(request.Id, true);
-            _friendRequestRepository.SetIsDone(request.Id, true);
+            _friendRequestRepository.SetIsAccepted(request.FriendRequestId, true);
+            _friendRequestRepository.SetIsDone(request.FriendRequestId, true);
         }
         catch (Exception e)
         {

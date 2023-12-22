@@ -1,6 +1,6 @@
 using Application.Dtos.Publication;
 using Application.Dtos.User.UserProfile;
-using Application.Services.Publication;
+using Application.Services.Publications;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Users;
@@ -38,6 +38,8 @@ public class UseCaseFetchUserPublicationByUser:IUseCaseParameterizedQuery<DtoOut
         var publications = _publicationService
                 .FetchPublicationsByUserId(profileRequestUserId)
                 .Select(p => _mapper.Map<DtoOutputUserPublications.DtoPublication>(p))
+                .AsEnumerable()
+                .Reverse()
                 .ToList();
 
         dto.Publications = publications;

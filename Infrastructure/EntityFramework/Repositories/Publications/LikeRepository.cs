@@ -13,6 +13,8 @@ public class LikeRepository: ILikeRepository
 
     public DbLike Create(DbLike like)
     {
+        like.LikeDate = DateTime.Now;
+        
         _context.Likes.Add(like);
         _context.SaveChanges();
         return like;
@@ -20,7 +22,7 @@ public class LikeRepository: ILikeRepository
 
     public bool Delete(int likeId)
     {
-        var entity = _context.Likes.FirstOrDefault(e => e.Id == likeId);
+        var entity = _context.Likes.FirstOrDefault(e => e.LikeId == likeId);
 
         if (entity == null)
             return false;
@@ -34,7 +36,7 @@ public class LikeRepository: ILikeRepository
     public DbLike FetchById(int likeId)
     {
         var entity = _context.Likes
-            .FirstOrDefault(e => e.Id == likeId);
+            .FirstOrDefault(e => e.LikeId == likeId);
         
         if (entity == null) throw new KeyNotFoundException("LikeNotFound");
 
@@ -54,5 +56,24 @@ public class LikeRepository: ILikeRepository
             .Count(l => l.PublicationId == pubId);
         
         return count;
+    }
+
+    public DbLike? FetchLikeByUserAndPublication(string userId, int publicationId)
+    {
+        return _context.Likes.FirstOrDefault(l => l.PublicationId == publicationId && l.UserId == userId);
+    }
+
+    public bool UpdateDate(int likeId)
+    {
+        var entity = _context.Likes.FirstOrDefault(e => e.LikeId == likeId);
+
+        if (entity == null)
+            return false;
+
+        entity.LikeDate = DateTime.Now;
+        
+        _context.SaveChanges();
+
+        return true;
     }
 }

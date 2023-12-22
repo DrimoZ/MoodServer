@@ -9,19 +9,19 @@ public class DtoOutputUserPublications
     
     public class DtoPublication
     {
-        public string Id { get; set; }
-        public string Content { get; set; }
-        public DateTime date { get; set; }
+        public string PublicationId { get; set; }
+        public string PublicationContent { get; set; }
+        public DateTime PublicationDate { get; set; }
     
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
 
-        public IEnumerable<DtoElement> Elements { get; set; }
+        public IEnumerable<DtoPublicationElement> Elements { get; set; }
 
-        public class DtoElement
+        public class DtoPublicationElement
         {
-            public int Id { get; set; }
-            public int IdImage { get; set; }
+            public int ElementId { get; set; }
+            public int ImageId { get; set; }
         }
     }
 }

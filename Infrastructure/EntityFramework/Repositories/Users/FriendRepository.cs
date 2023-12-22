@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Infrastructure.EntityFramework.DbEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework.Repositories.Users;
 
@@ -41,17 +42,17 @@ public class FriendRepository: IFriendRepository
             .Where(f => f.UserId == userId)
             .Join(_context.Users,
                 friend => friend.FriendId,
-                user => user.Id,
+                user => user.UserId,
                 (friend, user) => user)
+            .Where(user => !user.IsDeleted)
             .ToList();
-
+        
         return friends;
     }
     
     public bool IsFriend(string userId, string friendId)
     {
-        var friend = _context.Friends.FirstOrDefault(u => u.UserId == userId && u.FriendId == friendId);
-        return friend != null;
+        return _context.Friends.Any(u => u.UserId == userId && u.FriendId == friendId);
     }
     
 
@@ -65,17 +66,19 @@ public class FriendRepository: IFriendRepository
 
     public int FetchFriendCount(string userId)
     {
-        var count = _context.Friends
-            .Count(f => f.UserId == userId);
-        
-        return count;
+        return _context.Friends
+            .Where(f => f.UserId == userId)
+            .Select(f => f.FriendId)
+            .AsNoTracking()
+            .Count();
     }
     
     public int FetchCommonFriendsCount(string userId, string friendId)
     {
         return _context.Friends
-            .Join(_context.Friends, f1 => f1.FriendId, f2 => f2.FriendId, (f1, f2) => new { f1, f2 })
-            .Count(x => x.f1.UserId == userId && x.f2.UserId == friendId);
+            .Where(f => f.UserId == userId || f.FriendId == userId)
+            .GroupBy(f => f.FriendId)
+            .Count(g => _context.Friends.Any(f => f.UserId == friendId && f.FriendId == g.Key));
     }
 }
 

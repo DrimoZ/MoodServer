@@ -11,4 +11,6 @@ public interface IUserGroupRepository
     
     public IEnumerable<DbUserGroup> FetchAllByGroupId(int groupId);
     public DbUserGroup FetchByGroupIdUserId(int groupId, string id);
+    public bool ToggleUserQuitGroup(DbUserGroup userGroups);
+    public IEnumerable<int> GetCommonGroups(IEnumerable<string> userIds);
 }

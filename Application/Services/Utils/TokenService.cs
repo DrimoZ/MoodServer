@@ -48,7 +48,7 @@ public class TokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
     
-    public (string UserId, int Role) GetAuthCookieData(string token)
+    public (string UserId, int UserRole) GetAuthCookieData(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = _configuration["JwtSettings:SecretKey"];

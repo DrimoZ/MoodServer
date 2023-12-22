@@ -21,6 +21,7 @@ public class UserGroupRepository:IUserGroupRepository
     public DbUserGroup Create(DbUserGroup usrGrp)
     {
         _context.UserGroups.Add(usrGrp);
+        _context.SaveChanges();
         return usrGrp;
     }
 
@@ -36,10 +37,29 @@ public class UserGroupRepository:IUserGroupRepository
     }
     
     public DbUserGroup FetchByGroupIdUserId(int groupId, string userId)
-    { Console.WriteLine(userId + " " + groupId);
-       var entity = _context.UserGroups.FirstOrDefault(userGroup =>
+    {
+        var entity = _context.UserGroups.FirstOrDefault(userGroup =>
             userGroup.GroupId == groupId && userGroup.UserId == userId);
-       if (entity == null) throw new KeyNotFoundException("UserGroup cannot be found");
-       return entity;
+        if (entity == null) throw new KeyNotFoundException("UserGroup cannot be found");
+        return entity;
+    }
+    
+    public bool ToggleUserQuitGroup(DbUserGroup userGroup)
+    {
+        var entity = _context.UserGroups.FirstOrDefault(userGroups => userGroups.Id == userGroup.Id); 
+        if (entity == null) return false;
+        entity.HasLeft = !entity.HasLeft;
+        _context.SaveChanges();
+        return true;
+    }
+
+    public IEnumerable<int> GetCommonGroups(IEnumerable<string> userIds)
+    {
+        return _context.UserGroups
+            .Where(ug => userIds.Contains(ug.UserId))
+            .GroupBy(ug => ug.GroupId)
+            .Where(g => g.Select(ug => ug.UserId).Distinct().Count() == userIds.Count())
+            .Select(g => g.Key)
+            .ToList();
     }
 }

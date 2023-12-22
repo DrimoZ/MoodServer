@@ -10,10 +10,10 @@ public class DtoOutputUserFriends
     public class DtoFriend
     {
         public int CommonFriendCount { get; set; }
-        public string Id { get; set; }
-        public int? IdImage { get; set; }
+        public string UserId { get; set; }
+        public int? ImageId { get; set; }
         public int IsFriendWithConnected { get; set; }
-        public string Login { get; set; }
-        public string Name { get; set; }
+        public string UserLogin { get; set; }
+        public string UserName { get; set; }
     }
 }

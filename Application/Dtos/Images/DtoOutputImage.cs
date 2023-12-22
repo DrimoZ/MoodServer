@@ -2,6 +2,6 @@ namespace Application.Dtos.Images;
 
 public class DtoOutputImage
 {
-    public byte[] Data { get; set; }
-    public DateTime Date { get; set; }
+    public byte[] ImageData { get; set; }
+    public DateTime ImageDate { get; set; }
 }

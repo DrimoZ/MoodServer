@@ -1,41 +1,47 @@
 using Application.Dtos.User.UserAuthentication;
-using Application.Services.Users;
-using Application.Services.Users.Util;
 using Application.Services.Utils;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Domain;
 using Infrastructure.EntityFramework.DbEntities;
-using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
+using Infrastructure.EntityFramework.UnitOfWork;
 
 namespace Application.UseCases.Users.UserAuthentication;
 
-public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignUpUser>
+public class UseCaseCreateUser: IUseCaseParameterizedQuery<DtoUserAuthenticate?, DtoInputUserSignUp>
 {
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    
     private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
 
-    private readonly IUserService _userService;
 
-    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IUserService userService)
+    public UseCaseCreateUser(IMapper mapper, IUserRepository userRepository, IAccountRepository accountRepository, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _userService = userService;
+        _unitOfWork = unitOfWork;
     }
 
-    public DbUser Execute(DtoInputSignUpUser input)
+    public DtoUserAuthenticate? Execute(DtoInputUserSignUp inputUser)
     {
         var id = "";
-        
-                            //Unit of work => gestion de transactions sur db
-        
+        try
+        {
+            _userRepository.FetchByLoginAndMail(inputUser.UserLogin, inputUser.UserMail);
+            throw new Exception("Mail or Login already used");
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+
         //Create a dbAccount 
-        var dbAccount = _mapper.Map<DbAccount>(input);
+        var dbAccount = _mapper.Map<DbAccount>(inputUser);
         
         try
         {
@@ -46,34 +52,51 @@ public class UseCaseCreateUser: IUseCaseParameterizedQuery<DbUser, DtoInputSignU
         catch (KeyNotFoundException)
         {
             //Apply Id to dbAccount
-            dbAccount.Id = id;
+            dbAccount.AccountId = id;
         }
         
         //Create a dto For the user
-        var dtoUser = _mapper.Map<DtoInputCreateUser>(input);
-        dtoUser.Account = _mapper.Map<DtoInputCreateUser.DtoAccount>(dbAccount);
-        dtoUser.Password = BCryptService.HashPassword(dtoUser.Password);
+        var dtoUser = _mapper.Map<DtoInputUserCreate>(inputUser);
+        dtoUser.AccountId = dbAccount.AccountId;
+        dtoUser.UserPassword = BCryptService.HashPassword(dtoUser.UserPassword);
         
         //Create a dbUser
         var dbUser = _mapper.Map<DbUser>(dtoUser);
-        
         try
         {
             //Generate Custom Id
             do { id = IdService.Generate32CharId(EClassType.User); } 
-            while (_userService.FetchById(id, new List<EUserFetchAttribute>()) is { } user1);
+            while (_userRepository.FetchById(id) is { } user1);
         }
         catch (KeyNotFoundException)
         {
             //Apply Id to dbUser
-            dbUser.Id = id;
+            dbUser.UserId = id;
         }
         
-        //Apply Role to dbUser
-        dbUser.Role = (int)EUserRole.User;
+        //Apply Role & Privacy to dbUser
+        dbUser.UserRole = (int)EUserRole.User;
+        dbUser.IsPublic = true;
+        dbUser.IsFriendPublic = true;
+        dbUser.IsPublicationPublic = true;
+        
         
         //Adding Account and User to DB
-        _accountRepository.Create(dbAccount);
-        return _userRepository.Create(dbUser);
+        _unitOfWork.BeginTransaction();
+        try
+        {
+            _accountRepository.Create(dbAccount);
+            dbUser = _userRepository.Create(dbUser);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            _unitOfWork.Rollback();
+            return null;
+        }
+
+        
+        _unitOfWork.Commit();
+        return _mapper.Map<DtoUserAuthenticate>(dbUser);
     }
 }

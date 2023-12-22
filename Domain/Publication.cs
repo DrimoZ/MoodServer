@@ -2,16 +2,15 @@ namespace Domain;
 
 public class Publication
 {
-    public int Id { get; set; }
-    public string Content { get; set; }
-    public DateTime Date { get; set; }
-    
+    public int PublicationId { get; set; }
+    public string PublicationContent { get; set; }
+    public DateTime PublicationDate { get; set; }
     
     private int _commentCount;
-    public int CommentCount { get => _commentCount == 0 ? _comments.Count : _commentCount; set { if (_commentCount == 0 && value > 0) _commentCount = value; } }
+    public int CommentCount { get => _commentCount == 0 ? _comments.Count : _commentCount; set { if (value > 0) _commentCount = value; } }
 
     private int _likeCount;
-    public int LikeCount { get => _likeCount == 0 ? _likes.Count : _likeCount; set { if (_likeCount == 0 && value > 0) _likeCount = value; } }
+    public int LikeCount { get => _likeCount; set { if (_likeCount == 0 && value > 0) _likeCount = value; } }
     
     
     public IEnumerable<PublicationElement> Elements { get; set; }
@@ -19,11 +18,6 @@ public class Publication
     
     private readonly List<Comment> _comments = new();
     public IEnumerable<Comment> Comments() { return _comments; }
-    public void Add(Comment comment) { if (_comments.All(f => f.Id != comment.Id)) { _comments.Add(comment); } }
+    public void Add(Comment comment) { if (_comments.All(f => f.CommentId != comment.CommentId)) { _comments.Add(comment); } }
     public void AddRange(IEnumerable<Comment> comments) { foreach (var comment in comments) Add(comment); }
-    
-    private readonly List<Like> _likes = new();
-    public IEnumerable<Like> Likes() { return _likes; }
-    public void Add(Like like) { if (_likes.All(p => p.Id != like.Id)) { _likes.Add(like); } }
-    public void AddRange(IEnumerable<Like> likes) { foreach (var like in likes) Add(like); }
 }

@@ -11,5 +11,8 @@ public class DtoOutputMessage
     public int CommId { get; set; }
     public DateTime Date { get; set; }
     public int? ImageId { get; set; }
+    public bool IsDeleted { get; set; }
     
+    public bool HasLeft { get; set; }
+
 }

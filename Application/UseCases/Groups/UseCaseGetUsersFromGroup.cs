@@ -1,6 +1,7 @@
 using Application.Dtos.Group;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Domain.Exception;
 using Infrastructure.EntityFramework.Repositories.Accounts;
 using Infrastructure.EntityFramework.Repositories.Users;
 
@@ -21,23 +22,30 @@ public class UseCaseGetUsersFromGroup:IUseCaseParameterizedQuery<IEnumerable<Dto
 
     public IEnumerable<DtoOutputUserFromGroup> Execute(int groupId)
     {
-        Console.WriteLine("ICI");
         var entities = _userGroupRepository.FetchAllByGroupId(groupId);
-        Console.WriteLine("ICI");
         var users = new List<DtoOutputUserFromGroup>();
-        Console.WriteLine("ICI");
         foreach (var dbUserGroup in entities)
         {
-            var user = _userRepository.FetchById(dbUserGroup.UserId);
-            var account = _accountRepository.FetchById(user.AccountId);
-            var dtoOutputUserFromGroup = new DtoOutputUserFromGroup
+            if (dbUserGroup.HasLeft == true) continue;
+            try
             {
-                id = user.Id,
-                Login = user.Login,
-                Name = user.Name,
-                ImageId = account.ImageId
-            };
-            users.Add(dtoOutputUserFromGroup);
+                var user = _userRepository.FetchById(dbUserGroup.UserId);
+                var account = _accountRepository.FetchById(user.AccountId);
+                var dtoOutputUserFromGroup = new DtoOutputUserFromGroup
+                {
+                    id = user.UserId,
+                    Login = user.UserLogin,
+                    Name = user.UserName,
+                    ImageId = account.ImageId
+                };
+                users.Add(dtoOutputUserFromGroup);
+            }
+            catch (DeletedUserException e) {}
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         return users;
