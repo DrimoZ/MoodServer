@@ -14,14 +14,16 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
     private readonly IGroupRepository _groupRepository;
     private readonly IUserGroupRepository _userGroupRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IFriendRepository _friendRepository;
     private readonly IMapper _mapper;
 
-    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUserGroupRepository userGroupRepository, IUserRepository userRepository)
+    public UseCaseGetGroupsByUserId(IGroupRepository groupRepository, IMapper mapper, IUserGroupRepository userGroupRepository, IUserRepository userRepository, IFriendRepository friendRepository)
     {
         _groupRepository = groupRepository;
         _mapper = mapper;
         _userGroupRepository = userGroupRepository;
         _userRepository = userRepository;
+        _friendRepository = friendRepository;
     }
 
     public IEnumerable<DtoOutputGroup> Execute(string userId)
@@ -34,13 +36,18 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
             {
                 if (usergrp.HasLeft) continue;
                 var grp = _mapper.Map<DtoOutputGroup>(_groupRepository.FetchById(usergrp.GroupId));
+                if (grp.IsPrivate)
+                {
+                    var userInGroups = _userGroupRepository.FetchAllByGroupId(grp.Id).ToList();
+                    if (!_friendRepository.IsFriend(userInGroups[0].UserId, userInGroups[1].UserId)) continue;
+                }
                 if (grp.Name == null)
                 {
-                    var usergroups = _userGroupRepository.FetchAllByGroupId(grp.Id).ToList();
+                    var userInGroups = _userGroupRepository.FetchAllByGroupId(grp.Id).ToList();
                     
-                    if (usergroups.Count() < 3)
+                    if (userInGroups.Count() < 3)
                     {
-                        foreach(var  userGroup in usergroups)
+                        foreach(var  userGroup in userInGroups)
                         {
                             if (userGroup.UserId != userId)
                             {

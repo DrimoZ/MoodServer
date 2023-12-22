@@ -20,12 +20,18 @@ public class UseCaseQuitGroup:IUseCaseParameterizedQuery<bool, int, string>
     {
         var userGroup = _userGroupRepository.FetchByGroupIdUserId(groupId, userId);
         var group = _groupRepository.FetchById(userGroup.GroupId);
-        if (group.IsPrivate)
-        {
-            return false;
-        }
+        
         var usergroups = _userGroupRepository.FetchAllByGroupId(group.Id);
         
+        if (group.IsPrivate)
+        {
+            foreach (var usergroup in usergroups)
+            {
+                _userGroupRepository.ToggleUserQuitGroup(userGroup);
+            }
+
+            return true;
+        }
         if(userGroup.HasLeft == false) _userGroupRepository.ToggleUserQuitGroup(userGroup);
         
         if (usergroups.All(grp => grp.HasLeft == true)) _groupRepository.Delete(group);
