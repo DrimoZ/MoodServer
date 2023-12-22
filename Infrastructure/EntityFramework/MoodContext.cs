@@ -26,14 +26,14 @@ public class MoodContext: DbContext
         modelBuilder.Entity<DbUser>(builder =>
         {
             builder.ToTable("users");
-            builder.HasKey(user => user.Id);
-            builder.Property(user => user.Id).HasColumnName("user_id");
-            builder.Property(user => user.Mail).HasColumnName("user_mail");
-            builder.Property(user => user.Login).HasColumnName("user_login");
-            builder.Property(user => user.Name).HasColumnName("user_name");
-            builder.Property(user => user.Password).HasColumnName("user_password");
-            builder.Property(user => user.Role).HasColumnName("user_role");
-            builder.Property(user => user.Title).HasColumnName("user_title");
+            builder.HasKey(user => user.UserId);
+            builder.Property(user => user.UserId).HasColumnName("user_id");
+            builder.Property(user => user.UserMail).HasColumnName("user_mail");
+            builder.Property(user => user.UserLogin).HasColumnName("user_login");
+            builder.Property(user => user.UserName).HasColumnName("user_name");
+            builder.Property(user => user.UserPassword).HasColumnName("user_password");
+            builder.Property(user => user.UserRole).HasColumnName("user_role");
+            builder.Property(user => user.UserTitle).HasColumnName("user_title");
             builder.Property(user => user.AccountId).HasColumnName("acc_id");
             builder.Property(user => user.IsDeleted).HasColumnName("user_isDeleted");
             builder.Property(user => user.IsPublic).HasColumnName("user_isPublic");
@@ -44,11 +44,11 @@ public class MoodContext: DbContext
         modelBuilder.Entity<DbAccount>(builder =>
         {
             builder.ToTable("accounts");
-            builder.HasKey(account => account.Id);
-            builder.Property(account => account.Id).HasColumnName("acc_id");
-            builder.Property(account => account.PhoneNumber).HasColumnName("acc_phone_number");
-            builder.Property(account => account.BirthDate).HasColumnName("acc_birth_date");
-            builder.Property(account => account.Description).HasColumnName("acc_description");
+            builder.HasKey(account => account.AccountId);
+            builder.Property(account => account.AccountId).HasColumnName("acc_id");
+            builder.Property(account => account.AccountPhoneNumber).HasColumnName("acc_phone_number");
+            builder.Property(account => account.AccountBirthDate).HasColumnName("acc_birth_date");
+            builder.Property(account => account.AccountDescription).HasColumnName("acc_description");
             builder.Property(account => account.ImageId).HasColumnName("img_id");
         });
         
@@ -63,21 +63,21 @@ public class MoodContext: DbContext
         modelBuilder.Entity<DbPublication>(builder =>
         {
             builder.ToTable("publications");
-            builder.HasKey(pub => pub.Id);
-            builder.Property(pub => pub.Id).HasColumnName("pub_id");
-            builder.Property(pub => pub.Content).HasColumnName("pub_content");
+            builder.HasKey(pub => pub.PublicationId);
+            builder.Property(pub => pub.PublicationId).HasColumnName("pub_id");
+            builder.Property(pub => pub.PublicationContent).HasColumnName("pub_content");
             builder.Property(pub => pub.UserId).HasColumnName("user_id");
-            builder.Property(pub => pub.Date).HasColumnName("pub_date");
+            builder.Property(pub => pub.PublicationDate).HasColumnName("pub_date");
             builder.Property(pub => pub.IsDeleted).HasColumnName("pub_isDeleted");
         });
 
         modelBuilder.Entity<DbPublicationElement>(builder =>
         {
             builder.ToTable("publication_elements");
-            builder.HasKey(elem => elem.Id);
-            builder.Property(elem => elem.Id).HasColumnName("elmt_id");
-            builder.Property(elem => elem.IdImage).HasColumnName("img_id");
-            builder.Property(elem => elem.IdPublication).HasColumnName("pub_id");
+            builder.HasKey(elem => elem.ElementId);
+            builder.Property(elem => elem.ElementId).HasColumnName("elmt_id");
+            builder.Property(elem => elem.ImageId).HasColumnName("img_id");
+            builder.Property(elem => elem.PublicationId).HasColumnName("pub_id");
         });
 
         modelBuilder.Entity<DbGroup>(builder =>
@@ -115,40 +115,40 @@ public class MoodContext: DbContext
         modelBuilder.Entity<DbImage>(builder =>
         {
             builder.ToTable("images");
-            builder.HasKey(img => img.Id);
-            builder.Property(img => img.Id).HasColumnName(("img_id"));
-            builder.Property(img => img.Data).HasColumnName("img_data");
-            builder.Property(img => img.Date).HasColumnName("img_date");
+            builder.HasKey(img => img.ImageId);
+            builder.Property(img => img.ImageId).HasColumnName(("img_id"));
+            builder.Property(img => img.ImageData).HasColumnName("img_data");
+            builder.Property(img => img.ImageDate).HasColumnName("img_date");
         });
         
         
         modelBuilder.Entity<DbLike>(builder =>
         {
             builder.ToTable("likes");
-            builder.HasKey(like => like.Id);
-            builder.Property(like => like.Id).HasColumnName("like_id");
-            builder.Property(like => like.Date).HasColumnName("like_date");
-            builder.Property(like => like.IdPublication).HasColumnName("pub_id");
-            builder.Property(like => like.IdUser).HasColumnName("user_id");
+            builder.HasKey(like => like.LikeId);
+            builder.Property(like => like.LikeId).HasColumnName("like_id");
+            builder.Property(like => like.LikeDate).HasColumnName("like_date");
+            builder.Property(like => like.PublicationId).HasColumnName("pub_id");
+            builder.Property(like => like.UserId).HasColumnName("user_id");
         });
 
         modelBuilder.Entity<DbComment>(builder =>
         {
             builder.ToTable("comments");
-            builder.HasKey(cmt => cmt.Id);
-            builder.Property(cmt => cmt.Id).HasColumnName("cmt_id");
-            builder.Property(cmt => cmt.Date).HasColumnName("cmt_date");
-            builder.Property(cmt => cmt.Content).HasColumnName("cmt_content");
-            builder.Property(cmt => cmt.IdPublication).HasColumnName("pub_id");
-            builder.Property(cmt => cmt.IdUser).HasColumnName("user_id");
+            builder.HasKey(cmt => cmt.CommentId);
+            builder.Property(cmt => cmt.CommentId).HasColumnName("cmt_id");
+            builder.Property(cmt => cmt.CommentDate).HasColumnName("cmt_date");
+            builder.Property(cmt => cmt.CommentContent).HasColumnName("cmt_content");
+            builder.Property(cmt => cmt.PublicationId).HasColumnName("pub_id");
+            builder.Property(cmt => cmt.UserId).HasColumnName("user_id");
         });
         
         modelBuilder.Entity<DbFriendRequest>(builder =>
         {
             builder.ToTable("friend_requests");
-            builder.HasKey(fr => fr.Id);
-            builder.Property(fr => fr.Id).HasColumnName("req_id");
-            builder.Property(fr => fr.Date).HasColumnName("req_date");
+            builder.HasKey(fr => fr.FriendRequestId);
+            builder.Property(fr => fr.FriendRequestId).HasColumnName("req_id");
+            builder.Property(fr => fr.FriendRequestDate).HasColumnName("req_date");
             builder.Property(fr => fr.IsDone).HasColumnName("req_isDone");
             builder.Property(fr => fr.IsAccepted).HasColumnName("req_isAccepted");
             builder.Property(fr => fr.UserId).HasColumnName("user_id");

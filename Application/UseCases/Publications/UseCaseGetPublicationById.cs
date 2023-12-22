@@ -37,13 +37,14 @@ public class UseCaseGetPublicationById:IUseCaseParameterizedQuery<DtoOutputPubli
         
         var dtoPublication = _mapper.Map<DtoOutputPublication>(publication);
 
-        dtoPublication.IdAuthor = _publicationRepository.FetchById(pubId).UserId;
+        dtoPublication.AuthorId = _publicationRepository.FetchById(pubId).UserId;
 
-        var dbUser = _userRepository.FetchById(dtoPublication.IdAuthor);
-        
-        dtoPublication.NameAuthor = dbUser.Name;
-        dtoPublication.IsFromConnected = connectedUserId == dtoPublication.IdAuthor;
-        dtoPublication.IdAuthorImage = _accountRepository.FetchById(dbUser.AccountId).ImageId;
+        var dbUser = _userRepository.FetchById(dtoPublication.AuthorId);
+
+        dtoPublication.AuthorRole = dbUser.UserRole;
+        dtoPublication.AuthorName = dbUser.UserName;
+        dtoPublication.IsFromConnected = connectedUserId == dtoPublication.AuthorId;
+        dtoPublication.AuthorImageId = _accountRepository.FetchById(dbUser.AccountId).ImageId;
 
         dtoPublication.HasConnectedLiked = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, pubId) != null;
         

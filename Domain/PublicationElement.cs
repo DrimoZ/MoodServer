@@ -2,6 +2,6 @@ namespace Domain;
 
 public class PublicationElement
 {
-    public int Id { get; set; }
-    public int IdImage { get; set; }
+    public int ElementId { get; set; }
+    public int ImageId { get; set; }
 }

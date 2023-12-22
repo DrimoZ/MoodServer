@@ -10,4 +10,5 @@ public interface IFriendRequestRepository
     bool SetIsDone (int id, bool value);
     bool SetIsAccepted (int id, bool value);
     DbFriendRequest FetchRequestByIds (string userId, string friendId);
+    IEnumerable<DbFriendRequest> FetchAllRequestByUserId(string userId);
 }

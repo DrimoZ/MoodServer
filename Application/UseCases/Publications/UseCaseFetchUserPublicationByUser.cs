@@ -38,6 +38,8 @@ public class UseCaseFetchUserPublicationByUser:IUseCaseParameterizedQuery<DtoOut
         var publications = _publicationService
                 .FetchPublicationsByUserId(profileRequestUserId)
                 .Select(p => _mapper.Map<DtoOutputUserPublications.DtoPublication>(p))
+                .AsEnumerable()
+                .Reverse()
                 .ToList();
 
         dto.Publications = publications;

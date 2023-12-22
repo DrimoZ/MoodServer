@@ -50,8 +50,8 @@ public class UseCaseAcceptFriendRequest: IUseCaseParameterizedWriter<DtoOutputFr
             _friendRepository.Create(dbFriend);
 
             var request = _friendRequestRepository.FetchRequestByIds(connectedUserId, friendId);
-            _friendRequestRepository.SetIsAccepted(request.Id, true);
-            _friendRequestRepository.SetIsDone(request.Id, true);
+            _friendRequestRepository.SetIsAccepted(request.FriendRequestId, true);
+            _friendRequestRepository.SetIsDone(request.FriendRequestId, true);
         }
         catch (Exception e)
         {

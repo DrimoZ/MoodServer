@@ -20,7 +20,7 @@ public class PublicationElementRepository: IPublicationElementRepository
 
     public bool Delete(int id)
     {
-        var entity = _context.PublicationElements.FirstOrDefault(e => e.Id == id);
+        var entity = _context.PublicationElements.FirstOrDefault(e => e.ElementId == id);
 
         if (entity == null)
             return false;
@@ -34,7 +34,7 @@ public class PublicationElementRepository: IPublicationElementRepository
     public DbPublicationElement FetchById(int elementId)
     {
         var entity = _context.PublicationElements
-            .FirstOrDefault(e => e.Id == elementId);
+            .FirstOrDefault(e => e.ElementId == elementId);
         
         if (entity == null) throw new KeyNotFoundException("PublicationElementNotFound");
 
@@ -44,7 +44,7 @@ public class PublicationElementRepository: IPublicationElementRepository
     public IEnumerable<DbPublicationElement> FetchElementsByPublicationId(int pubId)
     { 
         return _context.PublicationElements
-            .Where(e => e.IdPublication == pubId)
+            .Where(e => e.PublicationId == pubId)
             .ToList();
     }
 }

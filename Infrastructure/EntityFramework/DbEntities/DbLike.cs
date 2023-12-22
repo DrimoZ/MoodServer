@@ -2,9 +2,9 @@ namespace Infrastructure.EntityFramework.DbEntities;
 
 public class DbLike
 {
-    public int Id { get; set; }
-    public DateTime Date { get; set; }
+    public int LikeId { get; set; }
+    public DateTime LikeDate { get; set; }
     
-    public int IdPublication { get; set; }
-    public string IdUser { get; set; }
+    public int PublicationId { get; set; }
+    public string UserId { get; set; }
 }

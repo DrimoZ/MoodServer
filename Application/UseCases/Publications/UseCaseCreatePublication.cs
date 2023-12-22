@@ -31,8 +31,8 @@ public class UseCaseCreatePublication: IUseCaseParameterizedWriter<DbComplexPubl
 
         var complexPub = new DbComplexPublication
         {
-            Content = content,
-            Date = DateTime.Now,
+            PublicationContent = content,
+            PublicationDate = DateTime.Now,
             UserId = connectedUserId,
             Elements = new List<DbPublicationElement>()
         };
@@ -47,8 +47,8 @@ public class UseCaseCreatePublication: IUseCaseParameterizedWriter<DbComplexPubl
                          .Create(
                              new DbPublicationElement
                              {
-                                 IdPublication = dbPub.Id, 
-                                 IdImage = dbImage.Id
+                                 PublicationId = dbPub.PublicationId, 
+                                 ImageId = dbImage.ImageId
                              })
                      )
                  )

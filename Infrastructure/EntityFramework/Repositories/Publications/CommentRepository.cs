@@ -13,7 +13,7 @@ public class CommentRepository: ICommentRepository
 
     public DbComment Create(DbComment comment)
     {
-        comment.Date = DateTime.Now;
+        comment.CommentDate = DateTime.Now;
         
         _context.Comments.Add(comment);
         _context.SaveChanges();
@@ -22,7 +22,7 @@ public class CommentRepository: ICommentRepository
 
     public bool Delete(int commId)
     {
-        var entity = _context.Comments.FirstOrDefault(e => e.Id == commId);
+        var entity = _context.Comments.FirstOrDefault(e => e.CommentId == commId);
 
         if (entity == null)
             return false;
@@ -36,7 +36,7 @@ public class CommentRepository: ICommentRepository
     public DbComment FetchById(int commId)
     {
         var entity = _context.Comments
-            .FirstOrDefault(e => e.Id == commId);
+            .FirstOrDefault(e => e.CommentId == commId);
         
         if (entity == null) throw new KeyNotFoundException("CommentNotFound");
 
@@ -46,14 +46,14 @@ public class CommentRepository: ICommentRepository
     public IEnumerable<DbComment> FetchCommentsByPublicationId(int pubId)
     { 
         return _context.Comments
-            .Where(e => e.IdPublication == pubId)
+            .Where(e => e.PublicationId == pubId)
             .ToList();
     }
     
     public int FetchCommentCountByPublicationId(int pubId)
     {
         var count = _context.Comments
-            .Count(l => l.IdPublication == pubId);
+            .Count(l => l.PublicationId == pubId);
         
         return count;
     }

@@ -1,4 +1,3 @@
-using Application.Dtos.Account;
 using Application.Dtos.Friend;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
@@ -13,7 +12,6 @@ public class FriendController: ControllerBase
 {
 
     private readonly UseCaseGetFriendByUserId _useCaseGetFriendByUserId;
-    private readonly UseCaseCreateFriend _useCaseCreateFriend;
     private readonly UseCaseDeleteFriend _useCaseDeleteFriend;
     private readonly UseCaseCreateFriendRequest _useCaseCreateFriendRequest;
     private readonly UseCaseAcceptFriendRequest _useCaseAcceptFriendRequest;
@@ -22,10 +20,9 @@ public class FriendController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseCreateFriend useCaseCreateFriend, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest, UseCaseAcceptFriendRequest useCaseAcceptFriendRequest, UseCaseRejectFriendRequest useCaseRejectFriendRequest)
+    public FriendController(UseCaseGetFriendByUserId useCaseGetFriendByUserId, UseCaseDeleteFriend useCaseDeleteFriend, TokenService tokenService, IConfiguration configuration, UseCaseCreateFriendRequest useCaseCreateFriendRequest, UseCaseAcceptFriendRequest useCaseAcceptFriendRequest, UseCaseRejectFriendRequest useCaseRejectFriendRequest)
     {
         _useCaseGetFriendByUserId = useCaseGetFriendByUserId;
-        _useCaseCreateFriend = useCaseCreateFriend;
         _useCaseDeleteFriend = useCaseDeleteFriend;
         _tokenService = tokenService;
         _configuration = configuration;
@@ -138,17 +135,4 @@ public class FriendController: ControllerBase
         }
         
     }
-    
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [Authorize]
-    public ActionResult Create(string friendLogin)
-    {
-        
-        var accountCreated = _useCaseCreateFriend.Execute(GetConnectedUserId(), friendLogin);
-        return StatusCode(201, accountCreated);
-    }
-    
-    
 }

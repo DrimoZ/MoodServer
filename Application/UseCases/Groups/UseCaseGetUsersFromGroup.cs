@@ -30,9 +30,9 @@ public class UseCaseGetUsersFromGroup:IUseCaseParameterizedQuery<IEnumerable<Dto
             var account = _accountRepository.FetchById(user.AccountId);
             var dtoOutputUserFromGroup = new DtoOutputUserFromGroup
             {
-                id = user.Id,
-                Login = user.Login,
-                Name = user.Name,
+                id = user.UserId,
+                Login = user.UserLogin,
+                Name = user.UserName,
                 ImageId = account.ImageId
             };
             users.Add(dtoOutputUserFromGroup);

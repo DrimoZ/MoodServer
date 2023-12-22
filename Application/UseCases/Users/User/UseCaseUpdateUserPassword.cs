@@ -1,4 +1,4 @@
-using Application.Dtos.User.UserData;
+using Application.Dtos.User.User;
 using Application.Services.Utils;
 using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.Repositories.Users;
@@ -21,10 +21,10 @@ public class UseCaseUpdateUserPassword: IUseCaseParameterizedWriter<bool, string
         if (dto.NewPassword == dto.OldPassword)
             return false;
         
-        if (!BCryptService.VerifyPassword(dto.OldPassword, user.Password))
+        if (!BCryptService.VerifyPassword(dto.OldPassword, user.UserPassword))
             return false;
 
-        user.Password = BCryptService.HashPassword(dto.NewPassword);
+        user.UserPassword = BCryptService.HashPassword(dto.NewPassword);
 
         return _userRepository.Update(user);
     }

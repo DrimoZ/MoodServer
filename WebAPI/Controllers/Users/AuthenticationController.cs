@@ -13,17 +13,17 @@ public class AuthenticationController: ControllerBase
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
     
-    private readonly UseCaseGetUserByLoginOrMail _useCaseGetUserByLoginOrMail;
-    private readonly UseCaseGetUserByLoginAndMail _useCaseGetUserByLoginAndMail;
+    private readonly UseCaseVerifySignInUser _useCaseVerifySignInUser;
+    private readonly UseCaseVerifySignUpUser _useCaseVerifySignUpUser;
     private readonly UseCaseCreateUser _useCaseCreateUser;
 
-    public AuthenticationController(TokenService tokenService, UseCaseCreateUser useCaseCreateUser, UseCaseGetUserByLoginOrMail useCaseGetUserByLoginOrMail, UseCaseGetUserByLoginAndMail useCaseGetUserByLoginAndMail, IConfiguration configuration)
+    public AuthenticationController(TokenService tokenService, UseCaseCreateUser useCaseCreateUser, UseCaseVerifySignInUser useCaseVerifySignInUser, UseCaseVerifySignUpUser useCaseVerifySignUpUser, IConfiguration configuration)
     {
         _tokenService = tokenService;
         
         _useCaseCreateUser = useCaseCreateUser;
-        _useCaseGetUserByLoginOrMail = useCaseGetUserByLoginOrMail;
-        _useCaseGetUserByLoginAndMail = useCaseGetUserByLoginAndMail;
+        _useCaseVerifySignInUser = useCaseVerifySignInUser;
+        _useCaseVerifySignUpUser = useCaseVerifySignUpUser;
         _configuration = configuration;
     }
     
@@ -42,24 +42,24 @@ public class AuthenticationController: ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public IActionResult UserSignIn([FromBody] DtoInputSignInUser model)
+    public IActionResult UserSignIn([FromBody] DtoInputUserSignIn inputUserSignIn)
     {
         try
         {
             // Get User From Database
-            var dbUser = _useCaseGetUserByLoginOrMail.Execute(model.Login);
+            var dtoUser = _useCaseVerifySignInUser.Execute(inputUserSignIn.UserLogin);
+            
             // Check If Given Password Corresponds
-            if (!BCryptService.VerifyPassword(model.Password, dbUser.Password)) return NotFound();
+            if (!BCryptService.VerifyPassword(inputUserSignIn.UserPassword, dtoUser.UserPassword)) return NotFound();
 
             // Try Generating a Token and publish it
-            if (!GenerateToken(dbUser.Id, dbUser.Role.ToString(), !model.StayLoggedIn)) return NotFound();
-            
+            if (!GenerateToken(dtoUser.UserId, dtoUser.UserRole.ToString(), !inputUserSignIn.StayLoggedIn)) return NotFound();
             
             return Ok();
         }
-        catch (KeyNotFoundException)
+        catch (Exception e)
         {
-            return NotFound();
+            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
         }
     }
     
@@ -69,12 +69,12 @@ public class AuthenticationController: ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [AllowAnonymous]
-    public IActionResult UserSignUp([FromBody] DtoInputSignUpUser model)
+    public IActionResult UserSignUp([FromBody] DtoInputUserSignUp model)
     {
         try
         {
             // Check if Login or Mail is already existing
-            _useCaseGetUserByLoginAndMail.Execute(model.Login, model.Mail);
+            _useCaseVerifySignUpUser.Execute(model.UserLogin, model.UserMail);
             return Conflict();
         }
         catch (KeyNotFoundException)
@@ -82,18 +82,18 @@ public class AuthenticationController: ControllerBase
             try
             {
                 //Create User
-                var dbCreatedUser = _useCaseCreateUser.Execute(model);
+                var dtoUser = _useCaseCreateUser.Execute(model);
                 
                 //If User is not created
-                if (dbCreatedUser == null)
+                if (dtoUser == null)
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the user account.");
                 
                 //Verify Password has not changed
-                if (!BCryptService.VerifyPassword(model.Password, dbCreatedUser.Password))
+                if (!BCryptService.VerifyPassword(model.UserPassword, dtoUser.UserPassword))
                     return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the user account.");
                 
                 // Try Generating a Token and publish it
-                if (!GenerateToken(dbCreatedUser.Id, dbCreatedUser.Role.ToString(), true)) return NotFound();
+                if (!GenerateToken(dtoUser.UserId, dtoUser.UserRole.ToString(), true)) return NotFound();
                 
                 return Ok();
             }
@@ -128,7 +128,6 @@ public class AuthenticationController: ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while logging out the user.");
         }
     }
-
     
     private bool GenerateToken(string login, string role, bool isSessionOnly)
     {
@@ -142,9 +141,14 @@ public class AuthenticationController: ControllerBase
                 Secure = true,
                 SameSite = SameSiteMode.None
             };
+            
+            if (!isSessionOnly)
+            {
+                cookieOptions.Expires = DateTimeOffset.UtcNow.AddHours(int.Parse(_configuration["JwtSettings:ValidityHours"]!));
+            }
 
             Response.Cookies.Append("MoodSession", tokenValue, cookieOptions);
-
+            
             return true;
         }
         catch (Exception)

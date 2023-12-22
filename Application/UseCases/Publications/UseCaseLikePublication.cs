@@ -19,20 +19,20 @@ public class UseCaseLikePublication: IUseCaseParameterizedWriter<bool, string, D
 
     public bool Execute(string connectedUserId, DtoInputLikePublication dto)
     {
-        var dbLike = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, dto.IdPublication);
+        var dbLike = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, dto.PublicationId);
 
         if (dto.IsLiked)
         {
             if (dbLike == null)
             {
                 var newDbLike = _mapper.Map<DbLike>(dto);
-                newDbLike.IdUser = connectedUserId;
+                newDbLike.UserId = connectedUserId;
                 
                 _likeRepository.Create(newDbLike);
             }
             else
             {
-                _likeRepository.UpdateDate(dbLike.Id);
+                _likeRepository.UpdateDate(dbLike.LikeId);
             }
 
              
@@ -41,7 +41,7 @@ public class UseCaseLikePublication: IUseCaseParameterizedWriter<bool, string, D
         {
             if (dbLike != null)
             {
-                _likeRepository.Delete(dbLike.Id);
+                _likeRepository.Delete(dbLike.LikeId);
             }
         }
 

@@ -2,9 +2,9 @@ namespace Application.Dtos.Publication;
 
 public class DtoOutputDiscoverPublication
 {
-    public string Id { get; set; }
-    public string Content { get; set; }
-    public DateTime Date { get; set; }
+    public string PublicationId { get; set; }
+    public string PublicationContent { get; set; }
+    public DateTime PublicationDate { get; set; }
     
     public int LikeCount { get; set; }
     public int CommentCount { get; set; }
@@ -13,7 +13,7 @@ public class DtoOutputDiscoverPublication
 
     public class DtoElement
     {
-        public int Id { get; set; }
-        public int IdImage { get; set; }
+        public int ElementId { get; set; }
+        public int ImageId { get; set; }
     }
 }

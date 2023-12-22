@@ -50,7 +50,8 @@ CREATE TABLE groups (
 CREATE TABLE user_groups (
     user_group_id INT PRIMARY KEY IDENTITY,
     user_id CHAR(32) FOREIGN KEY REFERENCES users(user_id),
-    group_id INT FOREIGN KEY REFERENCES groups(group_id) ON DELETE CASCADE
+    group_id INT FOREIGN KEY REFERENCES groups(group_id) ON DELETE CASCADE,
+    user_has_left BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE messages (

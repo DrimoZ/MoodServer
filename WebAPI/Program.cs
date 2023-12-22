@@ -1,6 +1,7 @@
 using System.Text;
 using Application.Dtos.Message;
 using Application.Services.Publications;
+using Application.Services.Users;
 using Application.Services.Utils;
 using Application.UseCases.Friends;
 using Application.UseCases.Groups;
@@ -65,26 +66,28 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Application Services
 builder.Services.AddScoped<IPublicationService, PublicationService>();
+builder.Services.AddScoped<IFriendService, FriendService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddSingleton<IdService>();
 builder.Services.AddSingleton<BCryptService>();
 
 //Use Cases
 builder.Services.AddScoped<UseCaseCreateUser>();
-builder.Services.AddScoped<UseCaseGetUserByLoginOrMail>();
-builder.Services.AddScoped<UseCaseGetUserByLoginAndMail>();
-builder.Services.AddScoped<UseCaseUpdateUserData>();
+builder.Services.AddScoped<UseCaseVerifySignInUser>();
+builder.Services.AddScoped<UseCaseVerifySignUpUser>();
+builder.Services.AddScoped<UseCaseUpdateUserProfile>();
 builder.Services.AddScoped<UseCaseFetchUserProfileByUserId>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCasePatchUser>();
-builder.Services.AddScoped<UseCaseGetUserPrivacySettings>();
-builder.Services.AddScoped<UseCaseSetDeletedUser>();
+builder.Services.AddScoped<UseCaseFetchUserPrivacySettings>();
+builder.Services.AddScoped<UseCaseDeleteUser>();
 builder.Services.AddScoped<UseCaseUpdateUserPassword>();
+builder.Services.AddScoped<UseCaseFetchUserNotifications>();
+
 
 builder.Services.AddScoped<UseCaseFetchUserPublicationByUser>();
 builder.Services.AddScoped<UseCaseGetPublicationById>();
 builder.Services.AddScoped<UseCaseCreatePublication>();
-builder.Services.AddScoped<UseCaseDeletePublication>();
 builder.Services.AddScoped<UseCaseSetPublicationDeleted>();
 builder.Services.AddScoped<UseCaseGetPublicationsByFilter>();
 builder.Services.AddScoped<UseCaseLikePublication>();
@@ -95,9 +98,9 @@ builder.Services.AddScoped<UseCaseGetFriendsPublications>();
 
 builder.Services.AddScoped<UseCaseFetchUserAccountByUserId>();
 builder.Services.AddScoped<UseCaseFetchUserFriendsByUserId>();
-builder.Services.AddScoped<UseCaseGetUsersByFilter>();
+builder.Services.AddScoped<UseCaseFetchUsersByFilter>();
 
-builder.Services.AddScoped<UseCaseCreateFriend>();
+
 builder.Services.AddScoped<UseCaseGetFriendByUserId>();
 builder.Services.AddScoped<UseCaseDeleteFriend>();
 builder.Services.AddScoped<UseCaseCreateFriendRequest>();
@@ -105,6 +108,7 @@ builder.Services.AddScoped<UseCaseAcceptFriendRequest>();
 builder.Services.AddScoped<UseCaseRejectFriendRequest>();
 builder.Services.AddScoped<UseCaseDeleteMessageById>();
 builder.Services.AddScoped<UseCaseSetMessageIsDeleted>();
+
 
 builder.Services.AddScoped<UseCaseCreateGroup>();
 builder.Services.AddScoped<UseCaseGetGroupsByUserId>();
@@ -117,7 +121,6 @@ builder.Services.AddScoped<UseCaseGetGroupById>();
 builder.Services.AddScoped<UseCaseUpdateGroup>();
 builder.Services.AddScoped<UseCaseUpdateGroupMembers>();
 
-builder.Services.AddScoped<UseCaseCreateImage>();
 builder.Services.AddScoped<UseCaseGetImageById>();
 
 

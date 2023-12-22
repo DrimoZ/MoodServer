@@ -14,7 +14,7 @@ public class FriendRequestRepository:IFriendRequestRepository
 
     public DbFriendRequest Create(DbFriendRequest friendRequest)
     {
-        friendRequest.Date = DateTime.Now;
+        friendRequest.FriendRequestDate = DateTime.Now;
         _context.FriendRequests.Add(friendRequest);
         _context.SaveChanges();
         
@@ -30,7 +30,7 @@ public class FriendRequestRepository:IFriendRequestRepository
 
     public bool Delete(int id)
     {
-        var entity = _context.FriendRequests.FirstOrDefault(e => e.Id == id);
+        var entity = _context.FriendRequests.FirstOrDefault(e => e.FriendRequestId == id);
 
         if (entity == null)
             return false;
@@ -43,7 +43,7 @@ public class FriendRequestRepository:IFriendRequestRepository
     
     public bool SetIsDone(int id, bool value)
     {
-        var entity = _context.FriendRequests.FirstOrDefault(e => e.Id == id);
+        var entity = _context.FriendRequests.FirstOrDefault(e => e.FriendRequestId == id);
 
         if (entity == null)
             return false;
@@ -56,7 +56,7 @@ public class FriendRequestRepository:IFriendRequestRepository
     
     public bool SetIsAccepted(int id, bool value)
     {
-        var entity = _context.FriendRequests.FirstOrDefault(e => e.Id == id);
+        var entity = _context.FriendRequests.FirstOrDefault(e => e.FriendRequestId == id);
 
         if (entity == null)
             return false;
@@ -73,5 +73,10 @@ public class FriendRequestRepository:IFriendRequestRepository
             .FirstOrDefault(fr => ((fr.UserId == userId && fr.FriendId == friendId) || (fr.UserId == friendId && fr.FriendId == userId)) && !fr.IsDone);
         if (entity == null) throw new KeyNotFoundException("FriendRequestNotFound");
         return entity;
+    }
+
+    public IEnumerable<DbFriendRequest> FetchAllRequestByUserId(string userId)
+    {
+        return _context.FriendRequests.Where(req => req.FriendId == userId || req.UserId == userId);
     }
 }

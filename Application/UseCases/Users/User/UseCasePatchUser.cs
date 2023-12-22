@@ -1,4 +1,4 @@
-using Application.Dtos.User.UserData;
+using Application.Dtos.User.User;
 using Application.UseCases.Utils;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories.Users;

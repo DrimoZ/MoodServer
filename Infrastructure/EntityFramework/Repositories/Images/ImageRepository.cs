@@ -13,7 +13,7 @@ public class ImageRepository:IImageRepository
 
     public DbImage Create(DbImage image)
     { 
-        image.Date = DateTime.Now;
+        image.ImageDate = DateTime.Now;
         
         _context.Images.Add(image);
         _context.SaveChanges();
@@ -28,7 +28,7 @@ public class ImageRepository:IImageRepository
 
     public DbImage FetchById(int id)
     {
-        var entity = _context.Images.FirstOrDefault(i => i.Id == id);
+        var entity = _context.Images.FirstOrDefault(i => i.ImageId == id);
         if (entity == null) throw new  KeyNotFoundException($"Image not found");
         return entity;
     }

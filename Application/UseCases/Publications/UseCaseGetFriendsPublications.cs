@@ -39,28 +39,28 @@ public class UseCaseGetFriendsPublications:IUseCaseParameterizedQuery<IEnumerabl
         var dbPublications = new List<DbPublication>();
         foreach (var dbFriend in dbFriends)
         {
-            dbPublications.AddRange(_publicationRepository.FetchUserPublications(dbFriend.Id));
+            dbPublications.AddRange(_publicationRepository.FetchUserPublications(dbFriend.UserId));
         }
 
-        var dbPublicationsByDate = dbPublications.OrderBy(p => p.Date).Reverse().ToList().Take(pubCount);
+        var dbPublicationsByDate = dbPublications.OrderBy(p => p.PublicationDate).Reverse().ToList().Take(pubCount);
 
         var publications = new List<DtoOutputPublication>();
         foreach (var dbPublication in dbPublicationsByDate)
         {
-            var publication = _publicationService.FetchPublicationById(dbPublication.Id, 
+            var publication = _publicationService.FetchPublicationById(dbPublication.PublicationId, 
                 new [] { EPublicationFetchAttribute.Comments });
         
             var dtoPublication = _mapper.Map<DtoOutputPublication>(publication);
 
-            dtoPublication.IdAuthor = _publicationRepository.FetchById(dbPublication.Id).UserId;
+            dtoPublication.AuthorId = _publicationRepository.FetchById(dbPublication.PublicationId).UserId;
 
-            var dbUser = _userRepository.FetchById(dtoPublication.IdAuthor);
+            var dbUser = _userRepository.FetchById(dtoPublication.AuthorId);
         
-            dtoPublication.NameAuthor = dbUser.Name;
-            dtoPublication.IsFromConnected = connectedUserId == dtoPublication.IdAuthor;
-            dtoPublication.IdAuthorImage = _accountRepository.FetchById(dbUser.AccountId).ImageId;
+            dtoPublication.AuthorName = dbUser.UserName;
+            dtoPublication.IsFromConnected = connectedUserId == dtoPublication.AuthorId;
+            dtoPublication.AuthorImageId = _accountRepository.FetchById(dbUser.AccountId).ImageId;
 
-            dtoPublication.HasConnectedLiked = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, dbPublication.Id) != null;
+            dtoPublication.HasConnectedLiked = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, dbPublication.PublicationId) != null;
             
             publications.Add(dtoPublication);
         }

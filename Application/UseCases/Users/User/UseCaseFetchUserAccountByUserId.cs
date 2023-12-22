@@ -27,9 +27,8 @@ public class UseCaseFetchUserAccountByUserId: IUseCaseParameterizedQuery<DtoOutp
         var user = _mapper.Map<DtoOutputUserAccount>(dbUser);
         
         var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
-        user.Description = dbAccount.Description!;
-        user.BirthDate = dbAccount.BirthDate!;
-        user.PhoneNumber = dbAccount.PhoneNumber!;
+        user.AccountDescription = dbAccount.AccountDescription!;
+        user.AccountBirthDate = dbAccount.AccountBirthDate!;
 
         return user;
     }

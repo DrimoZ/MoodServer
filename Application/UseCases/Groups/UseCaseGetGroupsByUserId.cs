@@ -44,7 +44,7 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
                         {
                             if (userGroup.UserId != userId)
                             {
-                                grp.Name = _userRepository.FetchById(userGroup.UserId).Name;
+                                grp.Name = _userRepository.FetchById(userGroup.UserId).UserName;
                                 break;
                             }
                         }

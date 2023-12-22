@@ -36,7 +36,7 @@ public class PublicationService: IPublicationService
     {
         return _publicationRepository
             .FetchUserPublications(userId)
-            .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
+            .Select(p => FetchPublicationById(p.PublicationId, Array.Empty<EPublicationFetchAttribute>()));
     }
     
     public IEnumerable<Domain.Publication> FetchPublicationsWithoutUserId(string userId, string searchValue)
@@ -46,14 +46,14 @@ public class PublicationService: IPublicationService
             .Where(publication => _friendRepository.IsFriend(userId, publication.UserId) || 
                                    (_userRepository.FetchById(publication.UserId).IsPublic &&
                                     _userRepository.FetchById(publication.UserId).IsPublicationPublic))
-            .Where(publication => _userRepository.FetchById(publication.UserId).Name.ToLower().Contains(searchValue))
-            .Select(p => FetchPublicationById(p.Id, Array.Empty<EPublicationFetchAttribute>()));
+            .Where(publication => _userRepository.FetchById(publication.UserId).UserName.ToLower().Contains(searchValue.ToLower()))
+            .Select(p => FetchPublicationById(p.PublicationId, Array.Empty<EPublicationFetchAttribute>()));
     }
 
-    public Domain.Publication FetchPublicationById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
+    public Publication FetchPublicationById(int id, IEnumerable<EPublicationFetchAttribute> attributesToFetch)
     {
         var dbComplex = FetchComplexByPublicationId(id);
-        var publication = _mapper.Map<Domain.Publication>(dbComplex);
+        var publication = _mapper.Map<Publication>(dbComplex);
 
         publication.LikeCount = _likeRepository.FetchLikeCountByPublicationId(id);
         publication.CommentCount = _commentRepository.FetchCommentCountByPublicationId(id);
@@ -68,11 +68,12 @@ public class PublicationService: IPublicationService
 
                     foreach (var comment in comments)
                     {
-                        var dbUser = _userRepository.FetchById(comment.IdAuthor);
+                        var dbUser = _userRepository.FetchById(comment.AuthorId);
                         var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
 
-                        comment.NameAuthor = dbUser.Name;
-                        comment.IdAuthorImage = dbAccount.ImageId;
+                        comment.AuthorName = dbUser.UserName;
+                        comment.AuthorImageId = dbAccount.ImageId;
+                        comment.AuthorRole = dbUser.UserRole;
                     }
                     
                     publication.AddRange(comments);
@@ -87,11 +88,9 @@ public class PublicationService: IPublicationService
 
     private DbComplexPublication FetchComplexByPublicationId(int pubId)
     {
-        
-        
         var complexPublication = _mapper.Map<DbComplexPublication>(_publicationRepository.FetchById(pubId));
         complexPublication.Elements = _elementRepository.FetchElementsByPublicationId(pubId).ToList();
-        
+     
         return complexPublication;
     }
 }

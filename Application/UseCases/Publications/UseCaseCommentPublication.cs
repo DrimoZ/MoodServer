@@ -20,7 +20,7 @@ public class UseCaseCommentPublication: IUseCaseParameterizedWriter<DbComment, s
     public DbComment Execute(string connectedUserId, DtoInputCommentPublication dto)
     {
         var dbComm = _mapper.Map<DbComment>(dto);
-        dbComm.IdUser = connectedUserId;
+        dbComm.UserId = connectedUserId;
         
         return _commentRepository.Create(dbComm);
     }

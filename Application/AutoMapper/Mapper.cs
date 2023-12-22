@@ -1,11 +1,10 @@
-using Application.Dtos.Account;
 using Application.Dtos.Friend;
 using Application.Dtos.Group;
 using Application.Dtos.Images;
 using Application.Dtos.Message;
 using Application.Dtos.Publication;
+using Application.Dtos.User.User;
 using Application.Dtos.User.UserAuthentication;
-using Application.Dtos.User.UserData;
 using Application.Dtos.User.UserProfile;
 using Application.Dtos.UserGroup;
 using AutoMapper;
@@ -30,67 +29,44 @@ public class Mapper: Profile
 
     private void UserMappings()
     {
-        CreateMap<DbUser, DtoOutputUser>();
+
+        // User Update
+        CreateMap<DtoInputUserUpdateProfile, DbUser>();
         
-        CreateMap<DbUser, User>();
-        
-        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-        
-        CreateMap<DtoInputUpdateUser, DbUser>()
-            .ForMember(dest => dest.Login, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.Ignore())
-            .ForMember(dest => dest.Password, opt => opt.Ignore())
-            .ForMember(dest => dest.AccountId, opt => opt.Ignore())
-            .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
-        
+        // User Sign In - Sign Up
+        CreateMap<DtoInputUserSignUp, DtoInputUserCreate>();
+        CreateMap<DbUser, DtoUserAuthenticate>();
         
         //Account Creation
-        CreateMap<DtoInputSignUpUser, DbAccount>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
-        CreateMap<DtoInputSignUpUser, DtoInputCreateUser>();
-        CreateMap<DtoInputCreateUser, DbUser>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.Ignore());
+        CreateMap<DtoInputUserSignUp, DtoInputUserCreate>();
+        CreateMap<DtoInputUserCreate, DbUser>();
 
         //User Profile
-        CreateMap<DbUser, DtoOutputUserProfile>()
-            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
-            .ForMember(dest => dest.FriendCount, opt => opt.Ignore())
-            .ForMember(dest => dest.PublicationCount, opt => opt.Ignore())
-            .ForMember(dest => dest.IsConnectedUser, opt => opt.Ignore())
-            .ForMember(dest => dest.Description, opt => opt.Ignore());
+        CreateMap<DbUser, DtoOutputUserProfile>();
         
         //User Profile Account
-        CreateMap<DbUser, DtoOutputUserAccount>()
-            .ForMember(dest => dest.Description, opt => opt.Ignore())
-            .ForMember(dest => dest.Description, opt => opt.Ignore())
-            .ForMember(dest => dest.BirthDate, opt => opt.Ignore())
-            .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore());
+        CreateMap<DbUser, DtoOutputUserAccount>();
         
         //User Profile Friends
-        CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>()
-            .ForMember(dest => dest.IdImage, opt => opt.Ignore())
-            .ForMember(dest => dest.CommonFriendCount, opt => opt.Ignore())
-            .ForMember(dest => dest.IsFriendWithConnected, opt => opt.Ignore());
-    
+        CreateMap<DbUser, DtoOutputUserFriends.DtoFriend>();
         
         //Discover Users
-        CreateMap<DbUser, DtoOutputUserDiscover>()
-            .ForMember(dest => dest.IdImage, opt => opt.Ignore());
-
+        CreateMap<DbUser, DtoOutputDiscoverUser>();
         
         // Create Friend Request
         CreateMap<DbFriendRequest, DtoOutputFriendRequest>();
         
         //User Privacy Settings
         CreateMap<DbUser, DtoOutputUserPrivacy>();
+        
+        // User Notification
+        CreateMap<DbFriendRequest, DtoOutputNotification>();
     }
 
     private void AccountMappings()
     {
-        CreateMap<DbAccount, DtoOutputAccount>();
-        
-        CreateMap<DbAccount, Account>();
+        //Account Creation
+        CreateMap<DtoInputUserSignUp, DbAccount>();
     }
 
     private void PublicationMappings()
@@ -106,7 +82,7 @@ public class Mapper: Profile
         
         //User Profile Publications
         CreateMap<Publication, DtoOutputUserPublications.DtoPublication>();
-        CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoElement>();
+        CreateMap<PublicationElement, DtoOutputUserPublications.DtoPublication.DtoPublicationElement>();
         
         // Discover Publications
         CreateMap<Publication, DtoOutputDiscoverPublication>();
@@ -144,7 +120,7 @@ public class Mapper: Profile
         CreateMap<DbFriend, DtoOutputFriend>();
         //Image
         CreateMap<DtoInputImage, DbImage>()
-            .ForMember(dest => dest.Date, opt => opt.Ignore());
+            .ForMember(dest => dest.ImageDate, opt => opt.Ignore());
         CreateMap<DbImage, DtoOutputImage>();
     }
 
@@ -152,19 +128,19 @@ public class Mapper: Profile
     {
         // Publication Service
         CreateMap<DbComment, Comment>()
-            .BeforeMap((s, d) => d.IdAuthor = s.IdUser);
+            .BeforeMap((s, d) => d.AuthorId = s.UserId);
         
         // Comment Publication
         CreateMap<DtoInputCommentPublication, DbComment>();
         
         // Get Comments From Publication
         CreateMap<DbComment, DtoOutputPublicationComment>()
-            .BeforeMap((s, d) => d.IdAuthor = s.IdUser);
+            .BeforeMap((s, d) => d.AuthorId = s.UserId);
     }
     
     private void LikeMappings()
     {
-        // like Publication
+        // Like Publication
         CreateMap<DtoInputLikePublication, DbLike>();
     }
 }

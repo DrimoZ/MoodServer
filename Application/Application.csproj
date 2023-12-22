@@ -15,4 +15,8 @@
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dtos\Account\" />
+    </ItemGroup>
+
 </Project>

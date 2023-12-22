@@ -2,7 +2,7 @@ namespace Infrastructure.EntityFramework.DbEntities;
 
 public class DbImage
 {
-    public int Id { get; set; }
-    public DateTime Date { get; set; }
-    public byte[] Data { get; set; }
+    public int ImageId { get; set; }
+    public DateTime ImageDate { get; set; }
+    public byte[] ImageData { get; set; }
 }

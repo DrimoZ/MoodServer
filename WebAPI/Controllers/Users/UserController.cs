@@ -1,5 +1,6 @@
-using Application.Dtos.User.UserAuthentication;
-using Application.Dtos.User.UserData;
+using Application.Dtos.Publication;
+using Application.Dtos.User.User;
+using Application.Dtos.User.UserProfile;
 using Application.Services.Utils;
 using Application.UseCases.Publications;
 using Application.UseCases.Users.User;
@@ -19,16 +20,24 @@ public class UserController: ControllerBase
     private readonly UseCaseFetchUserAccountByUserId _useCaseFetchUserAccountByUserId;
     private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
     private readonly UseCaseFetchUserFriendsByUserId _useCaseFetchUserFriendsByUserId;
-    private readonly UseCaseUpdateUserData _useCaseUpdateUserData;
-    private readonly UseCaseGetUsersByFilter _useCaseGetUsersByFilter;
+    private readonly UseCaseUpdateUserProfile _useCaseUpdateUserProfile;
+    private readonly UseCaseFetchUsersByFilter _useCaseFetchUsersByFilter;
     private readonly UseCaseFetchUserProfileByUserId _useCaseFetchUserProfileByUserId;
     private readonly UseCaseGetPublicationsByFilter _useCaseGetPublicationsByFilter;
     private readonly UseCasePatchUser _useCasePatchUser;
-    private readonly UseCaseGetUserPrivacySettings _useCaseGetUserPrivacySettings;
-    private readonly UseCaseSetDeletedUser _useCaseSetDeletedUser;
+    private readonly UseCaseFetchUserPrivacySettings _useCaseFetchUserPrivacySettings;
+    private readonly UseCaseDeleteUser _useCaseDeleteUser;
     private readonly UseCaseUpdateUserPassword _useCaseUpdateUserPassword;
+    private readonly UseCaseFetchUserNotifications _useCaseFetchUserNotifications;
 
-    public UserController(IConfiguration configuration, TokenService tokenService, UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserData useCaseUpdateUserData, UseCaseGetUsersByFilter useCaseGetUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId, UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, UseCaseGetUserPrivacySettings useCaseGetUserPrivacySettings, UseCaseSetDeletedUser useCaseSetDeletedUser, UseCaseUpdateUserPassword useCaseUpdateUserPassword)
+    public UserController(
+        IConfiguration configuration, TokenService tokenService, 
+        UseCaseFetchUserAccountByUserId useCaseFetchUserAccountByUserId, UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, 
+        UseCaseFetchUserFriendsByUserId useCaseFetchUserFriendsByUserId, UseCaseUpdateUserProfile useCaseUpdateUserProfile, 
+        UseCaseFetchUsersByFilter useCaseFetchUsersByFilter, UseCaseFetchUserProfileByUserId useCaseFetchUserProfileByUserId,
+        UseCaseGetPublicationsByFilter useCaseGetPublicationsByFilter, UseCasePatchUser useCasePatchUser, 
+        UseCaseFetchUserPrivacySettings useCaseFetchUserPrivacySettings, UseCaseDeleteUser useCaseDeleteUser, 
+        UseCaseUpdateUserPassword useCaseUpdateUserPassword, UseCaseFetchUserNotifications useCaseFetchUserNotifications) 
     {
         _configuration = configuration;
         _tokenService = tokenService;
@@ -36,102 +45,107 @@ public class UserController: ControllerBase
         _useCaseFetchUserAccountByUserId = useCaseFetchUserAccountByUserId;
         _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _useCaseFetchUserFriendsByUserId = useCaseFetchUserFriendsByUserId;
-        _useCaseUpdateUserData = useCaseUpdateUserData;
-        _useCaseGetUsersByFilter = useCaseGetUsersByFilter;
+        _useCaseUpdateUserProfile = useCaseUpdateUserProfile;
+        _useCaseFetchUsersByFilter = useCaseFetchUsersByFilter;
         _useCaseFetchUserProfileByUserId = useCaseFetchUserProfileByUserId;
         _useCaseGetPublicationsByFilter = useCaseGetPublicationsByFilter;
         _useCasePatchUser = useCasePatchUser;
-        _useCaseGetUserPrivacySettings = useCaseGetUserPrivacySettings;
-        _useCaseSetDeletedUser = useCaseSetDeletedUser;
+        _useCaseFetchUserPrivacySettings = useCaseFetchUserPrivacySettings;
+        _useCaseDeleteUser = useCaseDeleteUser;
         _useCaseUpdateUserPassword = useCaseUpdateUserPassword;
+        _useCaseFetchUserNotifications = useCaseFetchUserNotifications;
     }
     
+    // Get the currently connected User Id & Role
+    private (string UserId, int UserRole) GetConnectedUserStatus()
+    {
+        var token = HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!;
+        return _tokenService.GetAuthCookieData(token);
+    }
+
+    
+    // Get the connected User Id and his Role 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    //Get the connected User Id and his Role 
     public IActionResult GetUserIdAndRole()
     {
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(new {userId = data.UserId, userRole = data.Role});
+            var status = GetConnectedUserStatus();
+            return Ok(new {UserId = status.UserId, UserRole = status.UserRole});
         }
         catch (Exception)
         {
             return Unauthorized();
         }
     }
-    
+
+    // Get the public profile information of given userId
     [HttpGet("{userId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //Get the public profile information of given userId
-    public IActionResult GetUserProfileByUserId(string userId)
+    public ActionResult<DtoOutputUserProfile> GetUserProfileByUserId(string userId)
     {
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserProfileByUserId.Execute(data.UserId, userId));
+            return Ok(_useCaseFetchUserProfileByUserId.Execute(GetConnectedUserStatus().UserId, userId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
    
+    // Get the public profile account information of given userId
     [HttpGet("{userId}/account")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //Get the public profile account information of given userId
-    public IActionResult GetUserAccountByUserId(string userId)
+    public ActionResult<DtoOutputUserAccount> GetUserAccountByUserId(string userId)
     {
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserAccountByUserId.Execute(data.UserId, userId));
+            return Ok(_useCaseFetchUserAccountByUserId.Execute(GetConnectedUserStatus().UserId, userId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
     
+    // Get the friends information of given userId
     [HttpGet("{userId}/friends")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //Get the friends information of given userId
-    public IActionResult GetUserFriendsByUserId(string userId)
+    public ActionResult<DtoOutputUserFriends> GetUserFriendsByUserId(string userId)
     {
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserFriendsByUserId.Execute(data.UserId, userId));
+            return Ok(_useCaseFetchUserFriendsByUserId.Execute(GetConnectedUserStatus().UserId, userId));
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
     
+    //Get the publications information of given userId
     [HttpGet("{userId}/publications")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //Get the publications information of given userId
-    public IActionResult GetUserPublicationsData(string userId)
+    public ActionResult<DtoOutputUserPublications> GetUserPublicationsData(string userId)
     {
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(_useCaseFetchUserPublicationByUser.Execute(data.UserId, userId));
+            return Ok(_useCaseFetchUserPublicationByUser.Execute(GetConnectedUserStatus().UserId, userId));
         }
         catch (Exception e)
         {
-            return NotFound(e);
+            return NotFound(e.Message);
         }
     }
     
@@ -139,11 +153,11 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public ActionResult Update(DtoInputUpdateUser dto)
+    public ActionResult UpdateUserProfile(DtoInputUserUpdateProfile dto)
     {
         try
         {
-            if (_useCaseUpdateUserData.Execute(dto))
+            if (_useCaseUpdateUserProfile.Execute(dto))
             {
                 return NoContent();
             }
@@ -156,7 +170,7 @@ public class UserController: ControllerBase
         }
     }
     
-    [HttpPatch]
+    [HttpPatch("privacy")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -164,12 +178,12 @@ public class UserController: ControllerBase
     {
         try
         {
-            _useCasePatchUser.Execute(GetAuthCookieData().UserId, patch);
+            _useCasePatchUser.Execute(GetConnectedUserStatus().UserId, patch);
             return NoContent();
         }
         catch (Exception e)
         {
-            return BadRequest(error: e.Message);
+            return BadRequest(e.Message);
         }
     }
     
@@ -181,35 +195,45 @@ public class UserController: ControllerBase
     {
         try
         {
-            return Ok(_useCaseGetUserPrivacySettings.Execute(GetAuthCookieData().UserId));
+            return Ok(_useCaseFetchUserPrivacySettings.Execute(GetConnectedUserStatus().UserId));
         }
         catch (Exception e)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
-        }
-    }
-
-    [HttpPost("delete")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public ActionResult DeleteUserAccount()
-    {
-        try
-        {
-            if (_useCaseSetDeletedUser.Execute(GetAuthCookieData().UserId))
-                return NoContent();
-            
-            return NotFound();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }
     
-    [HttpPost("userPassword")]
+    // Deletes a User (if the given user is different from the connected user, check if connected has permissions
+    [HttpPatch]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public ActionResult UpdateIsDeleted([FromBody] DtoInputDeleteUser dto)
+    {
+        try
+        {
+            var connectedUserId = GetConnectedUserStatus().UserId;
+
+            if (!_useCaseDeleteUser.Execute(connectedUserId, dto.UserId)) return NotFound();
+            
+            if (connectedUserId != dto.UserId) return NoContent();
+            
+            if (Request.Cookies.ContainsKey(_configuration["JwtSettings:CookieName"]!))
+            {
+                Response.Cookies.Delete(_configuration["JwtSettings:CookieName"]!);
+            }
+            return NoContent();
+
+
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
+    }
+    
+    
+    [HttpPost("password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -217,7 +241,7 @@ public class UserController: ControllerBase
     {
         try
         {
-            if (!_useCaseUpdateUserPassword.Execute(GetAuthCookieData().UserId, dtoInputUpdateUserPassword))
+            if (!_useCaseUpdateUserPassword.Execute(GetConnectedUserStatus().UserId, dtoInputUpdateUserPassword))
                 return Forbid();
             
             return Ok();
@@ -234,14 +258,14 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     // Get A list of other Users for the Discover
-    public ActionResult<List<DtoOutputUser>> GetUsersByFilter([FromQuery] int userCount, [FromQuery] string? searchValue)
+    public ActionResult<IEnumerable<DtoOutputDiscoverUser>> GetUsersByFilter([FromQuery] int userCount, [FromQuery] string? searchValue)
     {
         searchValue ??= "";
         
         try
         {
-            var data =  GetAuthCookieData();
-            return Ok(_useCaseGetUsersByFilter.Execute(data.UserId, userCount, searchValue));
+            var data =  GetConnectedUserStatus();
+            return Ok(_useCaseFetchUsersByFilter.Execute(data.UserId, userCount, searchValue));
         }
         catch (Exception e)
         {
@@ -254,13 +278,13 @@ public class UserController: ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     // Get A list of other Users for the Discover
-    public ActionResult<List<DtoOutputUser>> GetPublicationsByFilter([FromQuery] int publicationCount, [FromQuery] string? searchValue)
+    public ActionResult<IEnumerable<DtoOutputDiscoverPublication>> GetPublicationsByFilter([FromQuery] int publicationCount, [FromQuery] string? searchValue)
     {
         searchValue ??= "";
         
         try
         {
-            var data =  GetAuthCookieData();
+            var data =  GetConnectedUserStatus();
             return Ok(_useCaseGetPublicationsByFilter.Execute(data.UserId, publicationCount, searchValue));
         }
         catch (Exception e)
@@ -268,11 +292,18 @@ public class UserController: ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
     }
-    
-    
-    private (string UserId, int Role) GetAuthCookieData()
+
+
+    [HttpGet("notifications")]
+    public ActionResult<IEnumerable<DtoOutputNotification>> GetUserNotifications()
     {
-        var token = HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!;
-        return _tokenService.GetAuthCookieData(token);
+        try
+        {
+            return Ok(_useCaseFetchUserNotifications.Execute(GetConnectedUserStatus().UserId));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
+        }
     }
 }

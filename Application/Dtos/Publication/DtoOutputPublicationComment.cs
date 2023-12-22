@@ -2,10 +2,10 @@ namespace Application.Dtos.Publication;
 
 public class DtoOutputPublicationComment
 {
-    public int Id { get; set; }
-    public DateTime Date { get; set; }
-    public string Content { get; set; }
-    public int? IdAuthorImage { get; set; }
-    public string NameAuthor { get; set; }
-    public string IdAuthor { get; set; }
+    public int CommentId { get; set; }
+    public DateTime CommentDate { get; set; }
+    public string CommentContent { get; set; }
+    public int? AuthorImageId { get; set; }
+    public string AuthorName { get; set; }
+    public string AuthorId { get; set; }
 }

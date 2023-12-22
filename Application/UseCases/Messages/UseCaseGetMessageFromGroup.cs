@@ -36,9 +36,9 @@ public class UseCaseGetMessageFromGroup:IUseCaseParameterizedQuery<IEnumerable<D
             var account = _accountRepository.FetchById(user.AccountId);
             var msgToAdd = new DtoOutputMessage
             {
-                UserLogin = user.Login,
-                UserId = user.Id,
-                UserName = user.Name,
+                UserLogin = user.UserLogin,
+                UserId = user.UserId,
+                UserName = user.UserName,
                 Date = dbMessage.Date,
                 Id = dbMessage.Id,
                 Content = dbMessage.Content,

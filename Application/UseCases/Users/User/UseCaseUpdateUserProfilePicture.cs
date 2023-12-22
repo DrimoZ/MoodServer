@@ -38,7 +38,7 @@ public class UseCaseUpdateUserProfilePicture:IUseCaseParameterizedWriter<bool, s
             var image = _imageRepository.Create(_mapper.Map<DbImage>(input));
             
             var account = _accountRepository.FetchById(entity.AccountId);
-            account.ImageId = image.Id;
+            account.ImageId = image.ImageId;
             _accountRepository.Update(account);
         }
         catch (Exception)

@@ -12,7 +12,6 @@ namespace WebAPI.Controllers.Publications;
 [Authorize]
 public class PublicationController: ControllerBase
 {
-    private readonly UseCaseFetchUserPublicationByUser _useCaseFetchUserPublicationByUser;
     private readonly UseCaseGetPublicationById _useCaseGetPublicationById;
     private readonly UseCaseLikePublication _useCaseLikePublication;
     private readonly UseCaseCommentPublication _useCaseCommentPublication;
@@ -20,15 +19,13 @@ public class PublicationController: ControllerBase
     private readonly UseCaseGetCommentsByPublicationId _useCaseGetCommentsByPublicationId;
     private readonly UseCaseGetFriendsPublications _useCaseGetFriendsPublications;
     private readonly UseCaseCreatePublication _useCaseCreatePublication;
-    private readonly UseCaseDeletePublication _useCaseDeletePublication;
     private readonly UseCaseSetPublicationDeleted _useCaseSetPublicationDeleted;
     
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
 
-    public PublicationController(UseCaseFetchUserPublicationByUser useCaseFetchUserPublicationByUser, UseCaseCreatePublication useCaseCreatePublication, UseCaseDeletePublication useCaseDeletePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId, UseCaseGetFriendsPublications useCaseGetFriendsPublications)
+    public PublicationController(UseCaseCreatePublication useCaseCreatePublication, UseCaseSetPublicationDeleted useCaseSetPublicationDeleted, UseCaseGetPublicationById useCaseGetPublicationById, TokenService tokenService, IConfiguration configuration, UseCaseLikePublication useCaseLikePublication, UseCaseCommentPublication useCaseCommentPublication, UseCaseDeleteCommentInPublicationById useCaseDeleteCommentInPublicationById, UseCaseGetCommentsByPublicationId useCaseGetCommentsByPublicationId, UseCaseGetFriendsPublications useCaseGetFriendsPublications)
     {
-        _useCaseFetchUserPublicationByUser = useCaseFetchUserPublicationByUser;
         _tokenService = tokenService;
         _configuration = configuration;
         _useCaseLikePublication = useCaseLikePublication;
@@ -37,7 +34,6 @@ public class PublicationController: ControllerBase
         _useCaseGetCommentsByPublicationId = useCaseGetCommentsByPublicationId;
         _useCaseGetFriendsPublications = useCaseGetFriendsPublications;
         _useCaseCreatePublication = useCaseCreatePublication;
-        _useCaseDeletePublication = useCaseDeletePublication;
         _useCaseSetPublicationDeleted = useCaseSetPublicationDeleted;
         _useCaseGetPublicationById = useCaseGetPublicationById;
     }
@@ -144,7 +140,7 @@ public class PublicationController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public  ActionResult ChangeUserProfilePicture([FromForm] List<IFormFile> images, [FromForm] string description)
+    public  ActionResult CreateNewPublication ([FromForm] List<IFormFile> images, [FromForm] string description)
     {
         try
         {
@@ -156,7 +152,7 @@ public class PublicationController: ControllerBase
                 
                 using var memoryStream = new MemoryStream();
                 file.CopyTo(memoryStream);
-                dtoInput.Data = memoryStream.ToArray();
+                dtoInput.ImageData = memoryStream.ToArray();
                 
                 inputs.Add(dtoInput);
             }
@@ -166,7 +162,6 @@ public class PublicationController: ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error : " + e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = e.Message });
         }
         
@@ -177,8 +172,8 @@ public class PublicationController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult UpdateIsDeleted([FromBody] int publicationId)
     {
-        Console.WriteLine(publicationId);
-        if (_useCaseSetPublicationDeleted.Execute(publicationId))
+        
+        if (_useCaseSetPublicationDeleted.Execute(GetConnectedUserId(), publicationId))
         {
             return Ok();
         }

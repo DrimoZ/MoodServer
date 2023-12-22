@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using Application.Dtos.Publication;
-using Application.Dtos.User.UserData;
 using Application.Services.Publications;
 using Application.UseCases.Utils;
 using AutoMapper;

@@ -14,7 +14,7 @@ public class PublicationRepository:IPublicationRepository
     
     public DbPublication Create(DbPublication publication)
     {
-        publication.Date = DateTime.Now;
+        publication.PublicationDate = DateTime.Now;
 
         _context.Publications.Add(publication);
         _context.SaveChanges();
@@ -37,7 +37,7 @@ public class PublicationRepository:IPublicationRepository
 
     public bool Delete(int id)
     {
-        var entity = _context.Publications.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
+        var entity = _context.Publications.FirstOrDefault(p => p.PublicationId == id && !p.IsDeleted);
 
         if (entity == null)
             return false;
@@ -65,7 +65,7 @@ public class PublicationRepository:IPublicationRepository
     public DbPublication FetchById(int id)
     {
         var entity = _context.Publications
-            .FirstOrDefault(pub => pub.Id == id && !pub.IsDeleted);
+            .FirstOrDefault(pub => pub.PublicationId == id && !pub.IsDeleted);
         
         if (entity == null) throw new KeyNotFoundException("PublicationNotFound");
 

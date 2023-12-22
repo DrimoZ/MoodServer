@@ -2,13 +2,13 @@
 
 public class DbUser
 {
-    public string Id { get; set; }
-    public string Mail { get; set; }
-    public string Login { get; set; }
-    public string Name { get; set; }
-    public string Password { get; set; }
-    public int Role { get; set; }
-    public string? Title { get; set; }
+    public string UserId { get; set; }
+    public string UserMail { get; set; }
+    public string UserLogin { get; set; }
+    public string UserName { get; set; }
+    public string UserPassword { get; set; }
+    public int UserRole { get; set; }
+    public string? UserTitle { get; set; }
     public string AccountId { get; set; }
     public bool IsDeleted { get; set; }
     public bool IsPublic { get; set; }

@@ -1,4 +1,5 @@
 using Application.Dtos.User.UserProfile;
+using Application.Services.Users;
 using Application.UseCases.Utils;
 using AutoMapper;
 using Infrastructure.EntityFramework.Repositories.Accounts;
@@ -16,9 +17,9 @@ public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutp
     private readonly IFriendRepository _friendRepository;
     private readonly IPublicationRepository _publicationRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly IFriendRequestRepository _friendRequestRepository;
+    private readonly IFriendService _friendService;
 
-    public UseCaseFetchUserProfileByUserId(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IPublicationRepository publicationRepository, IAccountRepository accountRepository, IFriendRequestRepository friendRequestRepository)
+    public UseCaseFetchUserProfileByUserId(IMapper mapper, IUserRepository userRepository, IFriendRepository friendRepository, IPublicationRepository publicationRepository, IAccountRepository accountRepository, IFriendService friendService)
     {
         _mapper = mapper;
         
@@ -26,7 +27,7 @@ public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutp
         _friendRepository = friendRepository;
         _publicationRepository = publicationRepository;
         _accountRepository = accountRepository;
-        _friendRequestRepository = friendRequestRepository;
+        _friendService = friendService;
     }
 
     public DtoOutputUserProfile Execute(string connectedUserId, string profileRequestUserId)
@@ -35,30 +36,16 @@ public class UseCaseFetchUserProfileByUserId: IUseCaseParameterizedQuery<DtoOutp
         var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
         
         var user = _mapper.Map<DtoOutputUserProfile>(dbUser);
-        
-        if (_friendRepository.IsFriend(connectedUserId, dbUser.Id))
-        {
-            user.IsFriendWithConnected = 2;
-        }
-        else if (_friendRequestRepository.IsRequestPresent(dbUser.Id, connectedUserId))
-        {
-            user.IsFriendWithConnected = 1;
-        }
-        else if (_friendRequestRepository.IsRequestPresent(connectedUserId, dbUser.Id))
-        {
-            user.IsFriendWithConnected = 0;
-        }
-        else
-        {
-            user.IsFriendWithConnected = -1;
-        }
-        
-        user.IdImage = dbAccount.ImageId;
+
+        user.IsFriendWithConnected = _friendService.GetFriendStatus(connectedUserId, dbUser.UserId);
         user.IsConnectedUser = connectedUserId == profileRequestUserId;
+        
+        user.ImageId = dbAccount.ImageId;
+        user.AccountDescription = dbAccount.AccountDescription!;
+
         user.FriendCount = _friendRepository.FetchFriendCount(profileRequestUserId);
         user.PublicationCount = _publicationRepository.FetchPublicationCount(profileRequestUserId);
-        user.Description = dbAccount.Description!;
-
+        
         return user;
     }
 }

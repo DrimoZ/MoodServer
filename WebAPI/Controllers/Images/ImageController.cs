@@ -1,13 +1,9 @@
-using System.Drawing;
 using Application.Dtos.Images;
 using Application.Services.Utils;
 using Application.UseCases.Images;
 using Application.UseCases.Users.User;
-using AutoMapper;
-using Infrastructure.EntityFramework.DbEntities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client.Utils;
 
 namespace WebAPI.Controllers.Images;
 
@@ -15,19 +11,14 @@ namespace WebAPI.Controllers.Images;
 [Route("api/v1/image")]
 public class ImageController:ControllerBase
 {
-
-    private readonly UseCaseCreateImage _useCaseCreateImage;
     private readonly UseCaseGetImageById _useCaseGetImageById;
     private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
     
-    private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
     private readonly TokenService _tokenService;
 
-    public ImageController(UseCaseCreateImage caseCreateImage, IMapper mapper, UseCaseGetImageById useCaseGetImageById, UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture, TokenService tokenService, IConfiguration configuration)
+    public ImageController(UseCaseGetImageById useCaseGetImageById, UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture, TokenService tokenService, IConfiguration configuration)
     {
-        _useCaseCreateImage = caseCreateImage;
-        _mapper = mapper;
         _useCaseGetImageById = useCaseGetImageById;
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
         _tokenService = tokenService;
@@ -38,30 +29,6 @@ public class ImageController:ControllerBase
     {
         var token = HttpContext.Request.Cookies[_configuration["JwtSettings:CookieName"]!]!;
         return _tokenService.GetAuthCookieData(token).UserId;
-    }
-    
-    private DbImage Create(DtoInputImage img)
-    {
-        var image = _useCaseCreateImage.Execute(img);
-        return image;
-    }
-    
-    [HttpPost]
-    // [Authorize]
-    [ProducesResponseType(400)]
-    public  ActionResult Post(IFormFile image)
-    {
-
-        var dtoInput = new DtoInputImage();
-        using (var memoryStream = new MemoryStream())
-        {
-            image.CopyTo(memoryStream);
-            dtoInput.Data = memoryStream.ToArray();
-        }
-        
-        var img = Create(dtoInput);
-        
-        return Ok();
     }
     
     
@@ -79,7 +46,7 @@ public class ImageController:ControllerBase
             using (var memoryStream = new MemoryStream())
             {
                 image.CopyTo(memoryStream);
-                dtoInput.Data = memoryStream.ToArray();
+                dtoInput.ImageData = memoryStream.ToArray();
             }
 
             _useCaseUpdateUserProfilePicture.Execute(connectedUserId, dtoInput);
