@@ -1,6 +1,7 @@
 using Application.Dtos.Group;
 using Application.UseCases.Utils;
 using AutoMapper;
+using Domain.Exception;
 using Infrastructure.EntityFramework.DbEntities;
 using Infrastructure.EntityFramework.Repositories;
 using Infrastructure.EntityFramework.Repositories.Communications;
@@ -47,12 +48,23 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
                     
                     if (userInGroups.Count() < 3)
                     {
+                        
                         foreach(var  userGroup in userInGroups)
                         {
-                            if (userGroup.UserId != userId)
+                            if(userGroup.UserId != userId)
                             {
-                                grp.Name = _userRepository.FetchById(userGroup.UserId).UserName;
-                                break;
+                                try
+                                {
+                                    grp.Name = _userRepository.FetchById(userGroup.UserId).UserName;
+                                    break;
+                                }
+                                catch (DeletedUserException e)
+                                {
+                                    grp.Name = "Deleted";
+                                    break;
+                                    Console.WriteLine(e);
+                                }
+                                
                             }
                         }
                     }
@@ -62,6 +74,7 @@ public class UseCaseGetGroupsByUserId:IUseCaseParameterizedQuery<IEnumerable<Dto
                     }
                     
                 }
+                if(grp.Name == "Deleted") continue;
                 grps.Add(grp);
             }
         }
