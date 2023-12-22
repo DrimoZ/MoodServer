@@ -31,7 +31,7 @@ VALUES
 (N'usr_6JPaWL2COoCYBzJ6O0QOfnfzPy4F', N'theomille1@gmail.com', N'theom_01', N'Theo Mille', N'$2a$11$aPpmgaTVlp//sr.B2.4M5OoE4XGacyP4W7GtjUD.FAG7vDgdxI09S', 2, N'God', 0, 1, 0, 1, N'acc_vQeoxnE1HcOdtgJl989W4s4DDCwZ'),
 (N'usr_9664tGClnuljaZJ2ymEfJGSQWnMl', N'produfoot@live.be', N'akisekai', N'Louis Testolin', N'$2a$11$tlqtCMcbHz9gXsMYsSFU3ulebcUjhLXOAFxBqGaccMHSKRyghAbxm', 2, null, 0, 1, 1, 1, N'acc_DOBadyzJbvZYNdvvnRTZ8rUnOfKU'),
 (N'usr_9NGoKFkHBIv6qwHqLQMwegO2YQr9', N'marine@defrance.com', N'marine0023', N'Marine <3', N'$2a$11$RAxHqyeURf80XZadno1SUOl8.VREvMHm.tr789YWJzA3KMhMEOWVq', 1, null, 0, 1, 1, 1, N'acc_r4Mo4H0uYd7pfKEfxTauwTHlzniP'),
-(N'usr_9yWVHaHniTc9164fQJfzCMssOb4e', N'yoplait@example.com', N'martin_p', N'Martin Pecheur', N'$2a$11$6UKm8Jc786NcIpuEH9ck8eC0nc0EqhcSOhJVVmNZCBmJbLVx/sjqC', 1, null, 0, 0, 0, 0, N'acc_nLhmM2C1CuRFKnXalS2f4F8oow44'),
+(N'usr_9yWVHaHniTc9164fQJfzCMssOb4e', N'yoplait@example.com', N'martin_p', N'Martin Pecheur', N'$2a$11$6UKm8Jc786NcIpuEH9ck8eC0nc0EqhcSOhJVVmNZCBmJbLVx/sjqC', 1, null, 0, 1, 1, 1, N'acc_nLhmM2C1CuRFKnXalS2f4F8oow44'),
 (N'usr_DBXDDt_2Naq7wrTMPsaM1p_9xdKd', N'user1@mail.com', N'login111', N'Arthur', N'$2a$11$khT276mDzLj1bpqsKtsQKOXZgOfuT9y01OQBlQWsdRhuF2sVEDk.y', 3, N'', 0, 1, 0, 1, N'acc_VFfu39dvIaPN3EEIxdlZVqqWKSGV'),
 (N'usr_dFdJuHV29RkIbaPrZ7KCe2FLdGre', N'enghien@bxl.be', N'engh_bxl', N'Enghiennoise De Bruxelles', N'$2a$11$Ynzc2gfRaJvITbI6q4rfWOg44ubgtsUuh9OGLnUAoiNN6I6T5pbCa', 1, null, 0, 1, 1, 0, N'acc_pn1JXApTYQE1smvMZUZXypmxHzX9'),
 (N'usr_FGeJ1NN0UMo8ST0aRLgpl62JBU1c', N'ezrzerzer@aze.zeaze', N'azeazeazeaze', N'eazezaeaze', N'$2a$11$wVMzzuxIAlLyMzoC0DTeFuYTY2FzmlICE/q9XZZPirFSq8BDCDOZW', 1, null, 1, 1, 1, 1, N'acc_EWkea49dUtSSgtof1ioZX8z91nO5'),
