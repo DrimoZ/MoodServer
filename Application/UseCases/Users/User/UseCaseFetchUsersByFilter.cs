@@ -44,7 +44,7 @@ public class UseCaseFetchUsersByFilter: IUseCaseParameterizedQuery<IEnumerable<D
         foreach (var user in users)
         {
             user.IsFriendWithConnected = _friendService.GetFriendStatus(connectedUserId, user.UserId);
-            user.CommonFriendCount = _friendRepository.FetchCommonFriendsCount(connectedUserId, user.UserId);
+            user.CommonFriendCount =  _friendRepository.FetchCommonFriendsCount(connectedUserId, user.UserId) - (user.IsFriendWithConnected == 2 ? 1: 0);
         }
         
         return users;
