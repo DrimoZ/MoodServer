@@ -44,15 +44,16 @@ public class FriendRepository: IFriendRepository
                 friend => friend.FriendId,
                 user => user.UserId,
                 (friend, user) => user)
+            .Where(user => !user.IsDeleted)
             .ToList();
         
         return friends;
     }
     
-        public bool IsFriend(string userId, string friendId)
-        {
-            return _context.Friends.Any(u => u.UserId == userId && u.FriendId == friendId);
-        }
+    public bool IsFriend(string userId, string friendId)
+    {
+        return _context.Friends.Any(u => u.UserId == userId && u.FriendId == friendId);
+    }
     
 
     public DbFriend FetchById(string userId, string otherId)
