@@ -49,12 +49,4 @@ public class CommentRepository: ICommentRepository
             .Where(e => e.PublicationId == pubId)
             .ToList();
     }
-    
-    public int FetchCommentCountByPublicationId(int pubId)
-    {
-        var count = _context.Comments
-            .Count(l => l.PublicationId == pubId);
-        
-        return count;
-    }
 }

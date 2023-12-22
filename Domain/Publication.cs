@@ -7,7 +7,7 @@ public class Publication
     public DateTime PublicationDate { get; set; }
     
     private int _commentCount;
-    public int CommentCount { get => _commentCount == 0 ? _comments.Count : _commentCount; set { if (_commentCount == 0 && value > 0) _commentCount = value; } }
+    public int CommentCount { get => _commentCount == 0 ? _comments.Count : _commentCount; set { if (value > 0) _commentCount = value; } }
 
     private int _likeCount;
     public int LikeCount { get => _likeCount; set { if (_likeCount == 0 && value > 0) _likeCount = value; } }

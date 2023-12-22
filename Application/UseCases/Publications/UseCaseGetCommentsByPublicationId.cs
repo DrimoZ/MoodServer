@@ -30,13 +30,18 @@ public class UseCaseGetCommentsByPublicationId: IUseCaseParameterizedQuery<IEnum
 
         foreach (var comment in comments)
         {
-            Console.WriteLine(comment.CommentId + " -- C -- " + comment.AuthorId);
-            var dbUser = _userRepository.FetchById(comment.AuthorId);
-            Console.WriteLine(dbUser.UserId + " -- U -- " + dbUser.UserName);
-            var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
+            try
+            {
+                var dbUser = _userRepository.FetchById(comment.AuthorId);
+                var dbAccount = _accountRepository.FetchById(dbUser.AccountId);
 
-            comment.AuthorName = dbUser.UserName;
-            comment.AuthorImageId = dbAccount.ImageId;
+                comment.AuthorName = dbUser.UserName;
+                comment.AuthorImageId = dbAccount.ImageId;
+            }
+            catch (Exception)
+            {
+                comments.Remove(comment);
+            }
         }
 
         return comments;

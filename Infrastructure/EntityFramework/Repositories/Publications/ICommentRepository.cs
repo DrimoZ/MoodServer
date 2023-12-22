@@ -8,5 +8,4 @@ public interface ICommentRepository
     bool Delete(int commentId);
     DbComment FetchById(int commId);
     IEnumerable<DbComment> FetchCommentsByPublicationId(int pubId);
-    int FetchCommentCountByPublicationId(int pubId);
 }
