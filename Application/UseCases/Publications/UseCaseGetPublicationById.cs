@@ -32,22 +32,31 @@ public class UseCaseGetPublicationById:IUseCaseParameterizedQuery<DtoOutputPubli
 
     public DtoOutputPublication Execute(string connectedUserId, int pubId)
     {
-        var publication = _publicationService.FetchPublicationById(pubId, 
-            new [] { EPublicationFetchAttribute.Comments });
-        
-        var dtoPublication = _mapper.Map<DtoOutputPublication>(publication);
+        try
+        {
+            var publication = _publicationService.FetchPublicationById(pubId,
+                new[] { EPublicationFetchAttribute.Comments });
 
-        dtoPublication.AuthorId = _publicationRepository.FetchById(pubId).UserId;
+            var dtoPublication = _mapper.Map<DtoOutputPublication>(publication);
 
-        var dbUser = _userRepository.FetchById(dtoPublication.AuthorId);
+            dtoPublication.AuthorId = _publicationRepository.FetchById(pubId).UserId;
 
-        dtoPublication.AuthorRole = dbUser.UserRole;
-        dtoPublication.AuthorName = dbUser.UserName;
-        dtoPublication.IsFromConnected = connectedUserId == dtoPublication.AuthorId;
-        dtoPublication.AuthorImageId = _accountRepository.FetchById(dbUser.AccountId).ImageId;
+            var dbUser = _userRepository.FetchById(dtoPublication.AuthorId);
 
-        dtoPublication.HasConnectedLiked = _likeRepository.FetchLikeByUserAndPublication(connectedUserId, pubId) != null;
-        
-        return dtoPublication;
+            dtoPublication.AuthorRole = dbUser.UserRole;
+            dtoPublication.AuthorName = dbUser.UserName;
+            dtoPublication.IsFromConnected = connectedUserId == dtoPublication.AuthorId;
+            dtoPublication.AuthorImageId = _accountRepository.FetchById(dbUser.AccountId).ImageId;
+
+            dtoPublication.HasConnectedLiked =
+                _likeRepository.FetchLikeByUserAndPublication(connectedUserId, pubId) != null;
+
+            return dtoPublication;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

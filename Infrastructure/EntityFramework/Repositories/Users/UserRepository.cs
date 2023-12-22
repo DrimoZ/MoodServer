@@ -1,5 +1,5 @@
+using Domain.Exception;
 using Infrastructure.EntityFramework.DbEntities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityFramework.Repositories.Users;
 
@@ -57,10 +57,10 @@ public class UserRepository: IUserRepository
     public DbUser FetchById(string id)
     {
         var user = _context.Users
-            .FirstOrDefault(u => u.UserId == id && !u.IsDeleted);
+            .FirstOrDefault(u => u.UserId == id);
 
-        if (user == null || user.IsDeleted) throw new KeyNotFoundException("userNotFound");
-
+        if (user == null) throw new KeyNotFoundException("userNotFound");
+        if (user.IsDeleted) throw new DeletedUserException(user.UserId + " is marked as deleted");
         
         return user;
     }
